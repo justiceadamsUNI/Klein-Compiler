@@ -139,15 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <ClInclude Include="src\header\DummyClass.h" />
+    <ClInclude Include="test\catch.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Compiler.cpp" />
-    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="src\Compiler.cpp" />
+    <ClCompile Include="src\implementation\DummyClass.cpp" />
+    <ClCompile Include="test\DummyTest.cpp" />
+    <ClCompile Include="test\RunTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
