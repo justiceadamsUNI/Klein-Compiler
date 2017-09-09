@@ -1,4 +1,4 @@
-#include "..\header\DummyClass.h"
+#include "../header/DummyClass.h"
 #include <stdexcept>
 
 DummyClass::DummyClass(int value)
