@@ -17,19 +17,3 @@ private:
 	TokenType ThisTokenType;
 	string ThisValue;
 };
-
-Token::Token(TokenType InTokenType, string InValue)
-{
-	ThisTokenType = InTokenType;
-	ThisValue = InValue;
-}
-
-inline TokenType Token::getTokenType()
-{
-	return ThisTokenType;
-}
-
-inline string Token::getValue()
-{
-	return ThisValue;
-}

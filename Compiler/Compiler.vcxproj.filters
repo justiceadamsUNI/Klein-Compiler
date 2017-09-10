@@ -24,6 +24,9 @@
     <ClInclude Include="src\header\Token.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\header\Scanner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Compiler.cpp">
@@ -33,6 +36,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="test\TokenTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\implementation\Scanner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\implementation\Token.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

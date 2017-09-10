@@ -139,12 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\header\Scanner.h" />
     <ClInclude Include="src\header\Token.h" />
     <ClInclude Include="src\header\TokenType.h" />
     <ClInclude Include="test\catch.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Compiler.cpp" />
+    <ClCompile Include="src\implementation\Scanner.cpp" />
+    <ClCompile Include="src\implementation\Token.cpp" />
     <ClCompile Include="test\RunAllTest.cpp" />
     <ClCompile Include="test\TokenTest.cpp" />
   </ItemGroup>
