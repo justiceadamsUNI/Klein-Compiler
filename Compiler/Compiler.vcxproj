@@ -139,14 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\header\DummyClass.h" />
+    <ClInclude Include="src\header\Token.h" />
+    <ClInclude Include="src\header\TokenType.h" />
     <ClInclude Include="test\catch.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Compiler.cpp" />
-    <ClCompile Include="src\implementation\DummyClass.cpp" />
-    <ClCompile Include="test\DummyTest.cpp" />
-    <ClCompile Include="test\RunTest.cpp" />
+    <ClCompile Include="test\RunAllTest.cpp" />
+    <ClCompile Include="test\TokenTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
