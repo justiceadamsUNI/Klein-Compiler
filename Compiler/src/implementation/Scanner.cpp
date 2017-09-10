@@ -14,7 +14,7 @@ Scanner::Scanner()
 Scanner::Scanner(string FilePath)
 {
 	std::fstream inputFile;
-	inputFile.open(FilePath);
+	inputFile.open(FilePath.c_str());
 
     // Check for successful opening
     if(inputFile.fail())
@@ -70,6 +70,8 @@ list<Token> Scanner::getTokens()
 
 		}
 	}
+
+	return Tokens;
 }
 
 
