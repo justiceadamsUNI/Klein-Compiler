@@ -44,7 +44,7 @@ list<Token> Scanner::getTokens()
 			
 			if (letter == ',')
 			{
-				Token CommaToken = Token(TokenType::COMMA, "");
+				Token CommaToken = Token(COMMA, "");
 				Tokens.push_back(CommaToken);
 				accum = "";
 				i++;
