@@ -1,7 +1,0 @@
-language: cpp
-compiler:
-  - gcc
-script:
-  - g++ -Wall compiler/src/Compiler.cpp compiler/src/implementation/*.cpp -o main
-  - g++ -Wall compiler/test/*.cpp compiler/src/implementation/*.cpp -o test
-  - ./test
