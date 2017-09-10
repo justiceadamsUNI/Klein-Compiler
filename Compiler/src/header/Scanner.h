@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include <list>
+#include <vector>
 #include "../header/TokenType.h"
 #include "../header/Token.h"
 
@@ -18,8 +19,7 @@ public:
 
 private:
 	map<string, string> GenericKeywordMap;
-	string FileContents;
-	int FilePosition;
+	vector<string> FileContents;
 	TokenType LastReadTokenType;
 
 	Token scanForTokenOfType(TokenType TokenTypeToScan);

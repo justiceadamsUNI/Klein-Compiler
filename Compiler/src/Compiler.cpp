@@ -3,7 +3,7 @@
 
 int main()
 {
-	Scanner("test");
+	Scanner();
     return 0;
 }
 
