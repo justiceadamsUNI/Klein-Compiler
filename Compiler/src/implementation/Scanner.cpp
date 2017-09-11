@@ -44,6 +44,14 @@ Token Scanner::getNextToken()
 		{
 			return consumeParenthesisToken(CharAtPosition);
 		}
+		else if (CharAtPosition == '<' || CharAtPosition == '=')
+		{
+			return consumeComparatorToken(CharAtPosition);
+		}
+		else if (Digits.find(CharAtPosition) != string::npos)
+		{
+			return consumeIntegerToken();
+		}
 	}
 
 	return Token(END_OF_FILE, "");
@@ -108,6 +116,65 @@ Token Scanner::consumeOperatorToken(char OperatorChar)
 	StringStream >> OperatorString;
 
 	return Token(ARITHMETIC_OPERATOR, OperatorString);
+}
+
+Token Scanner::consumeComparatorToken(char ComparatorChar)
+{
+	FilePosition++;
+	stringstream StringStream;
+	string ComparatorString;
+
+	StringStream << ComparatorChar;
+	StringStream >> ComparatorString;
+	return Token(COMPARATOR, ComparatorString);
+}
+
+Token Scanner::consumeIntegerToken()
+{
+	stringstream StringStream;
+	string Accumulator;
+
+	StringStream << FileContents[FilePosition];
+	StringStream >> Accumulator;
+
+
+	//Set initial endState To False
+	bool ValidEndState = false;
+	while (!ValidEndState && FilePosition < FileContents.size())
+	{
+		if (FilePosition + 1 == FileContents.size())
+		{
+			//Last character in file. Update accumulator, and set End State To Valid.
+			FilePosition++;
+			ValidEndState = true;
+			continue;
+		}
+
+		char NextChar = FileContents[FilePosition + 1];
+
+		//If not the last character in file, check that next char.
+		if (Digits.find(NextChar) != string::npos)
+		{
+			//If next character a digit, add to accumulator and keep going.
+			Accumulator = Accumulator + NextChar;
+			FilePosition++;
+		}
+		else if (SelfDelimiters.find(NextChar != string::npos) || isspace(NextChar))
+		{
+			//If next character is a self delimiter, or a space, we're in a stop state.
+			ValidEndState = true;
+			FilePosition++;
+		}
+		else
+		{
+			//If any other character is recognized, blow up.
+			ostringstream ErrorMessageStream;
+			ErrorMessageStream << "ERROR: Unexpected character while scanning Iteger literal at pos -  " << FilePosition + 1 << " char= " << NextChar;
+			throw  std::runtime_error(ErrorMessageStream.str());
+		}
+	}
+
+	return Token(INTEGER, Accumulator);
 }
 
 bool Scanner::isCommentStart()

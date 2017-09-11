@@ -18,11 +18,10 @@ public:
 	Token peek();
 
 private:
-	map<string, string> GenericKeywordMap;
+	string SelfDelimiters = "+-*/,:,<=()";
+	string Digits = "0123456789";
 	string FileContents;
 	int FilePosition;
-
-	Token scanForInteger();
 
 	Token consumeParenthesisToken(char Paren);
 
@@ -32,10 +31,13 @@ private:
 
 	Token consumeOperatorToken(char Operator);
 
+	Token consumeComparatorToken(char Comparator);
+
+	Token consumeIntegerToken();
+
 	bool isCommentStart();
 
 	void ignoreComment();
-
 
 	void skipPastWhiteSpace();
 

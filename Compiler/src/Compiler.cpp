@@ -11,6 +11,11 @@ int main()
 	{
 		cout << TokenTypePrintMap.find(Token.getTokenType())->second << " : " << Token.getValue() << endl;
 		Token = Scanner.getNextToken();
+
+		if (Token.getTokenType() == END_OF_FILE)
+		{
+			cout << "END OF FILE" << endl;
+		}
 	}
     return 0;
 }
