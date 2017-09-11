@@ -11,20 +11,33 @@ using namespace std;
 class Scanner
 {
 public:
-	Scanner();
-
 	Scanner(string FilePath);
 	
-	list<Token> getTokens();
+	Token getNextToken();
+
+	Token peek();
 
 private:
 	map<string, string> GenericKeywordMap;
-	vector<string> FileContents;
-	TokenType LastReadTokenType;
+	string FileContents;
+	int FilePosition;
 
-	Token scanForTokenOfType(TokenType TokenTypeToScan);
+	Token scanForInteger();
 
-	void seperatePotentialTokens();
+	Token consumeParenthesisToken(char Paren);
 
-	Token mutateWordTokenType();
+	Token consumeCommaToken();
+
+	Token consumeColonToken();
+
+	Token consumeOperatorToken(char Operator);
+
+	bool isCommentStart();
+
+	void ignoreComment();
+
+
+	void skipPastWhiteSpace();
+
+	string readFile(string FilePath);
 };

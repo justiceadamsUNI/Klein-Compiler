@@ -1,77 +1,144 @@
 #include "../header/Scanner.h"
 #include <fstream>
 #include <iostream>
-#include <vector>
-#include <stdexcept>
+#include <sstream>
 
 using namespace std;
 
-Scanner::Scanner()
-{
-	//no file to scan. Use this constructor for testing.
-}
-
 Scanner::Scanner(string FilePath)
-{
-	std::fstream inputFile;
-	inputFile.open(FilePath.c_str());
-
-    // Check for successful opening
-    if(inputFile.fail())
-    {
-		throw std::invalid_argument("The File Cannot Be Found! - " + FilePath);
-	}
-
-	string word;
-	while (inputFile >> word) {
-		FileContents.push_back(word);
-	}
+{	
+	FileContents = readFile(FilePath);
+	FilePosition = 0;
 }
 
-list<Token> Scanner::getTokens()
+Token Scanner::getNextToken()
 {
-	list<Token> Tokens;
-	
-	for (int wordIndex = 0; wordIndex < FileContents.size(); wordIndex++)
+	while (FilePosition < FileContents.size())
 	{
-		string word = FileContents.at(wordIndex);
+		skipPastWhiteSpace();
+		char CharAtPosition = FileContents[FilePosition];
 
-		string accum = "";
-		for (int i = 0; i < word.size(); i++)
+		if (CharAtPosition == ',')
 		{
-			//Split the word if needed and add back into the vector.
-			char letter = word[i];
-			
-			if (letter == ',')
+			return consumeCommaToken();
+
+		} else if (CharAtPosition == ':')
+		{
+			return consumeColonToken();
+		}
+		else if (CharAtPosition == '+' || CharAtPosition == '*' || CharAtPosition == '/' || CharAtPosition == '-')
+		{
+			return consumeOperatorToken(CharAtPosition);
+		}
+		else if (CharAtPosition == '(')
+		{
+			if (isCommentStart())
 			{
-				Token CommaToken = Token(COMMA, "");
-				Tokens.push_back(CommaToken);
-				accum = "";
-				i++;
-				continue;
+				ignoreComment();
 			}
-
-			if (letter == '+')
-			{
-				//create plus token
-				//create token for whatever is in accum (if it's not empty);
-
-				//add accum.
-				//add plus token.
-				//i+2;
-
+			else {
+				return consumeParenthesisToken(CharAtPosition);
 			}
-			if (isdigit(i))
-			{
-				//add to accumulator
-				//i++
-				//continue
-			}
-
+		}
+		else if (CharAtPosition == ')')
+		{
+			return consumeParenthesisToken(CharAtPosition);
 		}
 	}
 
-	return Tokens;
+	return Token(END_OF_FILE, "");
 }
 
+void Scanner::skipPastWhiteSpace()
+{
+	while (FilePosition < FileContents.size() && isspace(FileContents[FilePosition]))
+	{
+		FilePosition++;
+	}
+}
+
+string Scanner::readFile(string FilePath)
+{
+	string FileData;
+	fstream inputFile;
+	inputFile.open(FilePath.c_str());
+
+	// Check for successful opening
+	if (inputFile.fail())
+	{
+		throw std::invalid_argument("The File Cannot Be Found! - " + FilePath);
+	}
+
+	FileData.assign((std::istreambuf_iterator<char>(inputFile)),
+		(std::istreambuf_iterator<char>()));
+
+	return FileData;
+}
+
+Token Scanner::consumeParenthesisToken(char ParenChar)
+{
+	FilePosition++;
+	stringstream StringStream;
+	string ParenString;
+
+	StringStream << ParenChar;
+	StringStream >> ParenString;
+	return Token(PARENTHESIS, ParenString);
+}
+
+Token Scanner::consumeCommaToken()
+{
+	FilePosition++;
+	return Token(COMMA, "");
+}
+
+Token Scanner::consumeColonToken()
+{
+	FilePosition++;
+	return Token(COLON, "");
+}
+
+Token Scanner::consumeOperatorToken(char OperatorChar)
+{
+	FilePosition++;
+	stringstream StringStream;
+	string OperatorString;
+	
+	StringStream << OperatorChar;
+	StringStream >> OperatorString;
+
+	return Token(ARITHMETIC_OPERATOR, OperatorString);
+}
+
+bool Scanner::isCommentStart()
+{
+	return FilePosition + 1 < FileContents.size() && FileContents[FilePosition + 1] == '*';
+}
+
+void Scanner::ignoreComment()
+{
+	int InitialCommentPosition = FilePosition;
+	FilePosition = FilePosition + 2;
+
+	while (FilePosition < FileContents.size())
+	{
+		skipPastWhiteSpace();
+
+		if (FileContents[FilePosition] = '*') {
+			if (FilePosition + 1 < FileContents.size()
+				&& FileContents[FilePosition + 1] == ')')
+			{
+				//Valid comment end state. Return.
+				FilePosition = FilePosition + 2;
+				return;
+			}
+		}
+
+		FilePosition++;
+	}
+
+	ostringstream ErrorMessageStream;
+	ErrorMessageStream << "ERROR: You forgot to close you're comment that started at pos. " << InitialCommentPosition;
+	throw  std::runtime_error(ErrorMessageStream.str());
+}
 
