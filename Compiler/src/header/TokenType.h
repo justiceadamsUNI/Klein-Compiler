@@ -18,11 +18,10 @@ enum TokenType
 	COMPARATOR,
 	LOGICIAL_OPERATOR,
 	CONDITIONAL,
-	COMMENTOR,
 	END_OF_FILE
 };
 
-const map<TokenType, string> TokenTypePrintMap{
+const map<TokenType, string> TokenTypePrintMap {
 	{ INTEGER, "INTEGER" },
 	{ BOOLEAN, "BOOLEAN" },
 	{ ARITHMETIC_OPERATOR, "ARITHMETIC_OPERATOR" },
@@ -34,6 +33,5 @@ const map<TokenType, string> TokenTypePrintMap{
 	{ COMPARATOR, "COMPARATOR" },
 	{ LOGICIAL_OPERATOR, "LOGICIAL_OPERATOR" },
 	{ CONDITIONAL, "CONDITIONAL" },
-	{ COMMENTOR, "COMMENTOR" },
 	{ END_OF_FILE, "END_OF_FILE" }
 };

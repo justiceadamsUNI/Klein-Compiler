@@ -48,9 +48,15 @@ Token Scanner::getNextToken()
 		{
 			return consumeComparatorToken(CharAtPosition);
 		}
-		else if (Digits.find(CharAtPosition) != string::npos)
-		{
-			return consumeIntegerToken();
+		else if (Digits.find(CharAtPosition) != string::npos) {
+			if (CharAtPosition == '0')
+			{
+				return consumeZeroToken();
+			}
+			else
+			{
+				return consumeIntegerToken();
+			}
 		}
 	}
 
@@ -74,7 +80,7 @@ string Scanner::readFile(string FilePath)
 	// Check for successful opening
 	if (inputFile.fail())
 	{
-		throw std::invalid_argument("The File Cannot Be Found! - " + FilePath);
+		throw invalid_argument("The File Cannot Be Found! - " + FilePath);
 	}
 
 	FileData.assign((std::istreambuf_iterator<char>(inputFile)),
@@ -86,12 +92,7 @@ string Scanner::readFile(string FilePath)
 Token Scanner::consumeParenthesisToken(char ParenChar)
 {
 	FilePosition++;
-	stringstream StringStream;
-	string ParenString;
-
-	StringStream << ParenChar;
-	StringStream >> ParenString;
-	return Token(PARENTHESIS, ParenString);
+	return Token(PARENTHESIS, string(1, ParenChar));
 }
 
 Token Scanner::consumeCommaToken()
@@ -109,34 +110,18 @@ Token Scanner::consumeColonToken()
 Token Scanner::consumeOperatorToken(char OperatorChar)
 {
 	FilePosition++;
-	stringstream StringStream;
-	string OperatorString;
-	
-	StringStream << OperatorChar;
-	StringStream >> OperatorString;
-
-	return Token(ARITHMETIC_OPERATOR, OperatorString);
+	return Token(ARITHMETIC_OPERATOR, string(1, OperatorChar));
 }
 
 Token Scanner::consumeComparatorToken(char ComparatorChar)
 {
 	FilePosition++;
-	stringstream StringStream;
-	string ComparatorString;
-
-	StringStream << ComparatorChar;
-	StringStream >> ComparatorString;
-	return Token(COMPARATOR, ComparatorString);
+	return Token(COMPARATOR, string(1, ComparatorChar));
 }
 
 Token Scanner::consumeIntegerToken()
 {
-	stringstream StringStream;
-	string Accumulator;
-
-	StringStream << FileContents[FilePosition];
-	StringStream >> Accumulator;
-
+	string Accumulator = string(1, FileContents[FilePosition]);
 
 	//Set initial endState To False
 	bool ValidEndState = false;
@@ -158,23 +143,57 @@ Token Scanner::consumeIntegerToken()
 			//If next character a digit, add to accumulator and keep going.
 			Accumulator = Accumulator + NextChar;
 			FilePosition++;
+			continue;
 		}
-		else if (SelfDelimiters.find(NextChar != string::npos) || isspace(NextChar))
+		else if (SelfDelimiters.find(NextChar) != string::npos || isspace(NextChar))
 		{
 			//If next character is a self delimiter, or a space, we're in a stop state.
 			ValidEndState = true;
 			FilePosition++;
+			continue;
 		}
 		else
 		{
 			//If any other character is recognized, blow up.
-			ostringstream ErrorMessageStream;
-			ErrorMessageStream << "ERROR: Unexpected character while scanning Iteger literal at pos -  " << FilePosition + 1 << " char= " << NextChar;
-			throw  std::runtime_error(ErrorMessageStream.str());
+			string ErrorMessage = "ERROR: Unexpected character while scanning Iteger literal at pos - " + to_string(FilePosition + 1) + " char= " + NextChar;
+			throw runtime_error(ErrorMessage);
 		}
 	}
 
 	return Token(INTEGER, Accumulator);
+}
+
+Token Scanner::consumeZeroToken()
+{
+	
+	while (FilePosition + 1  < FileContents.size())
+	{
+		char NextChar = FileContents[FilePosition + 1];
+		if (NextChar == '0')
+		{
+			FilePosition++;
+			continue;
+
+		}
+		else if (SelfDelimiters.find(NextChar) != string::npos || isspace(NextChar))
+		{
+			FilePosition++;
+			break;
+		}
+		else {
+			//If any other character (NOT ZERO) is recognized, blow up.
+			if (Digits.find(NextChar) != string::npos)
+			{
+				string ErrorMessage = "ERROR: Integers can't have leading zeros. - " + to_string(FilePosition + 1);
+				throw runtime_error(ErrorMessage);
+
+			}
+			string ErrorMessage = "ERROR: Unexpected character while scanning Integer. at pos - " + to_string(FilePosition + 1) + " char= " + NextChar;
+			throw runtime_error(ErrorMessage);
+		}
+	}
+
+	return Token(INTEGER, "0");
 }
 
 bool Scanner::isCommentStart()

@@ -4,18 +4,27 @@
 
 int main()
 {
-	Scanner Scanner("C:/Users/justice/Desktop/test.txt");
-
-	Token Token = Scanner.getNextToken();
-	while (Token.getTokenType() != END_OF_FILE)
+	try
 	{
-		cout << TokenTypePrintMap.find(Token.getTokenType())->second << " : " << Token.getValue() << endl;
-		Token = Scanner.getNextToken();
-
-		if (Token.getTokenType() == END_OF_FILE)
+		Scanner Scanner("C:/Users/justice/Desktop/test.txt");
+		Token Token = Scanner.getNextToken();
+		while (Token.getTokenType() != END_OF_FILE)
 		{
-			cout << "END OF FILE" << endl;
+			cout << TokenTypePrintMap.find(Token.getTokenType())->second << " : " << Token.getValue() << endl;
+			Token = Scanner.getNextToken();
+
+			if (Token.getTokenType() == END_OF_FILE)
+			{
+				cout << "END OF FILE" << endl;
+			}
 		}
+
+	}
+	catch (const std::exception& e)
+	{
+		cout << e.what() << endl;
+		return 1;
+
 	}
     return 0;
 }
