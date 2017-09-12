@@ -58,6 +58,9 @@ Token Scanner::getNextToken()
 				return consumeIntegerToken();
 			}
 		}
+		else if (isalpha(CharAtPosition)) {
+			return consumeGenericWordToken();
+		}
 	}
 
 	return Token(END_OF_FILE, "");
@@ -155,7 +158,7 @@ Token Scanner::consumeIntegerToken()
 		else
 		{
 			//If any other character is recognized, blow up.
-			string ErrorMessage = "ERROR: Unexpected character while scanning Iteger literal at pos - " + to_string(FilePosition + 1) + " char= " + NextChar;
+			string ErrorMessage = "ERROR: Unexpected character while scanning Integer literal at pos - " + to_string(FilePosition + 1) + " char= " + NextChar;
 			throw runtime_error(ErrorMessage);
 		}
 	}
@@ -194,6 +197,50 @@ Token Scanner::consumeZeroToken()
 	}
 
 	return Token(INTEGER, "0");
+}
+
+Token Scanner::consumeGenericWordToken()
+{
+	string Accumulator = string(1, FileContents[FilePosition]);
+
+	//Set initial endState To False
+	bool ValidEndState = false;
+	while (!ValidEndState && FilePosition < FileContents.size())
+	{
+		if (FilePosition + 1 == FileContents.size())
+		{
+			//Last character in file. Update accumulator, and set End State To Valid.
+			FilePosition++;
+			ValidEndState = true;
+			continue;
+		}
+
+		char NextChar = FileContents[FilePosition + 1];
+
+		//If not the last character in file, check that next char.
+		if (isalpha(NextChar) || NextChar == '_' || Digits.find(NextChar) != string::npos)
+		{
+			//If next character a digit, add to accumulator and keep going.
+			Accumulator = Accumulator + NextChar;
+			FilePosition++;
+			continue;
+		}
+		else if (SelfDelimiters.find(NextChar) != string::npos || isspace(NextChar))
+		{
+			//If next character is a self delimiter, or a space, we're in a stop state.
+			ValidEndState = true;
+			FilePosition++;
+			continue;
+		}
+		else
+		{
+			//If any other character is recognized, blow up.
+			string ErrorMessage = "ERROR: Unexpected character while scanning Identifier at pos - " + to_string(FilePosition + 1) + " char= " + NextChar;
+			throw runtime_error(ErrorMessage);
+		}
+	}
+
+	return Token(IDENTIFIER, Accumulator);
 }
 
 bool Scanner::isCommentStart()

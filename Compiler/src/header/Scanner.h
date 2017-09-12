@@ -37,6 +37,8 @@ private:
 
 	Token consumeZeroToken();
 
+	Token consumeGenericWordToken();
+
 	bool isCommentStart();
 
 	void ignoreComment();
