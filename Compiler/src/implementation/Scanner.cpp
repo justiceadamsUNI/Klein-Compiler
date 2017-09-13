@@ -141,7 +141,8 @@ Token Scanner::consumeIntegerToken()
 		char NextChar = FileContents[FilePosition + 1];
 
 		//If not the last character in file, check that next char.
-		if (Digits.find(NextChar) != string::npos)
+		//Also check to make sure the integer is within valid range.
+		if (Digits.find(NextChar) != string::npos && (stoi(Accumulator) < 2^(32) - 1) && (stoi(Accumulator) > -(2^(32))))
 		{
 			//If next character a digit, add to accumulator and keep going.
 			Accumulator = Accumulator + NextChar;
@@ -217,11 +218,33 @@ Token Scanner::consumeGenericWordToken()
 
 		char NextChar = FileContents[FilePosition + 1];
 
-		//If not the last character in file, check that next char.
-		if (isalpha(NextChar) || NextChar == '_' || Digits.find(NextChar) != string::npos)
-		{
-			//If next character a digit, add to accumulator and keep going.
-			Accumulator = Accumulator + NextChar;
+		//If enot the last character in file, check the next char.
+		//Also keep making sure that Accumulator doesn't exceed more than 256 characters.
+		if (isalpha(NextChar) && Accumulator.length < 257) {
+			Accumulator += NextChar;
+			//Check Accumulator to see if it is a Primitive Keyword
+			if (Accumulator == "function" || Accumulator == "main" || Accumulator == "print") {
+				return Token(PRIMITIVE_KEYWORD, Accumulator);
+			}
+			//Check Accumulator to see if it is a Logical Operator
+			if (Accumulator == "and" || Accumulator == "or" || Accumulator == "not") {
+				return Token(LOGICIAL_OPERATOR, Accumulator);
+			}
+			//Check Accumulator to see if it is a Integer
+			if (Accumulator == "integer") {
+				return Token(INTEGER, Accumulator);
+			}
+			//Check Accumulator to see if it is a Boolean
+			if (Accumulator == "boolean") {
+				return Token(BOOLEAN, Accumulator);
+			}
+			//If it is none of the above Token Types, continue on.
+			FilePosition++;
+			continue;
+		}
+		if ((NextChar == '_' || isdigit(NextChar) && Accumulator.length < 257)) {
+			//If Next character a digit or an underscore and is of valid length, add to accumulator and keep going
+			Accumulator += NextChar;
 			FilePosition++;
 			continue;
 		}
