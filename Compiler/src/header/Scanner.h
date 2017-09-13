@@ -5,6 +5,7 @@
 #include <vector>
 #include "../header/TokenType.h"
 #include "../header/Token.h"
+#include <stdexcept>
 
 using namespace std;
 
@@ -12,6 +13,9 @@ class Scanner
 {
 public:
 	Scanner(string FilePath);
+
+	//Constructor for testing.
+	Scanner(string TestFileContents, bool Testing);
 	
 	Token next();
 
@@ -43,7 +47,9 @@ private:
 
 	void ignoreComment();
 
-	void skipPastWhiteSpace();
+	bool skipPastWhiteSpace();
 
 	string readFile(string FilePath);
+
+	bool isValidKleinFile(string FilePath);
 };
