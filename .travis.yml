@@ -4,5 +4,5 @@ compiler:
   
 script:
   - cd Compiler
-  - chmod +x RunTest.sh
-  - ./RunTest.sh
+  - chmod +x runtest.sh
+  - ./runtest.sh
