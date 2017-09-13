@@ -11,6 +11,13 @@ Scanner::Scanner(string FilePath)
 	FilePosition = 0;
 }
 
+Token Scanner::peek()
+{
+	int tempFilePosition = FilePosition;
+	next();
+	FilePosition = tempFilePosition;
+}
+
 Token Scanner::next()
 {
 	while (FilePosition < FileContents.size())
