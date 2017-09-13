@@ -5,6 +5,7 @@
 #include <vector>
 #include "../header/TokenType.h"
 #include "../header/Token.h"
+#include <stdexcept>
 
 using namespace std;
 

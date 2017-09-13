@@ -3,6 +3,6 @@ compiler:
   - g++
   
 script:
-  - g++ -std=c++11 -Wall Compiler/src/Compiler.cpp Compiler/src/implementation/*.cpp -o main
-  - g++ -std=c++11 -Wall Compiler/test/*.cpp Compiler/src/implementation/*.cpp -o test
-  - ./test
+  - cd Compiler
+  - chmod +x runtest.sh
+  - ./runtest.sh
