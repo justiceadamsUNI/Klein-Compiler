@@ -44,7 +44,7 @@ private:
 
 	void ignoreComment();
 
-	void skipPastWhiteSpace();
+	bool skipPastWhiteSpace();
 
 	string readFile(string FilePath);
 

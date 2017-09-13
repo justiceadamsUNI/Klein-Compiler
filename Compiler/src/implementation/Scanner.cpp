@@ -22,7 +22,11 @@ Token Scanner::getNextToken()
 {
 	while (FilePosition < FileContents.size())
 	{
-		skipPastWhiteSpace();
+		if (skipPastWhiteSpace())
+		{
+			continue;
+		}
+
 		char CharAtPosition = FileContents[FilePosition];
 
 		if (CharAtPosition == ',')
@@ -65,18 +69,26 @@ Token Scanner::getNextToken()
 				return consumeIntegerToken();
 			}
 		}
+		else {
+			string ErrorMessage = "ERROR: Unsupported character found while scanning for tokens at pos - " + to_string(FilePosition) + " char= " + CharAtPosition;
+			throw runtime_error(ErrorMessage);
+		}
 	}
 
 	//ONCE THE WORD STATE MACHINE IS COMPLETED IT NEEDS TO BE TESTED INSIDE SCANNERTEST.CPP. DO.NOT.FORGET.
 	return Token(END_OF_FILE, "");
 }
 
-void Scanner::skipPastWhiteSpace()
+bool Scanner::skipPastWhiteSpace()
 {
+	int InitialFilePosition = FilePosition;
 	while (FilePosition < FileContents.size() && isspace(FileContents[FilePosition]))
 	{
 		FilePosition++;
 	}
+
+	//Returns true if whitespace was skipped.
+	return InitialFilePosition != FilePosition;
 }
 
 string Scanner::readFile(string FilePath)

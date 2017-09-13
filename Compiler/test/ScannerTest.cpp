@@ -173,6 +173,14 @@ TEST_CASE("Scanner getNextToken() Returns INTEGER Token Properly when Self Delim
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "12");
 }
 
+TEST_CASE("Scanner getNextToken() Throws Error When Unsported Character Found", "[Scanner]") {
+	string TestFileContents = "123 #";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "123");
+	REQUIRE_THROWS_AS(Scanner.getNextToken(), runtime_error);
+}
+
 TEST_CASE("Scanner Constructor() Throws Error When File Not Found", "[Scanner]") {
 	REQUIRE_THROWS_AS(Scanner("fakeFile.kln"), invalid_argument);
 }

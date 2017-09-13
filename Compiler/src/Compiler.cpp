@@ -6,17 +6,17 @@ int main()
 {
 	try
 	{
-		Scanner Scanner("C:/Users/justice/Desktop/test.txt");
+		Scanner Scanner("C:/Users/justice/Desktop/test.kln");
 		Token Token = Scanner.getNextToken();
 		while (Token.getTokenType() != END_OF_FILE)
 		{
 			cout << TokenTypePrintMap.find(Token.getTokenType())->second << " : " << Token.getValue() << endl;
 			Token = Scanner.getNextToken();
+		}
 
-			if (Token.getTokenType() == END_OF_FILE)
-			{
-				cout << "END OF FILE" << endl;
-			}
+		if (Token.getTokenType() == END_OF_FILE)
+		{
+			cout << "END OF FILE" << endl;
 		}
 
 	}
