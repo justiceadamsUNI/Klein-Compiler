@@ -21,7 +21,7 @@ Scanner::Scanner(string TestFileContents, bool Testing)
 Token Scanner::peek()
 {
 	int tempFilePosition = FilePosition;
-	next();
+	return next();
 	FilePosition = tempFilePosition;
 }
 
@@ -78,6 +78,7 @@ Token Scanner::next()
 		}
 		else if (isalpha(CharAtPosition)) {
 			return consumeGenericWordToken();
+		}
 		else {
 			string ErrorMessage = "ERROR: Unsupported character found while scanning for tokens at pos - " + to_string(FilePosition) + " char= " + CharAtPosition;
 			throw runtime_error(ErrorMessage);

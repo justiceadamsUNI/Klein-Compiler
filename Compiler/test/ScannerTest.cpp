@@ -2,142 +2,142 @@
 #include"../src/header/Scanner.h"
 
 void assertScannerHasNextTokenOfType(Scanner &Scanner, TokenType TokenType) {
-	Token NextToken = Scanner.getNextToken();
+	Token NextToken = Scanner.next();
 
 	REQUIRE(NextToken.getTokenType() == TokenType);
 }
 
 void assertScannerHasNextTokenOfTypeWithValue(Scanner &Scanner, TokenType TokenType, string TokenValue) {
-	Token NextToken = Scanner.getNextToken();
+	Token NextToken = Scanner.next();
 
 	REQUIRE(NextToken.getTokenType() == TokenType);
 	REQUIRE(NextToken.getValue() == TokenValue);
 }
 
-TEST_CASE("Scanner getNextToken() returns END_OF_FILE Token for empty file", "[Scanner]") {
+TEST_CASE("Scanner next() returns END_OF_FILE Token for empty file", "[Scanner]") {
 	string TestFileContents = "         \n\n\n";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, END_OF_FILE, "");
 }
 
-TEST_CASE("Scanner getNextToken() returns COMMA Token for ,", "[Scanner]") {
+TEST_CASE("Scanner next() returns COMMA Token for ,", "[Scanner]") {
 	string TestFileContents = ",";
 	Scanner Scanner(TestFileContents, true);
 	
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, COMMA, "");
 }
 
-TEST_CASE("Scanner getNextToken() returns COLON Token for :", "[Scanner]") {
+TEST_CASE("Scanner next() returns COLON Token for :", "[Scanner]") {
 	string TestFileContents = ":";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, COLON, "");
 }
 
-TEST_CASE("Scanner getNextToken() returns ARITHMETIC_OPERATOR Token With Correct Value for +", "[Scanner]") {
+TEST_CASE("Scanner next() returns ARITHMETIC_OPERATOR Token With Correct Value for +", "[Scanner]") {
 	string TestFileContents = "+";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, ARITHMETIC_OPERATOR, "+");
 }
 
-TEST_CASE("Scanner getNextToken() returns ARITHMETIC_OPERATOR Token With Correct Value for *", "[Scanner]") {
+TEST_CASE("Scanner next() returns ARITHMETIC_OPERATOR Token With Correct Value for *", "[Scanner]") {
 	string TestFileContents = "*";
 	Scanner Scanner(TestFileContents, true);
 	
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, ARITHMETIC_OPERATOR, "*");
 }
 
-TEST_CASE("Scanner getNextToken() returns ARITHMETIC_OPERATOR Token With Correct Value for -", "[Scanner]") {
+TEST_CASE("Scanner next() returns ARITHMETIC_OPERATOR Token With Correct Value for -", "[Scanner]") {
 	string TestFileContents = "-";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, ARITHMETIC_OPERATOR, "-");
 }
 
-TEST_CASE("Scanner getNextToken() returns ARITHMETIC_OPERATOR Token With Correct Value for /", "[Scanner]") {
+TEST_CASE("Scanner next() returns ARITHMETIC_OPERATOR Token With Correct Value for /", "[Scanner]") {
 	string TestFileContents = "/";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, ARITHMETIC_OPERATOR, "/");
 }
 
-TEST_CASE("Scanner getNextToken() returns PARENTHESIS Token With Correct Value for (", "[Scanner]") {
+TEST_CASE("Scanner next() returns PARENTHESIS Token With Correct Value for (", "[Scanner]") {
 	string TestFileContents = "(";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, "(");
 }
 
-TEST_CASE("Scanner getNextToken() returns PARENTHESIS Token With Correct Value for )", "[Scanner]") {
+TEST_CASE("Scanner next() returns PARENTHESIS Token With Correct Value for )", "[Scanner]") {
 	string TestFileContents = ")";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, ")");
 }
 
-TEST_CASE("Scanner getNextToken() Skips Anything Within Comments", "[Scanner]") {
+TEST_CASE("Scanner next() Skips Anything Within Comments", "[Scanner]") {
 	string TestFileContents = "(*SKIP THIS STUFF *)";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfType(Scanner, END_OF_FILE);
 }
 
-TEST_CASE("Scanner getNextToken() Throws Error When Comment Isn't Closed", "[Scanner]") {
+TEST_CASE("Scanner next() Throws Error When Comment Isn't Closed", "[Scanner]") {
 	string TestFileContents = "(*SKIP THIS STUFF ";
 	Scanner Scanner(TestFileContents, true);
-	REQUIRE_THROWS_AS(Scanner.getNextToken(), runtime_error);
+	REQUIRE_THROWS_AS(Scanner.next(), runtime_error);
 }
 
-TEST_CASE("Scanner getNextToken() Ignores Comment And Finds Next Token Normally", "[Scanner]") {
+TEST_CASE("Scanner next() Ignores Comment And Finds Next Token Normally", "[Scanner]") {
 	string TestFileContents = "(*SKIP THIS STUFF*)+";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, ARITHMETIC_OPERATOR, "+");
 }
 
-TEST_CASE("Scanner getNextToken() Returns COMPARATOR Token For < With Correct Value", "[Scanner]") {
+TEST_CASE("Scanner next() Returns COMPARATOR Token For < With Correct Value", "[Scanner]") {
 	string TestFileContents = "<";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, COMPARATOR, "<");
 }
 
-TEST_CASE("Scanner getNextToken() Returns COMPARATOR Token For = With Correct Value", "[Scanner]") {
+TEST_CASE("Scanner next() Returns COMPARATOR Token For = With Correct Value", "[Scanner]") {
 	string TestFileContents = "=";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, COMPARATOR, "=");
 }
 
-TEST_CASE("Scanner getNextToken() Returns INTEGER Token For NonZero Integer With Correct Value", "[Scanner]") {
+TEST_CASE("Scanner next() Returns INTEGER Token For NonZero Integer With Correct Value", "[Scanner]") {
 	string TestFileContents = "1234";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "1234");
 }
 
-TEST_CASE("Scanner getNextToken() Returns INTEGER Token For Zero Integer With Correct Value", "[Scanner]") {
+TEST_CASE("Scanner next() Returns INTEGER Token For Zero Integer With Correct Value", "[Scanner]") {
 	string TestFileContents = "000";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "0");
 }
 
-TEST_CASE("Scanner getNextToken() Throws Error When NonZero Integer Leads With 0's", "[Scanner]") {
+TEST_CASE("Scanner next() Throws Error When NonZero Integer Leads With 0's", "[Scanner]") {
 	string TestFileContents = "0001";
 	Scanner Scanner(TestFileContents, true);
-	REQUIRE_THROWS_AS(Scanner.getNextToken(), runtime_error);
+	REQUIRE_THROWS_AS(Scanner.next(), runtime_error);
 }
 
-TEST_CASE("Scanner getNextToken() Throws Error When Integer Has Invalid Character", "[Scanner]") {
+TEST_CASE("Scanner next() Throws Error When Integer Has Invalid Character", "[Scanner]") {
 	string TestFileContents = "1234a";
 	Scanner Scanner(TestFileContents, true);
-	REQUIRE_THROWS_AS(Scanner.getNextToken(), runtime_error);
+	REQUIRE_THROWS_AS(Scanner.next(), runtime_error);
 }
 
-TEST_CASE("Scanner getNextToken() Reurns END_OF_FILE When End Of File Token Is Reached After Other Token", "[Scanner]") {
+TEST_CASE("Scanner next() Reurns END_OF_FILE When End Of File Token Is Reached After Other Token", "[Scanner]") {
 	string TestFileContents = "123";
 	Scanner Scanner(TestFileContents, true);
 	
@@ -145,7 +145,7 @@ TEST_CASE("Scanner getNextToken() Reurns END_OF_FILE When End Of File Token Is R
 	assertScannerHasNextTokenOfType(Scanner,END_OF_FILE);
 }
 
-TEST_CASE("Scanner getNextToken() Returns INTEGER Token Properly when Self Delimiters Or Whitespace Is Found", "[Scanner]") {
+TEST_CASE("Scanner next() Returns INTEGER Token Properly when Self Delimiters Or Whitespace Is Found", "[Scanner]") {
 	string TestFileContents = "1 2+3-4*5/6=7<8(9)10,11:12";
 	Scanner Scanner(TestFileContents, true);
 
@@ -173,12 +173,12 @@ TEST_CASE("Scanner getNextToken() Returns INTEGER Token Properly when Self Delim
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "12");
 }
 
-TEST_CASE("Scanner getNextToken() Throws Error When Unsported Character Found", "[Scanner]") {
+TEST_CASE("Scanner next() Throws Error When Unsported Character Found", "[Scanner]") {
 	string TestFileContents = "123 #";
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "123");
-	REQUIRE_THROWS_AS(Scanner.getNextToken(), runtime_error);
+	REQUIRE_THROWS_AS(Scanner.next(), runtime_error);
 }
 
 TEST_CASE("Scanner Constructor() Throws Error When File Not Found", "[Scanner]") {
