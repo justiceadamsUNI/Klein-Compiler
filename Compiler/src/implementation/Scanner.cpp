@@ -142,7 +142,7 @@ Token Scanner::consumeIntegerToken()
 
 		//If not the last character in file, check that next char.
 		//Also check to make sure the integer is within valid range.
-		if (Digits.find(NextChar) != string::npos && (stoi(Accumulator) < 2^(32) - 1) && (stoi(Accumulator) > -(2^(32))))
+		if (Digits.find(NextChar) != string::npos) 
 		{
 			//If next character a digit, add to accumulator and keep going.
 			Accumulator = Accumulator + NextChar;
@@ -155,6 +155,11 @@ Token Scanner::consumeIntegerToken()
 			ValidEndState = true;
 			FilePosition++;
 			continue;
+		}
+		//If the Integer is out of bounds, tell them the same
+		else if ((!stoi(Accumulator) < 2 ^ (32) - 1) && !(stoi(Accumulator) > -(2 ^ (32)))) {
+			string ErrorMessage = "ERROR: Value of integer entered is out of bounds - " + Accumulator;
+			throw runtime_error(ErrorMessage);
 		}
 		else
 		{
@@ -220,7 +225,7 @@ Token Scanner::consumeGenericWordToken()
 
 		//If enot the last character in file, check the next char.
 		//Also keep making sure that Accumulator doesn't exceed more than 256 characters.
-		if (isalpha(NextChar) && Accumulator.length() < 257) {
+		if (isalpha(NextChar)) {
 			Accumulator += NextChar;
 			//Check Accumulator to see if it is a Primitive Keyword
 			if (Accumulator == "function" || Accumulator == "main" || Accumulator == "print") {
@@ -254,6 +259,11 @@ Token Scanner::consumeGenericWordToken()
 			ValidEndState = true;
 			FilePosition++;
 			continue;
+		}
+		//If the identifier is longer than 256 valid characters, tell them they can't
+		else if (!Accumulator.length() < 257) {
+			string ErrorMessage = "ERROR: Length of Identifier is toooo long - " + Accumulator;
+			throw runtime_error(ErrorMessage);
 		}
 		else
 		{
