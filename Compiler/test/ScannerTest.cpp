@@ -190,7 +190,7 @@ TEST_CASE("Scanner Constructor() Throws Error When File Not Klein File", "[Scann
 }
 
 TEST_CASE("Scanner Constructor() Sucessfull Opens File And Reads Tokens When Program Is Valid", "[Scanner]") {
-	Scanner Scanner("Compiler/test/test_klein_program_1.kln");
+	Scanner Scanner("test/test_klein_program_1.kln");
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, "(");
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "34");
