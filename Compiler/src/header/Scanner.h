@@ -12,6 +12,9 @@ class Scanner
 {
 public:
 	Scanner(string FilePath);
+
+	//Constructor for testing.
+	Scanner(string TestFileContents, bool Testing);
 	
 	Token getNextToken();
 
@@ -41,7 +44,9 @@ private:
 
 	void ignoreComment();
 
-	void skipPastWhiteSpace();
+	bool skipPastWhiteSpace();
 
 	string readFile(string FilePath);
+
+	bool isValidKleinFile(string FilePath);
 };

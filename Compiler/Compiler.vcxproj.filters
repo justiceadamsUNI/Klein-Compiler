@@ -44,5 +44,11 @@
     <ClCompile Include="src\implementation\Token.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test\ScannerTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test\test_klein_program_1.kln" />
   </ItemGroup>
 </Project>

@@ -11,11 +11,22 @@ Scanner::Scanner(string FilePath)
 	FilePosition = 0;
 }
 
+Scanner::Scanner(string TestFileContents, bool Testing)
+{
+	//ONLY USE THIS CONSTRUCTOR FOR TESTING PURPOSES.
+	FileContents = TestFileContents;
+	FilePosition = 0;
+}
+
 Token Scanner::getNextToken()
 {
 	while (FilePosition < FileContents.size())
 	{
-		skipPastWhiteSpace();
+		if (skipPastWhiteSpace())
+		{
+			continue;
+		}
+
 		char CharAtPosition = FileContents[FilePosition];
 
 		if (CharAtPosition == ',')
@@ -58,21 +69,35 @@ Token Scanner::getNextToken()
 				return consumeIntegerToken();
 			}
 		}
+		else {
+			string ErrorMessage = "ERROR: Unsupported character found while scanning for tokens at pos - " + to_string(FilePosition) + " char= " + CharAtPosition;
+			throw runtime_error(ErrorMessage);
+		}
 	}
 
+	//ONCE THE WORD STATE MACHINE IS COMPLETED IT NEEDS TO BE TESTED INSIDE SCANNERTEST.CPP. DO.NOT.FORGET.
 	return Token(END_OF_FILE, "");
 }
 
-void Scanner::skipPastWhiteSpace()
+bool Scanner::skipPastWhiteSpace()
 {
+	int InitialFilePosition = FilePosition;
 	while (FilePosition < FileContents.size() && isspace(FileContents[FilePosition]))
 	{
 		FilePosition++;
 	}
+
+	//Returns true if whitespace was skipped.
+	return InitialFilePosition != FilePosition;
 }
 
 string Scanner::readFile(string FilePath)
 {
+	if (!isValidKleinFile(FilePath))
+	{
+		throw invalid_argument("The File Must be a .kln File! - " + FilePath);
+	}
+
 	string FileData;
 	fstream inputFile;
 	inputFile.open(FilePath.c_str());
@@ -87,6 +112,12 @@ string Scanner::readFile(string FilePath)
 		(std::istreambuf_iterator<char>()));
 
 	return FileData;
+}
+
+bool Scanner::isValidKleinFile(string FilePath)
+{
+	//Int 4 used here since .kln is 4 characters.
+	return FilePath.size() > 4 && FilePath.compare(FilePath.size() - 4, 4, ".kln") == 0;
 }
 
 Token Scanner::consumeParenthesisToken(char ParenChar)
@@ -227,4 +258,3 @@ void Scanner::ignoreComment()
 	ErrorMessageStream << "ERROR: You forgot to close you're comment that started at pos. " << InitialCommentPosition;
 	throw  std::runtime_error(ErrorMessageStream.str());
 }
-
