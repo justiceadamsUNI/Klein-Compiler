@@ -7,11 +7,11 @@ int main()
 	try
 	{
 		Scanner Scanner("C:/Users/khars/Desktop/test.txt");
-		Token Token = Scanner.getNextToken();
+		Token Token = Scanner.next();
 		while (Token.getTokenType() != END_OF_FILE)
 		{
 			cout << TokenTypePrintMap.find(Token.getTokenType())->second << " : " << Token.getValue() << endl;
-			Token = Scanner.getNextToken();
+			Token = Scanner.next();
 
 			if (Token.getTokenType() == END_OF_FILE)
 			{

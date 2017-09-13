@@ -11,7 +11,7 @@ Scanner::Scanner(string FilePath)
 	FilePosition = 0;
 }
 
-Token Scanner::getNextToken()
+Token Scanner::next()
 {
 	while (FilePosition < FileContents.size())
 	{

@@ -13,7 +13,7 @@ class Scanner
 public:
 	Scanner(string FilePath);
 	
-	Token getNextToken();
+	Token next();
 
 	Token peek();
 
