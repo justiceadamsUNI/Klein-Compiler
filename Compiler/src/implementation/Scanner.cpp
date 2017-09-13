@@ -220,7 +220,7 @@ Token Scanner::consumeGenericWordToken()
 
 		//If enot the last character in file, check the next char.
 		//Also keep making sure that Accumulator doesn't exceed more than 256 characters.
-		if (isalpha(NextChar) && Accumulator.length < 257) {
+		if (isalpha(NextChar) && Accumulator.length() < 257) {
 			Accumulator += NextChar;
 			//Check Accumulator to see if it is a Primitive Keyword
 			if (Accumulator == "function" || Accumulator == "main" || Accumulator == "print") {
@@ -242,7 +242,7 @@ Token Scanner::consumeGenericWordToken()
 			FilePosition++;
 			continue;
 		}
-		if ((NextChar == '_' || isdigit(NextChar) && Accumulator.length < 257)) {
+		if ((NextChar == '_' || isdigit(NextChar) && Accumulator.length() < 257)) {
 			//If Next character a digit or an underscore and is of valid length, add to accumulator and keep going
 			Accumulator += NextChar;
 			FilePosition++;
