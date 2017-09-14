@@ -336,6 +336,16 @@ TEST_CASE("Scanner next() Finds Token After Identifier And Returns End Of File A
 	assertScannerHasNextTokenOfType(Scanner, END_OF_FILE);
 }
 
+TEST_CASE("Scanner next() Finds IDENTIFIER Token With Correct Value When Keyword And Int Smashed Together") {
+	string TestFileContents = "function7 if8 or_55";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "function7");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "if8");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "or_55");
+	assertScannerHasNextTokenOfType(Scanner, END_OF_FILE);
+}
+
 TEST_CASE("Scanner next() Throws Error When Unsported Character Found in identifier", "[Scanner]") {
 	string TestFileContents = "abcd!";
 	Scanner Scanner(TestFileContents, true);

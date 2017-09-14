@@ -173,7 +173,7 @@ Token Scanner::consumeIntegerToken()
 	{
 		if (FilePosition + 1 == FileContents.size())
 		{
-			//Last character in file. Update accumulator, and set End State To Valid.
+			//Last character in file. Update pointer, and set End State To Valid.
 			FilePosition++;
 			ValidEndState = true;
 			continue;
@@ -257,7 +257,7 @@ Token Scanner::consumeGenericWordToken()
 	{
 		if (FilePosition + 1 == FileContents.size())
 		{
-			//Last character in file. Update accumulator, and set End State To Valid.
+			//Last character in file. Update pointer, and set End State To Valid.
 			FilePosition++;
 			ValidEndState = true;
 			continue;
@@ -270,32 +270,9 @@ Token Scanner::consumeGenericWordToken()
 		//Also keep making sure that Accumulator doesn't exceed more than 256 characters.
 		if (isalpha(NextChar)) {
 			Accumulator += NextChar;
-			//Check Accumulator to see if it is a Primitive Keyword
-			if (Accumulator == "function" || Accumulator == "main" || Accumulator == "print") {
-				FilePosition  = FilePosition + 2;
-				return Token(PRIMITIVE_KEYWORD, Accumulator);
-			}
-			//Check Accumulator to see if it is a Logical Operator
-			if (Accumulator == "and" || Accumulator == "or" || Accumulator == "not") {
-				FilePosition = FilePosition + 2;
-				return Token(LOGICIAL_OPERATOR, Accumulator);
-			}
-			//Check Accumulator to see if it is a Integer
-			if (Accumulator == "integer" || Accumulator == "boolean") {
-				FilePosition = FilePosition + 2;
-				return Token(DATA_TYPE, Accumulator);
-			}
-			//Check Accumulator to see if it is a Boolean
-			if (Accumulator == "true" || Accumulator == "false") {
-				FilePosition = FilePosition + 2;
-				return Token(BOOLEAN, Accumulator);
-			}
-			//If it is none of the above Token Types, continue on.
 			FilePosition++;
 			continue;
-		}
-
-		if ((NextChar == '_' || isdigit(NextChar) && Accumulator.length() < 257)) {
+		} else if ((NextChar == '_' || isdigit(NextChar) && Accumulator.length() < 257)) {
 			//If Next character a digit or an underscore and is of valid length, add to accumulator and keep going
 			Accumulator += NextChar;
 			FilePosition++;
@@ -314,6 +291,24 @@ Token Scanner::consumeGenericWordToken()
 			string ErrorMessage = "ERROR: Unexpected character while scanning Identifier at pos - " + to_string(FilePosition + 1) + " char= " + NextChar;
 			throw runtime_error(ErrorMessage);
 		}
+	}
+
+	//CONVERT FOLLOWING CODE TO MAP EVENTUALLY
+	//Check Accumulator to see if it is a Primitive Keyword
+	if (Accumulator == "function" || Accumulator == "main" || Accumulator == "print") {
+		return Token(PRIMITIVE_KEYWORD, Accumulator);
+	}
+	//Check Accumulator to see if it is a Logical Operator
+	else if (Accumulator == "and" || Accumulator == "or" || Accumulator == "not") {
+		return Token(LOGICIAL_OPERATOR, Accumulator);
+	}
+	//Check Accumulator to see if it is a Integer
+	else if (Accumulator == "integer" || Accumulator == "boolean") {
+		return Token(DATA_TYPE, Accumulator);
+	}
+	//Check Accumulator to see if it is a Boolean
+	else if (Accumulator == "true" || Accumulator == "false") {
+		return Token(BOOLEAN, Accumulator);
 	}
 
 	//If the identifier is longer than 256 valid characters, tell them they can't
