@@ -14,6 +14,13 @@ void assertScannerHasNextTokenOfTypeWithValue(Scanner &Scanner, TokenType TokenT
 	REQUIRE(NextToken.getValue() == TokenValue);
 }
 
+void assertScannerPeeksNextTokenOfTypeWithValue(Scanner &Scanner, TokenType TokenType, string TokenValue) {
+	Token NextToken = Scanner.peek();
+
+	REQUIRE(NextToken.getTokenType() == TokenType);
+	REQUIRE(NextToken.getValue() == TokenValue);
+}
+
 TEST_CASE("Scanner next() returns END_OF_FILE Token for empty file", "[Scanner]") {
 	string TestFileContents = "         \n\n\n";
 	Scanner Scanner(TestFileContents, true);
@@ -333,6 +340,37 @@ TEST_CASE("Scanner next() Returns IDENTIFIER Token Properly when Self Delimiters
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "k");
 	assertScannerHasNextTokenOfType(Scanner, COLON);
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "l");
+}
+
+TEST_CASE("Scanner peek() Returns Token But Doesn't Consume It") {
+	string TestFileContents = "213 test";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerPeeksNextTokenOfTypeWithValue(Scanner, INTEGER, "213");
+	assertScannerPeeksNextTokenOfTypeWithValue(Scanner, INTEGER, "213");
+}
+
+TEST_CASE("Scanner peek() Returns Correct Token After Consuming A") {
+	string TestFileContents = "213 test";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "213");
+	assertScannerPeeksNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "test");
+}
+
+TEST_CASE("Scanner next() Works After peek() ") {
+	string TestFileContents = "213 test";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerPeeksNextTokenOfTypeWithValue(Scanner, INTEGER, "213");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "213");
+}
+
+TEST_CASE("Scanner peek() Detects End Of File Correctly") {
+	string TestFileContents = "";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerPeeksNextTokenOfTypeWithValue(Scanner, END_OF_FILE, "");
 }
 
 TEST_CASE("Scanner next() Throws Error When Unsported Character Found", "[Scanner]") {

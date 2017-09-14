@@ -22,8 +22,10 @@ Scanner::Scanner(string TestFileContents, bool Testing)
 Token Scanner::peek()
 {
 	int tempFilePosition = FilePosition;
-	return next();
+	Token PeekedToken = next();
 	FilePosition = tempFilePosition;
+
+	return PeekedToken;
 }
 
 Token Scanner::next()
