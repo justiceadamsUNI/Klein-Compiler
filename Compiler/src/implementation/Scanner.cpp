@@ -32,7 +32,7 @@ Token Scanner::peek()
 
 Token Scanner::next()
 {
-	while (FilePosition < FileContents.size())
+	while (FilePosition < FileSize)
 	{
 		if (skipPastWhiteSpace())
 		{
@@ -41,37 +41,42 @@ Token Scanner::next()
 
 		char CharAtPosition = FileContents[FilePosition];
 
-		if (CharAtPosition == ',')
+		switch (CharAtPosition)
 		{
+		case ',':
 			return consumeCommaToken();
-
-		} else if (CharAtPosition == ':')
-		{
+		case ':':
 			return consumeColonToken();
-		}
-		else if (CharAtPosition == '+' || CharAtPosition == '*' || CharAtPosition == '/' || CharAtPosition == '-')
-		{
+		case '+':
 			return consumeOperatorToken(CharAtPosition);
-		}
-		else if (CharAtPosition == '(')
-		{
+		case '*':
+			return consumeOperatorToken(CharAtPosition);
+		case '/':
+			return consumeOperatorToken(CharAtPosition);
+		case '-':
+			return consumeOperatorToken(CharAtPosition);
+		case '(':
 			if (isCommentStart())
 			{
 				ignoreComment();
+				continue;
 			}
 			else {
 				return consumeParenthesisToken(CharAtPosition);
 			}
-		}
-		else if (CharAtPosition == ')')
-		{
+		case ')':
 			return consumeParenthesisToken(CharAtPosition);
-		}
-		else if (CharAtPosition == '<' || CharAtPosition == '=')
-		{
+		case '<':
 			return consumeComparatorToken(CharAtPosition);
+		case '=':
+			return consumeComparatorToken(CharAtPosition);
+		default:
+			break;
 		}
-		else if (isdigit(CharAtPosition)) {
+
+		// Handle More Complex Tokens
+		if (isdigit(CharAtPosition))
+		{
 			if (CharAtPosition == '0')
 			{
 				return consumeZeroToken();
@@ -90,14 +95,13 @@ Token Scanner::next()
 		}
 	}
 
-	//ONCE THE WORD STATE MACHINE IS COMPLETED IT NEEDS TO BE TESTED INSIDE SCANNERTEST.CPP. DO.NOT.FORGET.
 	return Token(END_OF_FILE, "");
 }
 
 bool Scanner::skipPastWhiteSpace()
 {
 	int InitialFilePosition = FilePosition;
-	while (FilePosition < FileContents.size() && isspace(FileContents[FilePosition]))
+	while (FilePosition < FileSize && isspace(FileContents[FilePosition]))
 	{
 		FilePosition++;
 	}
@@ -171,9 +175,9 @@ Token Scanner::consumeIntegerToken()
 
 	//Set initial endState To False
 	bool ValidEndState = false;
-	while (!ValidEndState && FilePosition < FileContents.size())
+	while (!ValidEndState && FilePosition < FileSize)
 	{
-		if (FilePosition + 1 == FileContents.size())
+		if (FilePosition + 1 == FileSize)
 		{
 			//Last character in file. Update pointer, and set End State To Valid.
 			FilePosition++;
@@ -219,7 +223,7 @@ Token Scanner::consumeIntegerToken()
 Token Scanner::consumeZeroToken()
 {
 	
-	while (FilePosition + 1  < FileContents.size())
+	while (FilePosition + 1  < FileSize)
 	{
 		char NextChar = FileContents[FilePosition + 1];
 		if (NextChar == '0')
@@ -255,9 +259,9 @@ Token Scanner::consumeGenericWordToken()
 
 	//Set initial endState To False
 	bool ValidEndState = false;
-	while (!ValidEndState && FilePosition < FileContents.size())
+	while (!ValidEndState && FilePosition < FileSize)
 	{
-		if (FilePosition + 1 == FileContents.size())
+		if (FilePosition + 1 == FileSize)
 		{
 			//Last character in file. Update pointer, and set End State To Valid.
 			FilePosition++;
@@ -325,7 +329,7 @@ Token Scanner::consumeGenericWordToken()
 
 bool Scanner::isCommentStart()
 {
-	return FilePosition + 1 < FileContents.size() && FileContents[FilePosition + 1] == '*';
+	return FilePosition + 1 < FileSize && FileContents[FilePosition + 1] == '*';
 }
 
 void Scanner::ignoreComment()
@@ -333,7 +337,7 @@ void Scanner::ignoreComment()
 	int InitialCommentPosition = FilePosition;
 	FilePosition = FilePosition + 2;
 
-	while (FilePosition < FileContents.size())
+	while (FilePosition < FileSize)
 	{
 		if (skipPastWhiteSpace())
 		{
@@ -341,7 +345,7 @@ void Scanner::ignoreComment()
 		};
 
 		if (FileContents[FilePosition] == '*') {
-			if (FilePosition + 1 < FileContents.size()
+			if (FilePosition + 1 < FileSize
 				&& FileContents[FilePosition + 1] == ')')
 			{
 				//Valid comment end state. Return.
