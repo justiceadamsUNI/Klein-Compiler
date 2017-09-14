@@ -4,6 +4,8 @@
 #include <sstream>
 #include <cmath>
 
+#define CHAR_NOT_FOUND string::npos
+
 using namespace std;
 
 Scanner::Scanner(string FilePath)
@@ -127,8 +129,8 @@ string Scanner::readFile(string FilePath)
 		throw invalid_argument("The File Cannot Be Found! - " + FilePath);
 	}
 
-	FileData.assign((std::istreambuf_iterator<char>(inputFile)),
-		(std::istreambuf_iterator<char>()));
+	FileData.assign((istreambuf_iterator<char>(inputFile)),
+		(istreambuf_iterator<char>()));
 
 	return FileData;
 }
@@ -179,7 +181,7 @@ Token Scanner::consumeIntegerToken()
 	{
 		if (FilePosition + 1 == FileSize)
 		{
-			//Last character in file. Update accumulator, and set End State To Valid.
+			//Last character in file. Update pointer, and set End State To Valid.
 			FilePosition++;
 			ValidEndState = true;
 			continue;
@@ -192,11 +194,11 @@ Token Scanner::consumeIntegerToken()
 		if (isdigit(NextChar)) 
 		{
 			//If next character a digit, add to accumulator and keep going.
-			Accumulator = Accumulator + NextChar;
+			Accumulator += NextChar;
 			FilePosition++;
 			continue;
 		}
-		else if (SelfDelimiters.find(NextChar) != string::npos || isspace(NextChar))
+		else if (SelfDelimiters.find(NextChar) != CHAR_NOT_FOUND || isspace(NextChar))
 		{
 			//If next character is a self delimiter, or a space, we're in a stop state.
 			ValidEndState = true;
@@ -232,7 +234,7 @@ Token Scanner::consumeZeroToken()
 			continue;
 
 		}
-		else if (SelfDelimiters.find(NextChar) != string::npos || isspace(NextChar))
+		else if (SelfDelimiters.find(NextChar) != CHAR_NOT_FOUND || isspace(NextChar))
 		{
 			FilePosition++;
 			break;
@@ -282,7 +284,7 @@ Token Scanner::consumeGenericWordToken()
 			FilePosition++;
 			continue;
 		}
-		else if (SelfDelimiters.find(NextChar) != string::npos || isspace(NextChar))
+		else if (SelfDelimiters.find(NextChar) != CHAR_NOT_FOUND || isspace(NextChar))
 		{
 			//If next character is a self delimiter, or a space, we're in a stop state.
 			ValidEndState = true;
