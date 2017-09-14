@@ -316,7 +316,7 @@ Token Scanner::consumeGenericWordToken()
 				FilePosition = FilePosition++;
 				return Token(BOOLEAN, Accumulator);
 			}
-			else if (Accumulator == "if" || Accumulator == "than" || Accumulator == "else") {
+			else if (Accumulator == "if" || Accumulator == "then" || Accumulator == "else") {
 				FilePosition = FilePosition++;
 				return Token(CONDITIONAL, Accumulator);
 			}
