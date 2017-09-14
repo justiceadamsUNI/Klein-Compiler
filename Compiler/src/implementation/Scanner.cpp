@@ -268,34 +268,9 @@ Token Scanner::consumeGenericWordToken()
 
 		//If not the last character in file, check the next char.
 		//Also keep making sure that Accumulator doesn't exceed more than 256 characters.
-		if (isalpha(NextChar)) {
-			Accumulator += NextChar;
-			//Check Accumulator to see if it is a Primitive Keyword
-			if (Accumulator == "function" || Accumulator == "main" || Accumulator == "print") {
-				FilePosition  = FilePosition + 2;
-				return Token(PRIMITIVE_KEYWORD, Accumulator);
-			}
-			//Check Accumulator to see if it is a Logical Operator
-			if (Accumulator == "and" || Accumulator == "or" || Accumulator == "not") {
-				FilePosition = FilePosition + 2;
-				return Token(LOGICIAL_OPERATOR, Accumulator);
-			}
-			//Check Accumulator to see if it is a Integer
-			if (Accumulator == "integer" || Accumulator == "boolean") {
-				FilePosition = FilePosition + 2;
-				return Token(DATA_TYPE, Accumulator);
-			}
-			//Check Accumulator to see if it is a Boolean
-			if (Accumulator == "true" || Accumulator == "false") {
-				FilePosition = FilePosition + 2;
-				return Token(BOOLEAN, Accumulator);
-			}
-			//If it is none of the above Token Types, continue on.
-			FilePosition++;
-			continue;
-		}
 
-		if ((NextChar == '_' || isdigit(NextChar) && Accumulator.length() < 257)) {
+
+		if ((isalpha(NextChar) || NextChar == '_' || isdigit(NextChar)) && Accumulator.length() < 257) {
 			//If Next character a digit or an underscore and is of valid length, add to accumulator and keep going
 			Accumulator += NextChar;
 			FilePosition++;
@@ -322,9 +297,36 @@ Token Scanner::consumeGenericWordToken()
 		throw runtime_error(ErrorMessage);
 	}
 	else {
-		return Token(IDENTIFIER, Accumulator);
+			if (Accumulator == "function" || Accumulator == "main" || Accumulator == "print") {
+				FilePosition = FilePosition++;
+				return Token(PRIMITIVE_KEYWORD, Accumulator);
+			}
+			//Check Accumulator to see if it is a Logical Operator
+			else if (Accumulator == "and" || Accumulator == "or" || Accumulator == "not") {
+				FilePosition = FilePosition++;
+				return Token(LOGICIAL_OPERATOR, Accumulator);
+			}
+			//Check Accumulator to see if it is a Integer
+			else if (Accumulator == "integer" || Accumulator == "boolean") {
+				FilePosition = FilePosition++;
+				return Token(DATA_TYPE, Accumulator);
+			}
+			//Check Accumulator to see if it is a Boolean
+			else if (Accumulator == "true" || Accumulator == "false") {
+				FilePosition = FilePosition++;
+				return Token(BOOLEAN, Accumulator);
+			}
+			else if (Accumulator == "if" || Accumulator == "than" || Accumulator == "else") {
+				FilePosition = FilePosition++;
+				return Token(CONDITIONAL, Accumulator);
+			}
+			else {
+				return Token(IDENTIFIER, Accumulator);
+			}
+
+		}
+		
 	}
-}
 
 bool Scanner::isCommentStart()
 {
