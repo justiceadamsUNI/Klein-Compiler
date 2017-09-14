@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <cmath>
 
 using namespace std;
 
@@ -194,17 +195,18 @@ Token Scanner::consumeIntegerToken()
 			FilePosition++;
 			continue;
 		}
-		//If the Integer is out of bounds, tell them the same
-		else if ((!stoi(Accumulator) < 2 ^ (32) - 1) && !(stoi(Accumulator) > -(2 ^ (32)))) {
-			string ErrorMessage = "ERROR: Value of integer entered is out of bounds - " + Accumulator;
-			throw runtime_error(ErrorMessage);
-		}
 		else
 		{
 			//If any other character is recognized, blow up.
 			string ErrorMessage = "ERROR: Unexpected character while scanning Integer literal at pos - " + to_string(FilePosition + 1) + " char= " + NextChar;
 			throw runtime_error(ErrorMessage);
 		}
+	}
+
+	//If the Integer is out of bounds, tell them the same. Must Use Long Long Int. Regular Int isn't big enough with C++
+	 if (stoll(Accumulator) > pow(2,32)) {
+		string ErrorMessage = "ERROR: Value of integer entered is out of bounds - " + Accumulator;
+		throw runtime_error(ErrorMessage);
 	}
 
 	return Token(INTEGER, Accumulator);
@@ -261,7 +263,8 @@ Token Scanner::consumeGenericWordToken()
 
 		char NextChar = FileContents[FilePosition + 1];
 
-		//If enot the last character in file, check the next char.
+
+		//If not the last character in file, check the next char.
 		//Also keep making sure that Accumulator doesn't exceed more than 256 characters.
 		if (isalpha(NextChar)) {
 			Accumulator += NextChar;
@@ -275,16 +278,17 @@ Token Scanner::consumeGenericWordToken()
 			}
 			//Check Accumulator to see if it is a Integer
 			if (Accumulator == "integer") {
-				return Token(INTEGER, Accumulator);
+				return Token(DATA_TYPE, Accumulator);
 			}
 			//Check Accumulator to see if it is a Boolean
 			if (Accumulator == "boolean") {
-				return Token(BOOLEAN, Accumulator);
+				return Token(DATA_TYPE, Accumulator);
 			}
 			//If it is none of the above Token Types, continue on.
 			FilePosition++;
 			continue;
 		}
+
 		if ((NextChar == '_' || isdigit(NextChar) && Accumulator.length() < 257)) {
 			//If Next character a digit or an underscore and is of valid length, add to accumulator and keep going
 			Accumulator += NextChar;
@@ -298,11 +302,6 @@ Token Scanner::consumeGenericWordToken()
 			FilePosition++;
 			continue;
 		}
-		//If the identifier is longer than 256 valid characters, tell them they can't
-		else if (!Accumulator.length() < 257) {
-			string ErrorMessage = "ERROR: Length of Identifier is toooo long - " + Accumulator;
-			throw runtime_error(ErrorMessage);
-		}
 		else
 		{
 			//If any other character is recognized, blow up.
@@ -311,7 +310,14 @@ Token Scanner::consumeGenericWordToken()
 		}
 	}
 
-	return Token(IDENTIFIER, Accumulator);
+	//If the identifier is longer than 256 valid characters, tell them they can't
+	if (Accumulator.length() > 256) {
+		string ErrorMessage = "ERROR: Length of Identifier is toooo long at pos - " + to_string(FilePosition);
+		throw runtime_error(ErrorMessage);
+	}
+	else {
+		return Token(IDENTIFIER, Accumulator);
+	}
 }
 
 bool Scanner::isCommentStart()
@@ -326,9 +332,12 @@ void Scanner::ignoreComment()
 
 	while (FilePosition < FileContents.size())
 	{
-		skipPastWhiteSpace();
+		if (skipPastWhiteSpace())
+		{
+			continue;
+		};
 
-		if (FileContents[FilePosition] = '*') {
+		if (FileContents[FilePosition] == '*') {
 			if (FilePosition + 1 < FileContents.size()
 				&& FileContents[FilePosition + 1] == ')')
 			{

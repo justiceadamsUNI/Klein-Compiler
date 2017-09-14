@@ -137,7 +137,7 @@ TEST_CASE("Scanner next() Throws Error When Integer Has Invalid Character", "[Sc
 	REQUIRE_THROWS_AS(Scanner.next(), runtime_error);
 }
 
-TEST_CASE("Scanner next() Reurns END_OF_FILE When End Of File Token Is Reached After Other Token", "[Scanner]") {
+TEST_CASE("Scanner next() Returns END_OF_FILE When End Of File Token Is Reached After Other Token", "[Scanner]") {
 	string TestFileContents = "123";
 	Scanner Scanner(TestFileContents, true);
 	
@@ -173,6 +173,168 @@ TEST_CASE("Scanner next() Returns INTEGER Token Properly when Self Delimiters Or
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "12");
 }
 
+TEST_CASE("Scanner next() Returns PRIMITIVE_KEYWORD for 'function' with the Correct Value", "[Scanner]") {
+	string TestFileContents = "function";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, PRIMITIVE_KEYWORD, "function");
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'Function' with the Correct Value (AND NOT A PRIMITIVE KEYWORD)", "[Scanner]") {
+	string TestFileContents = "Function";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "Function");
+}
+
+TEST_CASE("Scanner next() Returns PRIMITIVE_KEYWORD for 'main' with the Correct Value", "[Scanner]") {
+	string TestFileContents = "main";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, PRIMITIVE_KEYWORD, "main");
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'Main' with the Correct Value (AND NOT A PRIMITIVE KEYWORD)", "[Scanner]") {
+	string TestFileContents = "Main";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "Main");
+}
+
+TEST_CASE("Scanner next() Returns PRIMITIVE_KEYWORD for 'print' with the Correct Value", "[Scanner]") {
+	string TestFileContents = "print";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, PRIMITIVE_KEYWORD, "print");
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'Print' with the Correct Value (AND NOT A PRIMITIVE KEYWORD)", "[Scanner]") {
+	string TestFileContents = "Print";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "Print");
+}
+
+TEST_CASE("Scanner next() Returns LOGICIAL_OPERATOR for 'and' with the Correct Value", "[Scanner]") {
+	string TestFileContents = "and";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, LOGICIAL_OPERATOR, "and");
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'And' with the Correct Value (LOGICIAL_OPERATORD)", "[Scanner]") {
+	string TestFileContents = "And";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "And");
+}
+
+TEST_CASE("Scanner next() Returns LOGICIAL_OPERATOR for 'or' with the Correct Value", "[Scanner]") {
+	string TestFileContents = "or";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, LOGICIAL_OPERATOR, "or");
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'Or' with the Correct Value (LOGICIAL_OPERATOR)", "[Scanner]") {
+	string TestFileContents = "Or";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "Or");
+}
+
+TEST_CASE("Scanner next() Returns LOGICIAL_OPERATOR for 'not' with the Correct Value", "[Scanner]") {
+	string TestFileContents = "not";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, LOGICIAL_OPERATOR, "not");
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'Not' with the Correct Value (LOGICIAL_OPERATORD)", "[Scanner]") {
+	string TestFileContents = "Not";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "Not");
+}
+
+TEST_CASE("Scanner next() Returns DATA_TYPE for 'integer' with the Correct Value", "[Scanner]") {
+	string TestFileContents = "integer";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, DATA_TYPE, "integer");
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'Integer' with the Correct Value (AND NOT A DATA_TYPE)", "[Scanner]") {
+	string TestFileContents = "Integer";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "Integer");
+}
+
+TEST_CASE("Scanner next() Returns DATA_TYPE for 'boolean' with the Correct Value", "[Scanner]") {
+	string TestFileContents = "boolean";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, DATA_TYPE, "boolean");
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'Boolean' with the Correct Value (AND NOT A DATA_TYPE)", "[Scanner]") {
+	string TestFileContents = "Boolean";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "Boolean");
+}
+
+TEST_CASE("Scanner next() Returns Valid Identifier When Underscores And Numbers Are Involved") {
+	string TestFileContents = "identifIER_23_44";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "identifIER_23_44");
+}
+
+TEST_CASE("Scanner next() Finds Token After Identifier And Returns End Of File At The End") {
+	string TestFileContents = "213 identifIER_23_44";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "213");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "identifIER_23_44");
+	assertScannerHasNextTokenOfType(Scanner, END_OF_FILE);
+}
+
+TEST_CASE("Scanner next() Throws Error When Unsported Character Found in identifier", "[Scanner]") {
+	string TestFileContents = "abcd!";
+	Scanner Scanner(TestFileContents, true);
+	REQUIRE_THROWS_AS(Scanner.next(), runtime_error);
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER Token Properly when Self Delimiters Or Whitespace Is Found", "[Scanner]") {
+	string TestFileContents = "a b+c-d*e/f=g<h(i)j,k:l";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "a");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "b");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, ARITHMETIC_OPERATOR, "+");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "c");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, ARITHMETIC_OPERATOR, "-");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "d");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, ARITHMETIC_OPERATOR, "*");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "e");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, ARITHMETIC_OPERATOR, "/");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "f");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, COMPARATOR, "=");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "g");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, COMPARATOR, "<");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "h");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, "(");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "i");;
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, ")");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "j");
+	assertScannerHasNextTokenOfType(Scanner, COMMA);
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "k");
+	assertScannerHasNextTokenOfType(Scanner, COLON);
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "l");
+}
+
 TEST_CASE("Scanner next() Throws Error When Unsported Character Found", "[Scanner]") {
 	string TestFileContents = "123 #";
 	Scanner Scanner(TestFileContents, true);
@@ -197,4 +359,18 @@ TEST_CASE("Scanner Constructor() Sucessfull Opens File And Reads Tokens When Pro
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, ARITHMETIC_OPERATOR, "+");
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "34");
 	assertScannerHasNextTokenOfType(Scanner, END_OF_FILE);
+}
+
+TEST_CASE("Scanner next() Sucessfull Reads Token of 256 Characters But Blows Up When There's 257 Characters", "[Scanner]") {
+	Scanner Scanner("test/test_klein_program_2_long_identifiers.kln");
+
+	assertScannerHasNextTokenOfType(Scanner, IDENTIFIER);
+	REQUIRE_THROWS_AS(Scanner.next(), runtime_error);
+}
+
+TEST_CASE("Scanner next() Sucessfull Reads Integer == 2^32 But Blows Up When Integer == 2^32 + 1", "[Scanner]") {
+	Scanner Scanner("test/test_klein_program_3_int_range.kln");
+
+	assertScannerHasNextTokenOfType(Scanner, INTEGER);
+	REQUIRE_THROWS_AS(Scanner.next(), runtime_error);
 }

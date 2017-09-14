@@ -7,7 +7,6 @@ using namespace std;
 enum TokenType
 {
 	INTEGER,
-	BOOLEAN,
 	DATA_TYPE,
 	ARITHMETIC_OPERATOR,
 	PRIMITIVE_KEYWORD,
@@ -23,7 +22,7 @@ enum TokenType
 
 const map<TokenType, string> TokenTypePrintMap {
 	{ INTEGER, "INTEGER" },
-	{ BOOLEAN, "BOOLEAN" },
+	{ DATA_TYPE, "DATA_TYPE" },
 	{ ARITHMETIC_OPERATOR, "ARITHMETIC_OPERATOR" },
 	{ PRIMITIVE_KEYWORD, "PRIMITIVE_KEYWORD" },
 	{ PARENTHESIS, "PARENTHESIS" },
