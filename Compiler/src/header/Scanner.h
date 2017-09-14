@@ -17,7 +17,7 @@ public:
 	//Constructor for testing.
 	Scanner(string TestFileContents, bool Testing);
 	
-	Token getNextToken();
+	Token next();
 
 	Token peek();
 
@@ -40,6 +40,8 @@ private:
 	Token consumeIntegerToken();
 
 	Token consumeZeroToken();
+
+	Token consumeGenericWordToken();
 
 	bool isCommentStart();
 
