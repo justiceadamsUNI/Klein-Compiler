@@ -10,6 +10,7 @@ Scanner::Scanner(string FilePath)
 {	
 	FileContents = readFile(FilePath);
 	FilePosition = 0;
+	FileSize = FileContents.size();
 }
 
 Scanner::Scanner(string TestFileContents, bool Testing)
@@ -17,6 +18,7 @@ Scanner::Scanner(string TestFileContents, bool Testing)
 	//ONLY USE THIS CONSTRUCTOR FOR TESTING PURPOSES.
 	FileContents = TestFileContents;
 	FilePosition = 0;
+	FileSize = FileContents.size();
 }
 
 Token Scanner::peek()
@@ -69,7 +71,7 @@ Token Scanner::next()
 		{
 			return consumeComparatorToken(CharAtPosition);
 		}
-		else if (Digits.find(CharAtPosition) != string::npos) {
+		else if (isdigit(CharAtPosition)) {
 			if (CharAtPosition == '0')
 			{
 				return consumeZeroToken();
@@ -183,7 +185,7 @@ Token Scanner::consumeIntegerToken()
 
 		//If not the last character in file, check that next char.
 		//Also check to make sure the integer is within valid range.
-		if (Digits.find(NextChar) != string::npos) 
+		if (isdigit(NextChar)) 
 		{
 			//If next character a digit, add to accumulator and keep going.
 			Accumulator = Accumulator + NextChar;
@@ -233,7 +235,7 @@ Token Scanner::consumeZeroToken()
 		}
 		else {
 			//If any other character (NOT ZERO) is recognized, blow up.
-			if (Digits.find(NextChar) != string::npos)
+			if (isdigit(NextChar))
 			{
 				string ErrorMessage = "ERROR: Integers can't have leading zeros. - " + to_string(FilePosition + 1);
 				throw runtime_error(ErrorMessage);
