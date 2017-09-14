@@ -23,9 +23,9 @@ public:
 
 private:
 	string SelfDelimiters = "+-*/,:,<=()";
-	string Digits = "0123456789";
 	string FileContents;
 	int FilePosition;
+	int FileSize;
 
 	Token consumeParenthesisToken(char Paren);
 
@@ -49,7 +49,7 @@ private:
 
 	bool skipPastWhiteSpace();
 
-	string readFile(string FilePath);
-
 	bool isValidKleinFile(string FilePath);
+
+	string readFile(string FilePath);
 };
