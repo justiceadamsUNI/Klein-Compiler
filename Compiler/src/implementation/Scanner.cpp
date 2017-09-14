@@ -270,7 +270,7 @@ Token Scanner::consumeGenericWordToken()
 		//Also keep making sure that Accumulator doesn't exceed more than 256 characters.
 
 
-		if ((isalpha(NextChar) || NextChar == '_' || isdigit(NextChar)) && Accumulator.length() < 257) {
+		if ((isalpha(NextChar) || NextChar == '_' || isdigit(NextChar))) {
 			//If Next character a digit or an underscore and is of valid length, add to accumulator and keep going
 			Accumulator += NextChar;
 			FilePosition++;

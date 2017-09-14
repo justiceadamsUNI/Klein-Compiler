@@ -320,6 +320,49 @@ TEST_CASE("Scanner next() Returns IDENTIFIER for 'False' with the Correct Value 
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "False");
 }
+
+TEST_CASE("Scanner next() Returns CONDITIONAL for 'if' with the Correct Value", "[Scanner]") {
+	string TestFileContents = "if";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, CONDITIONAL, "if");
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'If' with the Correct Value (AND NOT A CONDITIONAL)", "[Scanner]") {
+	string TestFileContents = "If";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "If");
+}
+
+TEST_CASE("Scanner next() Returns CONDITIONAL for 'then' with the Correct Value", "[Scanner]") {
+	string TestFileContents = "then";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, CONDITIONAL, "then");
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'Then' with the Correct Value (AND NOT A CONDITIONAL)", "[Scanner]") {
+	string TestFileContents = "Then";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "Then");
+}
+
+TEST_CASE("Scanner next() Returns CONDITIONAL for 'else' with the Correct Value", "[Scanner]") {
+	string TestFileContents = "else";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, CONDITIONAL, "else");
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'Else' with the Correct Value (AND NOT A CONDITIONAL)", "[Scanner]") {
+	string TestFileContents = "Else";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "Else");
+}
+
 TEST_CASE("Scanner next() Returns Valid Identifier When Underscores And Numbers Are Involved") {
 	string TestFileContents = "identifIER_23_44";
 	Scanner Scanner(TestFileContents, true);
@@ -427,13 +470,16 @@ TEST_CASE("Scanner Constructor() Throws Error When File Not Klein File", "[Scann
 	REQUIRE_THROWS_AS(Scanner("fakeFile.txt"), invalid_argument);
 }
 
-TEST_CASE("Scanner Constructor() Sucessfull Opens File And Reads Tokens When Program Is Valid", "[Scanner]") {
+TEST_CASE("Scanner Constructor() Sucessfull Opens File And Reads Tokens When Tokens Are Valid", "[Scanner]") {
 	Scanner Scanner("test/test_klein_program_1.kln");
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, "(");
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "34");
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, ARITHMETIC_OPERATOR, "+");
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "34");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, CONDITIONAL, "if");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "THAN");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, CONDITIONAL, "else");
 	assertScannerHasNextTokenOfType(Scanner, END_OF_FILE);
 }
 
