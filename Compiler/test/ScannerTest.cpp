@@ -185,6 +185,7 @@ TEST_CASE("Scanner next() Returns PRIMITIVE_KEYWORD for 'function' with the Corr
 	Scanner Scanner(TestFileContents, true);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, PRIMITIVE_KEYWORD, "function");
+	assertScannerHasNextTokenOfType(Scanner, END_OF_FILE);
 }
 
 TEST_CASE("Scanner next() Returns IDENTIFIER for 'Function' with the Correct Value (AND NOT A PRIMITIVE KEYWORD)", "[Scanner]") {

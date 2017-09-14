@@ -272,18 +272,22 @@ Token Scanner::consumeGenericWordToken()
 			Accumulator += NextChar;
 			//Check Accumulator to see if it is a Primitive Keyword
 			if (Accumulator == "function" || Accumulator == "main" || Accumulator == "print") {
+				FilePosition  = FilePosition + 2;
 				return Token(PRIMITIVE_KEYWORD, Accumulator);
 			}
 			//Check Accumulator to see if it is a Logical Operator
 			if (Accumulator == "and" || Accumulator == "or" || Accumulator == "not") {
+				FilePosition = FilePosition + 2;
 				return Token(LOGICIAL_OPERATOR, Accumulator);
 			}
 			//Check Accumulator to see if it is a Integer
 			if (Accumulator == "integer") {
+				FilePosition = FilePosition + 2;
 				return Token(DATA_TYPE, Accumulator);
 			}
 			//Check Accumulator to see if it is a Boolean
 			if (Accumulator == "boolean") {
+				FilePosition = FilePosition + 2;
 				return Token(DATA_TYPE, Accumulator);
 			}
 			//If it is none of the above Token Types, continue on.
