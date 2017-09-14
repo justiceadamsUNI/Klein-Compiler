@@ -173,7 +173,7 @@ Token Scanner::consumeIntegerToken()
 	{
 		if (FilePosition + 1 == FileContents.size())
 		{
-			//Last character in file. Update pointer, and set End State To Valid.
+			//Last character in file. Update accumulator, and set End State To Valid.
 			FilePosition++;
 			ValidEndState = true;
 			continue;
@@ -257,7 +257,7 @@ Token Scanner::consumeGenericWordToken()
 	{
 		if (FilePosition + 1 == FileContents.size())
 		{
-			//Last character in file. Update pointer, and set End State To Valid.
+			//Last character in file. Update accumulator, and set End State To Valid.
 			FilePosition++;
 			ValidEndState = true;
 			continue;
@@ -268,11 +268,9 @@ Token Scanner::consumeGenericWordToken()
 
 		//If not the last character in file, check the next char.
 		//Also keep making sure that Accumulator doesn't exceed more than 256 characters.
-		if (isalpha(NextChar)) {
-			Accumulator += NextChar;
-			FilePosition++;
-			continue;
-		} else if ((NextChar == '_' || isdigit(NextChar) && Accumulator.length() < 257)) {
+
+
+		if ((isalpha(NextChar) || NextChar == '_' || isdigit(NextChar)) && Accumulator.length() < 257) {
 			//If Next character a digit or an underscore and is of valid length, add to accumulator and keep going
 			Accumulator += NextChar;
 			FilePosition++;
@@ -293,33 +291,42 @@ Token Scanner::consumeGenericWordToken()
 		}
 	}
 
-	//CONVERT FOLLOWING CODE TO MAP EVENTUALLY
-	//Check Accumulator to see if it is a Primitive Keyword
-	if (Accumulator == "function" || Accumulator == "main" || Accumulator == "print") {
-		return Token(PRIMITIVE_KEYWORD, Accumulator);
-	}
-	//Check Accumulator to see if it is a Logical Operator
-	else if (Accumulator == "and" || Accumulator == "or" || Accumulator == "not") {
-		return Token(LOGICIAL_OPERATOR, Accumulator);
-	}
-	//Check Accumulator to see if it is a Integer
-	else if (Accumulator == "integer" || Accumulator == "boolean") {
-		return Token(DATA_TYPE, Accumulator);
-	}
-	//Check Accumulator to see if it is a Boolean
-	else if (Accumulator == "true" || Accumulator == "false") {
-		return Token(BOOLEAN, Accumulator);
-	}
-
 	//If the identifier is longer than 256 valid characters, tell them they can't
 	if (Accumulator.length() > 256) {
 		string ErrorMessage = "ERROR: Length of Identifier is toooo long at pos - " + to_string(FilePosition);
 		throw runtime_error(ErrorMessage);
 	}
 	else {
-		return Token(IDENTIFIER, Accumulator);
+			if (Accumulator == "function" || Accumulator == "main" || Accumulator == "print") {
+				FilePosition = FilePosition++;
+				return Token(PRIMITIVE_KEYWORD, Accumulator);
+			}
+			//Check Accumulator to see if it is a Logical Operator
+			else if (Accumulator == "and" || Accumulator == "or" || Accumulator == "not") {
+				FilePosition = FilePosition++;
+				return Token(LOGICIAL_OPERATOR, Accumulator);
+			}
+			//Check Accumulator to see if it is a Integer
+			else if (Accumulator == "integer" || Accumulator == "boolean") {
+				FilePosition = FilePosition++;
+				return Token(DATA_TYPE, Accumulator);
+			}
+			//Check Accumulator to see if it is a Boolean
+			else if (Accumulator == "true" || Accumulator == "false") {
+				FilePosition = FilePosition++;
+				return Token(BOOLEAN, Accumulator);
+			}
+			else if (Accumulator == "if" || Accumulator == "than" || Accumulator == "else") {
+				FilePosition = FilePosition++;
+				return Token(CONDITIONAL, Accumulator);
+			}
+			else {
+				return Token(IDENTIFIER, Accumulator);
+			}
+
+		}
+		
 	}
-}
 
 bool Scanner::isCommentStart()
 {
