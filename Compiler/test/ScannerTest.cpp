@@ -293,6 +293,33 @@ TEST_CASE("Scanner next() Returns IDENTIFIER for 'Boolean' with the Correct Valu
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "Boolean");
 }
 
+TEST_CASE("Scanner next() Returns BOOLEAN for 'true' with the Correct Value", "[Scanner]") {
+	string TestFileContents = "true";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, BOOLEAN, "true");
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'True' with the Correct Value (AND NOT A BOOLEAN)", "[Scanner]") {
+	string TestFileContents = "True";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "True");
+}
+
+TEST_CASE("Scanner next() Returns BOOLEAN for 'false' with the Correct Value", "[Scanner]") {
+	string TestFileContents = "false";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, BOOLEAN, "false");
+}
+
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'False' with the Correct Value (AND NOT A BOOLEAN)", "[Scanner]") {
+	string TestFileContents = "False";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "False");
+}
 TEST_CASE("Scanner next() Returns Valid Identifier When Underscores And Numbers Are Involved") {
 	string TestFileContents = "identifIER_23_44";
 	Scanner Scanner(TestFileContents, true);

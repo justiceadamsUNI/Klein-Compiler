@@ -281,14 +281,14 @@ Token Scanner::consumeGenericWordToken()
 				return Token(LOGICIAL_OPERATOR, Accumulator);
 			}
 			//Check Accumulator to see if it is a Integer
-			if (Accumulator == "integer") {
+			if (Accumulator == "integer" || Accumulator == "boolean") {
 				FilePosition = FilePosition + 2;
 				return Token(DATA_TYPE, Accumulator);
 			}
 			//Check Accumulator to see if it is a Boolean
-			if (Accumulator == "boolean") {
+			if (Accumulator == "true" || Accumulator == "false") {
 				FilePosition = FilePosition + 2;
-				return Token(DATA_TYPE, Accumulator);
+				return Token(BOOLEAN, Accumulator);
 			}
 			//If it is none of the above Token Types, continue on.
 			FilePosition++;
