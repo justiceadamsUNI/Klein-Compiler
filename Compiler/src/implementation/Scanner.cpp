@@ -190,7 +190,6 @@ Token Scanner::consumeIntegerToken()
 		char NextChar = FileContents[FilePosition + 1];
 
 		//If not the last character in file, check that next char.
-		//Also check to make sure the integer is within valid range.
 		if (isdigit(NextChar)) 
 		{
 			//If next character a digit, add to accumulator and keep going.
@@ -208,12 +207,12 @@ Token Scanner::consumeIntegerToken()
 		else
 		{
 			//If any other character is recognized, blow up.
-			string ErrorMessage = "ERROR: Unexpected character while scanning Integer literal at pos - " + to_string(FilePosition + 1) + " char= " + NextChar;
+			string ErrorMessage = "ERROR: Unexpected character while scanning Integer literal at pos - " + to_string(FilePosition + 1) + " char = " + NextChar;
 			throw runtime_error(ErrorMessage);
 		}
 	}
 
-	//If the Integer is out of bounds, tell them the same. Must Use Long Long Int. Regular Int isn't big enough with C++
+	//If the Integer is out of bounds, tell them. Must Use Long Long Int. Regular Int isn't big enough with C++
 	 if (stoll(Accumulator) > pow(2,32)) {
 		string ErrorMessage = "ERROR: Value of integer entered is out of bounds - " + Accumulator;
 		throw runtime_error(ErrorMessage);
@@ -239,14 +238,14 @@ Token Scanner::consumeZeroToken()
 			FilePosition++;
 			break;
 		}
-		else {
-			//If any other character (NOT ZERO) is recognized, blow up.
-			if (isdigit(NextChar))
-			{
-				string ErrorMessage = "ERROR: Integers can't have leading zeros. - " + to_string(FilePosition + 1);
-				throw runtime_error(ErrorMessage);
-
-			}
+		//If any other character (NOT ZERO) is recognized, blow up.
+		else if (isdigit(NextChar))
+		{
+			string ErrorMessage = "ERROR: Integers can't have leading zeros. - " + to_string(FilePosition + 1);
+			throw runtime_error(ErrorMessage);
+		}
+		else
+		{
 			string ErrorMessage = "ERROR: Unexpected character while scanning Integer. at pos - " + to_string(FilePosition + 1) + " char= " + NextChar;
 			throw runtime_error(ErrorMessage);
 		}
@@ -265,7 +264,7 @@ Token Scanner::consumeGenericWordToken()
 	{
 		if (FilePosition + 1 == FileSize)
 		{
-			//Last character in file. Update accumulator, and set End State To Valid.
+			//Last character in file. Update pointer, and set End State To Valid.
 			FilePosition++;
 			ValidEndState = true;
 			continue;
@@ -275,9 +274,6 @@ Token Scanner::consumeGenericWordToken()
 
 
 		//If not the last character in file, check the next char.
-		//Also keep making sure that Accumulator doesn't exceed more than 256 characters.
-
-
 		if ((isalpha(NextChar) || NextChar == '_' || isdigit(NextChar))) {
 			//If Next character a digit or an underscore and is of valid length, add to accumulator and keep going
 			Accumulator += NextChar;
@@ -299,9 +295,9 @@ Token Scanner::consumeGenericWordToken()
 		}
 	}
 
-	//If the identifier is longer than 256 valid characters, tell them they can't
+	//If the identifier is longer than 256 valid characters, throw error
 	if (Accumulator.length() > 256) {
-		string ErrorMessage = "ERROR: Length of Identifier is toooo long at pos - " + to_string(FilePosition);
+		string ErrorMessage = "ERROR: Length of Identifier is too long at pos - " + to_string(FilePosition);
 		throw runtime_error(ErrorMessage);
 	}
 	else {
