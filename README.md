@@ -43,7 +43,7 @@ make your life easier!
 -----------------------------------------------------------------------------------------
 ![Project Structure](https://i.imgur.com/gBPuSSq.png)
 	
-SRC: A directory containing all code for the project. Header files can be found in /header
+**SRC:** A directory containing all code for the project. Header files can be found in /header
 and implementation files of those headers found in /implementation. You'll notice 
 Compiler.cpp and BuildTokens.cpp in the src/ directory. They serve seperate purposes and 
 are thus seperated. Compiler.cpp will be our final cpp class containing all other objects
