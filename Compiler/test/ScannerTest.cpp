@@ -77,6 +77,26 @@ TEST_CASE("Scanner next() returns PARENTHESIS Token With Correct Value for (", "
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, "(");
 }
 
+TEST_CASE("Scanner next() returns PARENTHESIS Tokens correctly directly after keyword.", "[Scanner]") {
+	string TestFileContents = "main()";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, PRIMITIVE_KEYWORD, "main");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, "(");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, ")");
+	assertScannerHasNextTokenOfType(Scanner, END_OF_FILE);
+}
+
+TEST_CASE("Scanner next() returns PARENTHESIS Tokens correctly directly after identifier.", "[Scanner]") {
+	string TestFileContents = "variable()";
+	Scanner Scanner(TestFileContents, true);
+
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "variable");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, "(");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, ")");
+	assertScannerHasNextTokenOfType(Scanner, END_OF_FILE);
+}
+
 TEST_CASE("Scanner next() returns PARENTHESIS Token With Correct Value for )", "[Scanner]") {
 	string TestFileContents = ")";
 	Scanner Scanner(TestFileContents, true);

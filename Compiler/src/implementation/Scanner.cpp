@@ -301,7 +301,6 @@ Token Scanner::consumeGenericWordToken()
 		throw runtime_error(ErrorMessage);
 	}
 	else if (GenericKeywordTypeMap.find(Accumulator) != GenericKeywordTypeMap.end()) {
-		FilePosition++;
 		return Token(GenericKeywordTypeMap.find(Accumulator)->second, Accumulator);
 	}
 	else {
