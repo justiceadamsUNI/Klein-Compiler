@@ -34,6 +34,8 @@ utilizing github. View the repo here: (https://github.com/justiceadamsUNI/Klein-
 You'll notice the repo has an extra outer directory for various reasons including
 continous integration purposes.
 
+For a much prettier README, I encourage you to check out the Github repo.
+
 # A quick note about Visual Studio. If you don't intend to edit this using visual studio, ignore
 the Compiler.sln , Compiler.vcxproj	,Compiler.vcxproj.filters files. If you are, they will
 make your life easier!
