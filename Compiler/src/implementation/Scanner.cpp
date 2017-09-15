@@ -324,7 +324,7 @@ void Scanner::ignoreComment()
 		if (skipPastWhiteSpace())
 		{
 			continue;
-		};
+		}
 
 		if (FileContents[FilePosition] == '*') {
 			if (FilePosition + 1 < FileSize
