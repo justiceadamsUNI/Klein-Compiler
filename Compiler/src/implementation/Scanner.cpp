@@ -4,12 +4,15 @@
 #include <sstream>
 #include <cmath>
 
+#define CHAR_NOT_FOUND string::npos
+
 using namespace std;
 
 Scanner::Scanner(string FilePath)
 {	
 	FileContents = readFile(FilePath);
 	FilePosition = 0;
+	FileSize = FileContents.size();
 }
 
 Scanner::Scanner(string TestFileContents, bool Testing)
@@ -17,6 +20,7 @@ Scanner::Scanner(string TestFileContents, bool Testing)
 	//ONLY USE THIS CONSTRUCTOR FOR TESTING PURPOSES.
 	FileContents = TestFileContents;
 	FilePosition = 0;
+	FileSize = FileContents.size();
 }
 
 Token Scanner::peek()
@@ -30,7 +34,7 @@ Token Scanner::peek()
 
 Token Scanner::next()
 {
-	while (FilePosition < FileContents.size())
+	while (FilePosition < FileSize)
 	{
 		if (skipPastWhiteSpace())
 		{
@@ -39,37 +43,42 @@ Token Scanner::next()
 
 		char CharAtPosition = FileContents[FilePosition];
 
-		if (CharAtPosition == ',')
+		switch (CharAtPosition)
 		{
+		case ',':
 			return consumeCommaToken();
-
-		} else if (CharAtPosition == ':')
-		{
+		case ':':
 			return consumeColonToken();
-		}
-		else if (CharAtPosition == '+' || CharAtPosition == '*' || CharAtPosition == '/' || CharAtPosition == '-')
-		{
+		case '+':
 			return consumeOperatorToken(CharAtPosition);
-		}
-		else if (CharAtPosition == '(')
-		{
+		case '*':
+			return consumeOperatorToken(CharAtPosition);
+		case '/':
+			return consumeOperatorToken(CharAtPosition);
+		case '-':
+			return consumeOperatorToken(CharAtPosition);
+		case '(':
 			if (isCommentStart())
 			{
 				ignoreComment();
+				continue;
 			}
 			else {
 				return consumeParenthesisToken(CharAtPosition);
 			}
-		}
-		else if (CharAtPosition == ')')
-		{
+		case ')':
 			return consumeParenthesisToken(CharAtPosition);
-		}
-		else if (CharAtPosition == '<' || CharAtPosition == '=')
-		{
+		case '<':
 			return consumeComparatorToken(CharAtPosition);
+		case '=':
+			return consumeComparatorToken(CharAtPosition);
+		default:
+			break;
 		}
-		else if (Digits.find(CharAtPosition) != string::npos) {
+
+		// Handle More Complex Tokens
+		if (isdigit(CharAtPosition))
+		{
 			if (CharAtPosition == '0')
 			{
 				return consumeZeroToken();
@@ -88,14 +97,13 @@ Token Scanner::next()
 		}
 	}
 
-	//ONCE THE WORD STATE MACHINE IS COMPLETED IT NEEDS TO BE TESTED INSIDE SCANNERTEST.CPP. DO.NOT.FORGET.
 	return Token(END_OF_FILE, "");
 }
 
 bool Scanner::skipPastWhiteSpace()
 {
 	int InitialFilePosition = FilePosition;
-	while (FilePosition < FileContents.size() && isspace(FileContents[FilePosition]))
+	while (FilePosition < FileSize && isspace(FileContents[FilePosition]))
 	{
 		FilePosition++;
 	}
@@ -121,8 +129,8 @@ string Scanner::readFile(string FilePath)
 		throw invalid_argument("The File Cannot Be Found! - " + FilePath);
 	}
 
-	FileData.assign((std::istreambuf_iterator<char>(inputFile)),
-		(std::istreambuf_iterator<char>()));
+	FileData.assign((istreambuf_iterator<char>(inputFile)),
+		(istreambuf_iterator<char>()));
 
 	return FileData;
 }
@@ -169,11 +177,11 @@ Token Scanner::consumeIntegerToken()
 
 	//Set initial endState To False
 	bool ValidEndState = false;
-	while (!ValidEndState && FilePosition < FileContents.size())
+	while (!ValidEndState && FilePosition < FileSize)
 	{
-		if (FilePosition + 1 == FileContents.size())
+		if (FilePosition + 1 == FileSize)
 		{
-			//Last character in file. Update accumulator, and set End State To Valid.
+			//Last character in file. Update pointer, and set End State To Valid.
 			FilePosition++;
 			ValidEndState = true;
 			continue;
@@ -182,15 +190,14 @@ Token Scanner::consumeIntegerToken()
 		char NextChar = FileContents[FilePosition + 1];
 
 		//If not the last character in file, check that next char.
-		//Also check to make sure the integer is within valid range.
-		if (Digits.find(NextChar) != string::npos) 
+		if (isdigit(NextChar)) 
 		{
 			//If next character a digit, add to accumulator and keep going.
-			Accumulator = Accumulator + NextChar;
+			Accumulator += NextChar;
 			FilePosition++;
 			continue;
 		}
-		else if (SelfDelimiters.find(NextChar) != string::npos || isspace(NextChar))
+		else if (SelfDelimiters.find(NextChar) != CHAR_NOT_FOUND || isspace(NextChar))
 		{
 			//If next character is a self delimiter, or a space, we're in a stop state.
 			ValidEndState = true;
@@ -200,12 +207,12 @@ Token Scanner::consumeIntegerToken()
 		else
 		{
 			//If any other character is recognized, blow up.
-			string ErrorMessage = "ERROR: Unexpected character while scanning Integer literal at pos - " + to_string(FilePosition + 1) + " char= " + NextChar;
+			string ErrorMessage = "ERROR: Unexpected character while scanning Integer literal at pos - " + to_string(FilePosition + 1) + " char = " + NextChar;
 			throw runtime_error(ErrorMessage);
 		}
 	}
 
-	//If the Integer is out of bounds, tell them the same. Must Use Long Long Int. Regular Int isn't big enough with C++
+	//If the Integer is out of bounds, tell them. Must Use Long Long Int. Regular Int isn't big enough with C++
 	 if (stoll(Accumulator) > pow(2,32)) {
 		string ErrorMessage = "ERROR: Value of integer entered is out of bounds - " + Accumulator;
 		throw runtime_error(ErrorMessage);
@@ -217,7 +224,7 @@ Token Scanner::consumeIntegerToken()
 Token Scanner::consumeZeroToken()
 {
 	
-	while (FilePosition + 1  < FileContents.size())
+	while (FilePosition + 1  < FileSize)
 	{
 		char NextChar = FileContents[FilePosition + 1];
 		if (NextChar == '0')
@@ -226,19 +233,19 @@ Token Scanner::consumeZeroToken()
 			continue;
 
 		}
-		else if (SelfDelimiters.find(NextChar) != string::npos || isspace(NextChar))
+		else if (SelfDelimiters.find(NextChar) != CHAR_NOT_FOUND || isspace(NextChar))
 		{
 			FilePosition++;
 			break;
 		}
-		else {
-			//If any other character (NOT ZERO) is recognized, blow up.
-			if (Digits.find(NextChar) != string::npos)
-			{
-				string ErrorMessage = "ERROR: Integers can't have leading zeros. - " + to_string(FilePosition + 1);
-				throw runtime_error(ErrorMessage);
-
-			}
+		//If any other character (NOT ZERO) is recognized, blow up.
+		else if (isdigit(NextChar))
+		{
+			string ErrorMessage = "ERROR: Integers can't have leading zeros. - " + to_string(FilePosition + 1);
+			throw runtime_error(ErrorMessage);
+		}
+		else
+		{
 			string ErrorMessage = "ERROR: Unexpected character while scanning Integer. at pos - " + to_string(FilePosition + 1) + " char= " + NextChar;
 			throw runtime_error(ErrorMessage);
 		}
@@ -253,11 +260,11 @@ Token Scanner::consumeGenericWordToken()
 
 	//Set initial endState To False
 	bool ValidEndState = false;
-	while (!ValidEndState && FilePosition < FileContents.size())
+	while (!ValidEndState && FilePosition < FileSize)
 	{
-		if (FilePosition + 1 == FileContents.size())
+		if (FilePosition + 1 == FileSize)
 		{
-			//Last character in file. Update accumulator, and set End State To Valid.
+			//Last character in file. Update pointer, and set End State To Valid.
 			FilePosition++;
 			ValidEndState = true;
 			continue;
@@ -267,16 +274,13 @@ Token Scanner::consumeGenericWordToken()
 
 
 		//If not the last character in file, check the next char.
-		//Also keep making sure that Accumulator doesn't exceed more than 256 characters.
-
-
 		if ((isalpha(NextChar) || NextChar == '_' || isdigit(NextChar))) {
 			//If Next character a digit or an underscore and is of valid length, add to accumulator and keep going
 			Accumulator += NextChar;
 			FilePosition++;
 			continue;
 		}
-		else if (SelfDelimiters.find(NextChar) != string::npos || isspace(NextChar))
+		else if (SelfDelimiters.find(NextChar) != CHAR_NOT_FOUND || isspace(NextChar))
 		{
 			//If next character is a self delimiter, or a space, we're in a stop state.
 			ValidEndState = true;
@@ -291,46 +295,23 @@ Token Scanner::consumeGenericWordToken()
 		}
 	}
 
-	//If the identifier is longer than 256 valid characters, tell them they can't
+	//If the identifier is longer than 256 valid characters, throw error
 	if (Accumulator.length() > 256) {
-		string ErrorMessage = "ERROR: Length of Identifier is toooo long at pos - " + to_string(FilePosition);
+		string ErrorMessage = "ERROR: Length of Identifier is too long at pos - " + to_string(FilePosition);
 		throw runtime_error(ErrorMessage);
 	}
-	else {
-			if (Accumulator == "function" || Accumulator == "main" || Accumulator == "print") {
-				FilePosition = FilePosition++;
-				return Token(PRIMITIVE_KEYWORD, Accumulator);
-			}
-			//Check Accumulator to see if it is a Logical Operator
-			else if (Accumulator == "and" || Accumulator == "or" || Accumulator == "not") {
-				FilePosition = FilePosition++;
-				return Token(LOGICIAL_OPERATOR, Accumulator);
-			}
-			//Check Accumulator to see if it is a Integer
-			else if (Accumulator == "integer" || Accumulator == "boolean") {
-				FilePosition = FilePosition++;
-				return Token(DATA_TYPE, Accumulator);
-			}
-			//Check Accumulator to see if it is a Boolean
-			else if (Accumulator == "true" || Accumulator == "false") {
-				FilePosition = FilePosition++;
-				return Token(BOOLEAN, Accumulator);
-			}
-			else if (Accumulator == "if" || Accumulator == "then" || Accumulator == "else") {
-				FilePosition = FilePosition++;
-				return Token(CONDITIONAL, Accumulator);
-			}
-			else {
-				return Token(IDENTIFIER, Accumulator);
-			}
-
-		}
-		
+	else if (GenericKeywordTypeMap.find(Accumulator) != GenericKeywordTypeMap.end()) {
+		FilePosition++;
+		return Token(GenericKeywordTypeMap.find(Accumulator)->second, Accumulator);
 	}
+	else {
+		return Token(IDENTIFIER, Accumulator);
+	}
+}
 
 bool Scanner::isCommentStart()
 {
-	return FilePosition + 1 < FileContents.size() && FileContents[FilePosition + 1] == '*';
+	return FilePosition + 1 < FileSize && FileContents[FilePosition + 1] == '*';
 }
 
 void Scanner::ignoreComment()
@@ -338,15 +319,15 @@ void Scanner::ignoreComment()
 	int InitialCommentPosition = FilePosition;
 	FilePosition = FilePosition + 2;
 
-	while (FilePosition < FileContents.size())
+	while (FilePosition < FileSize)
 	{
 		if (skipPastWhiteSpace())
 		{
 			continue;
-		};
+		}
 
 		if (FileContents[FilePosition] == '*') {
-			if (FilePosition + 1 < FileContents.size()
+			if (FilePosition + 1 < FileSize
 				&& FileContents[FilePosition + 1] == ')')
 			{
 				//Valid comment end state. Return.

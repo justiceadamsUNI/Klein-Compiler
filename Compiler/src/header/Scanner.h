@@ -23,9 +23,26 @@ public:
 
 private:
 	string SelfDelimiters = "+-*/,:,<=()";
-	string Digits = "0123456789";
 	string FileContents;
 	int FilePosition;
+	int FileSize;
+
+	const map<string, TokenType> GenericKeywordTypeMap{
+		{ "function", PRIMITIVE_KEYWORD},
+		{ "main", PRIMITIVE_KEYWORD},
+		{ "print", PRIMITIVE_KEYWORD},
+		{ "and", LOGICIAL_OPERATOR},
+		{ "or", LOGICIAL_OPERATOR},
+		{ "not", LOGICIAL_OPERATOR},
+		{ "integer", DATA_TYPE},
+		{ "boolean", DATA_TYPE},
+		{ "true", BOOLEAN},
+		{ "false", BOOLEAN},
+		{ "if", CONDITIONAL},
+		{ "then", CONDITIONAL},
+		{ "else", CONDITIONAL}
+	};
+
 
 	Token consumeParenthesisToken(char Paren);
 
@@ -49,7 +66,7 @@ private:
 
 	bool skipPastWhiteSpace();
 
-	string readFile(string FilePath);
-
 	bool isValidKleinFile(string FilePath);
+
+	string readFile(string FilePath);
 };
