@@ -300,37 +300,14 @@ Token Scanner::consumeGenericWordToken()
 		string ErrorMessage = "ERROR: Length of Identifier is too long at pos - " + to_string(FilePosition);
 		throw runtime_error(ErrorMessage);
 	}
-	else {
-			if (Accumulator == "function" || Accumulator == "main" || Accumulator == "print") {
-				FilePosition = FilePosition++;
-				return Token(PRIMITIVE_KEYWORD, Accumulator);
-			}
-			//Check Accumulator to see if it is a Logical Operator
-			else if (Accumulator == "and" || Accumulator == "or" || Accumulator == "not") {
-				FilePosition = FilePosition++;
-				return Token(LOGICIAL_OPERATOR, Accumulator);
-			}
-			//Check Accumulator to see if it is a Integer
-			else if (Accumulator == "integer" || Accumulator == "boolean") {
-				FilePosition = FilePosition++;
-				return Token(DATA_TYPE, Accumulator);
-			}
-			//Check Accumulator to see if it is a Boolean
-			else if (Accumulator == "true" || Accumulator == "false") {
-				FilePosition = FilePosition++;
-				return Token(BOOLEAN, Accumulator);
-			}
-			else if (Accumulator == "if" || Accumulator == "then" || Accumulator == "else") {
-				FilePosition = FilePosition++;
-				return Token(CONDITIONAL, Accumulator);
-			}
-			else {
-				return Token(IDENTIFIER, Accumulator);
-			}
-
-		}
-		
+	else if (GenericKeywordTypeMap.find(Accumulator) != GenericKeywordTypeMap.end()) {
+		FilePosition++;
+		return Token(GenericKeywordTypeMap.find(Accumulator)->second, Accumulator);
 	}
+	else {
+		return Token(IDENTIFIER, Accumulator);
+	}
+}
 
 bool Scanner::isCommentStart()
 {
