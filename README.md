@@ -22,7 +22,7 @@
 
 Hello, we are the compiler defilers. Our Group Consist of:
 * [Justice Adams (adamsjal@uni.edu)](https://github.com/justiceadamsUNI)
-* [Harsha Varma (Varmak@uni.edu)](https://github.com/harshavarmak)
+* [Harsha Varma (varmak@uni.edu)](https://github.com/harshavarmak)
 * [Joshua Hilliard (hilliarj@uni.edu)](https://github.com/hilliardj)
 
 
@@ -81,6 +81,10 @@ Then run the RunTest excecutable with `RunTest.exe` .There you have it.
 ALTERNATIVELY: you can run the bash script if you have a g++ compiler and bash :)
 **We have verified that this works on STUDENT.CS.UNI.EDU server**. Run it with
 
+`chmod -x runtest.sh`
+
+and
+
 `./runtest.sh`
 
 
@@ -92,6 +96,9 @@ course of this project. Right now we just have kleins. This script will print ou
 all the valid tokens of any .kln file you pass it as a paramater. You could run this 
 bash script with
 
+`chmod -x kleins.sh`
+
+and
 `./kleins test_file_path.kln`
 
 **We have verified that this works on STUDENT.CS.UNI.EDU server.**
