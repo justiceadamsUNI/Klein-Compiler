@@ -338,7 +338,6 @@ void Scanner::ignoreComment()
 		FilePosition++;
 	}
 
-	ostringstream ErrorMessageStream;
-	ErrorMessageStream << "ERROR: You forgot to close you're comment that started at pos. " << InitialCommentPosition;
-	throw  std::runtime_error(ErrorMessageStream.str());
+	string ErrorMessage ="ERROR: You forgot to close you're comment that started at pos. " + to_string(InitialCommentPosition);
+	throw runtime_error(ErrorMessage);
 }
