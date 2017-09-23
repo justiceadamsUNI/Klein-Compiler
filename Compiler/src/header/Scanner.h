@@ -29,8 +29,6 @@ private:
 
 	const map<string, TokenType> GenericKeywordTypeMap{
 		{ "function", PRIMITIVE_KEYWORD},
-		{ "main", PRIMITIVE_KEYWORD},
-		{ "print", PRIMITIVE_KEYWORD},
 		{ "and", LOGICIAL_OPERATOR},
 		{ "or", LOGICIAL_OPERATOR},
 		{ "not", LOGICIAL_OPERATOR},
