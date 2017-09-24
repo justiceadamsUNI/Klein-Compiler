@@ -27,7 +27,7 @@ kleinc (){
 i=0
 buffer=""
 if [ "$#" -eq "0" ]; then
-echo "Please enter a command line argumet"
+echo "Please enter a command line argument"
 else
 for ((i=1; i<= $#; i++))
 do
