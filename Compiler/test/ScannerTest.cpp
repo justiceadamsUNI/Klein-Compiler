@@ -78,10 +78,10 @@ TEST_CASE("Scanner next() returns PARENTHESIS Token With Correct Value for (", "
 }
 
 TEST_CASE("Scanner next() returns PARENTHESIS Tokens correctly directly after keyword.", "[Scanner]") {
-	string TestFileContents = "main()";
+	string TestFileContents = "function()";
 	Scanner Scanner(TestFileContents, true);
 
-	assertScannerHasNextTokenOfTypeWithValue(Scanner, PRIMITIVE_KEYWORD, "main");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, PRIMITIVE_KEYWORD, "function");
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, "(");
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, ")");
 	assertScannerHasNextTokenOfType(Scanner, END_OF_FILE);
@@ -215,11 +215,11 @@ TEST_CASE("Scanner next() Returns IDENTIFIER for 'Function' with the Correct Val
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "Function");
 }
 
-TEST_CASE("Scanner next() Returns PRIMITIVE_KEYWORD for 'main' with the Correct Value", "[Scanner]") {
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'main' with the Correct Value", "[Scanner]") {
 	string TestFileContents = "main";
 	Scanner Scanner(TestFileContents, true);
 
-	assertScannerHasNextTokenOfTypeWithValue(Scanner, PRIMITIVE_KEYWORD, "main");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "main");
 }
 
 TEST_CASE("Scanner next() Returns IDENTIFIER for 'Main' with the Correct Value (AND NOT A PRIMITIVE KEYWORD)", "[Scanner]") {
@@ -229,11 +229,11 @@ TEST_CASE("Scanner next() Returns IDENTIFIER for 'Main' with the Correct Value (
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "Main");
 }
 
-TEST_CASE("Scanner next() Returns PRIMITIVE_KEYWORD for 'print' with the Correct Value", "[Scanner]") {
+TEST_CASE("Scanner next() Returns IDENTIFIER for 'print' with the Correct Value", "[Scanner]") {
 	string TestFileContents = "print";
 	Scanner Scanner(TestFileContents, true);
 
-	assertScannerHasNextTokenOfTypeWithValue(Scanner, PRIMITIVE_KEYWORD, "print");
+	assertScannerHasNextTokenOfTypeWithValue(Scanner, IDENTIFIER, "print");
 }
 
 TEST_CASE("Scanner next() Returns IDENTIFIER for 'Print' with the Correct Value (AND NOT A PRIMITIVE KEYWORD)", "[Scanner]") {

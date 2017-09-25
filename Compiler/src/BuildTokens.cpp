@@ -22,7 +22,7 @@ int main(int argv, char* argc[])
 	catch (const std::exception& e)
 	{
 		//Print Error Message
-		cout << e.what() << endl;
+		cout << endl << e.what() << endl;
 		return 1;
 	}
     return 0;
