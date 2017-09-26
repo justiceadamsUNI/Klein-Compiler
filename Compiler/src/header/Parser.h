@@ -1,9 +1,7 @@
 #pragma once
 #include "TokenType.h"
-#include "Scanner.h"
 #include "Token.h"
 #include <list>
-#include <map>
 #include <stdexcept>
 
 using namespace std;
@@ -12,9 +10,7 @@ class Parser
 {
 	// Represents every terminal/non-terminal that could 
 	// possibly be put onto the stack.
-
-	Parser(Scanner scanner);
-
+public:
 	enum StackValues
 	{
 		INTEGER_LITERAL,
@@ -62,11 +58,10 @@ class Parser
 		NON_EMPTY_ACTUALS,
 		NON_EMPTY_ACTUALS_TAIL,
 		LITERAL,
-		PRINT_STATEMENT,
-		EPSILON
+		PRINT_STATEMENT
 	};
 
-public:
+//public:
 	//ToDo: plug in public methods. Probably a match() and isValid()
 
 private:
@@ -128,41 +123,4 @@ private:
 
 
 	StackValues mapFromScannerTokenToStackValue(Token token);
-
-
-	// PARSE TABLE - Sparse 2D array representation.
-	// Read below the map for a better understanding. 
-	// After struggling for a while, I think this is the best data structure to use here.
-
-	const map<pair<StackValues, StackValues>, list<StackValues>> ParseTable {
-		{
-			{ make_pair<StackValues, StackValues>(PROGRAM, FUNCTION), list<StackValues>{DEFINITIONS} },
-			{ make_pair<StackValues, StackValues>(PROGRAM, END_OF_STREAM), list<StackValues>{EPSILON} },
-			{ make_pair<StackValues, StackValues>(DEFINITIONS, END_OF_STREAM), list<StackValues>{EPSILON} },
-			{ make_pair<StackValues, StackValues>(DEFINITIONS, FUNCTION), list<StackValues>{DEF, DEFINITIONS} },
-			{ make_pair<StackValues, StackValues>(DEF, FUNCTION), list<StackValues>{FUNCTION, IDENTIFIER, LEFT_PAREN, FORMALS, RIGHT_PAREN, COLON_LITERAL, TYPE, BODY} },
-			{ make_pair<StackValues, StackValues>(FORMALS, RIGHT_PAREN), list<StackValues>{EPSILON} },
-			{ make_pair<StackValues, StackValues>(FORMALS, IDENTIFIER), list<StackValues>{NON_EMPTY_FORMALS} },
-			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS, IDENTIFIER), list<StackValues>{FORMAL, NON_EMPTY_FORMALS_TAIL} },
-			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS_TAIL, COMMA_LITERAL), list<StackValues>{COMMA_LITERAL, NON_EMPTY_FORMALS_TAIL} },
-			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS_TAIL, RIGHT_PAREN), list<StackValues>{EPSILON} },
-			{ make_pair<StackValues, StackValues>(FORMAL, IDENTIFIER), list<StackValues>{IDENTIFIER, COLON_LITERAL, TYPE} },
-			{ make_pair<StackValues, StackValues>(BODY, PRINT), list<StackValues>{PRINT_STATEMENT, BODY} },
-			{ make_pair<StackValues, StackValues>(BODY, IF), list<StackValues>{EXPR} },
-			{ make_pair<StackValues, StackValues>(BODY, NOT), list<StackValues>{EXPR} },
-			{ make_pair<StackValues, StackValues>(BODY, IDENTIFIER), list<StackValues>{EXPR} },
-			{ make_pair<StackValues, StackValues>(BODY, INTEGER_LITERAL), list<StackValues>{EXPR} },
-			{ make_pair<StackValues, StackValues>(BODY, BOOLEAN_LITERAL), list<StackValues>{EXPR} },
-			{ make_pair<StackValues, StackValues>(BODY, MINUS_OPERATOR), list<StackValues>{EXPR} },
-			{ make_pair<StackValues, StackValues>(BODY, LEFT_PAREN), list<StackValues>{EXPR} },
-
-			// I made it to row 14 in the excell document. The rest needs to be flesched out still. This is going
-			// to be a super large map, but it is by far the cleanest solution I could think of, and it represents exactly what we want. 
-			// Let's talk math: Essentially we want a two variable function f(x,y) where the domain = D^2 and Codomain = D.
-			// This appears to be exactly that, and we won't have any empty list, nor will we have a large matrix to maintain.
-			// Ideally from our cpp file we could for example call map.find(make_pair<StackValues, StackValues>(BODY, LEFT_PAREN)) and it
-			// would return {EXPR} as a list! (see last row here). Anyway, if a pair isn't a key in the table, we're in an error state. AKA
-			// the function is undefined here. Note that we're exlusively dealing with our stack_values enum, so that's dope!
-		}
-	};
 };
