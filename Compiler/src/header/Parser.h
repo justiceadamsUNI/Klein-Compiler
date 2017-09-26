@@ -10,11 +10,11 @@ using namespace std;
 
 class Parser
 {
+public:
+	Parser(Scanner& InScanner);
+
 	// Represents every terminal/non-terminal that could 
 	// possibly be put onto the stack.
-
-	Parser(Scanner scanner);
-
 	enum StackValues
 	{
 		INTEGER_LITERAL,
@@ -63,13 +63,13 @@ class Parser
 		NON_EMPTY_ACTUALS_TAIL,
 		LITERAL,
 		PRINT_STATEMENT,
-		EPSILON
 	};
 
-public:
-	//ToDo: plug in public methods. Probably a match() and isValid()
+	StackValues mapFromScannerTokenToStackValue(Token token);
 
 private:
+	Scanner ScannerVar;
+
 	// All the stack values that are terminals
 	list<StackValues> TerminalValues = { 
 		INTEGER_LITERAL,
@@ -124,10 +124,13 @@ private:
 		PRINT_STATEMENT
 	};
 
-	bool isTerminalValue(StackValues value);
+	bool isTerminalValue(StackValues Value);
 
+	StackValues mapArithmeticOperatorTokenToStackValue(Token InToken);
 
-	StackValues mapFromScannerTokenToStackValue(Token token);
+	StackValues mapLogicalOperatorTokenToStackValue(Token InToken);
+	
+	StackValues mapConditionalTokenToStackValue(Token InToken);
 
 
 	// PARSE TABLE - Sparse 2D array representation.
@@ -137,15 +140,15 @@ private:
 	const map<pair<StackValues, StackValues>, list<StackValues>> ParseTable {
 		{
 			{ make_pair<StackValues, StackValues>(PROGRAM, FUNCTION), list<StackValues>{DEFINITIONS} },
-			{ make_pair<StackValues, StackValues>(PROGRAM, END_OF_STREAM), list<StackValues>{EPSILON} },
-			{ make_pair<StackValues, StackValues>(DEFINITIONS, END_OF_STREAM), list<StackValues>{EPSILON} },
+			{ make_pair<StackValues, StackValues>(PROGRAM, END_OF_STREAM), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(DEFINITIONS, END_OF_STREAM), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(DEFINITIONS, FUNCTION), list<StackValues>{DEF, DEFINITIONS} },
 			{ make_pair<StackValues, StackValues>(DEF, FUNCTION), list<StackValues>{FUNCTION, IDENTIFIER, LEFT_PAREN, FORMALS, RIGHT_PAREN, COLON_LITERAL, TYPE, BODY} },
-			{ make_pair<StackValues, StackValues>(FORMALS, RIGHT_PAREN), list<StackValues>{EPSILON} },
+			{ make_pair<StackValues, StackValues>(FORMALS, RIGHT_PAREN), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(FORMALS, IDENTIFIER), list<StackValues>{NON_EMPTY_FORMALS} },
 			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS, IDENTIFIER), list<StackValues>{FORMAL, NON_EMPTY_FORMALS_TAIL} },
 			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS_TAIL, COMMA_LITERAL), list<StackValues>{COMMA_LITERAL, NON_EMPTY_FORMALS_TAIL} },
-			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS_TAIL, RIGHT_PAREN), list<StackValues>{EPSILON} },
+			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS_TAIL, RIGHT_PAREN), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(FORMAL, IDENTIFIER), list<StackValues>{IDENTIFIER, COLON_LITERAL, TYPE} },
 			{ make_pair<StackValues, StackValues>(BODY, PRINT), list<StackValues>{PRINT_STATEMENT, BODY} },
 			{ make_pair<StackValues, StackValues>(BODY, IF), list<StackValues>{EXPR} },

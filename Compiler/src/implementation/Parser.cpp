@@ -1,6 +1,11 @@
 #include "../header/Parser.h"
 #include <algorithm>
 
+
+Parser::Parser(Scanner& InScanner): ScannerVar(InScanner) {
+	return;
+}
+
 bool Parser::isTerminalValue(StackValues value)
 {
 	list<StackValues>::iterator foundElement = std::find(TerminalValues.begin(), TerminalValues.end(), value);
@@ -18,22 +23,7 @@ Parser::StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
 	case BOOLEAN:
 		return BOOLEAN_LITERAL;
 	case ARITHMETIC_OPERATOR:
-		if (InToken.getValue() == "+")
-		{
-			return PLUS_OPERATOR;
-		}
-		else if (InToken.getValue() == "-")
-		{
-			return MINUS_OPERATOR;
-		}
-		else if (InToken.getValue() == "/")
-		{
-			return DIVIDES_OPERATOR;
-		}
-		else
-		{
-			return MULTIPLY_OPERATOR;
-		};
+		return mapArithmeticOperatorTokenToStackValue(InToken);
 	case PRIMITIVE_KEYWORD:
 		return FUNCTION;
 	case PARENTHESIS:
@@ -43,55 +33,68 @@ Parser::StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
 	case COLON:
 		return COLON_LITERAL;
 	case IDENTIFIER:
-		if (InToken.getValue() == "print")
-		{
-			return PRINT;
-		}
-		else
-		{
-			return IDENTIFIER;
-		};
+		return InToken.getValue() == "print" ? PRINT : IDENTIFIER;
 	case COMPARATOR:
-		if (InToken.getValue() == "<")
-		{
-			return LESS_THAN_OPERATOR;
-		}
-		else
-		{
-			return EQUAL_SIGN;
-		};
+		return InToken.getValue() == "<" ? LESS_THAN_OPERATOR : EQUAL_SIGN;
 	case LOGICIAL_OPERATOR:
-		if (InToken.getValue() == "and")
-		{
-			return AND;
-		}
-		else if (InToken.getValue() == "not")
-		{
-			return NOT;
-		}
-		else
-		{
-			return OR;
-		};
+		return mapLogicalOperatorTokenToStackValue(InToken);
 	case CONDITIONAL:
-		if (InToken.getValue() == "if")
-		{
-			return IF;
-		}
-		else if (InToken.getValue() == "then")
-		{
-			return THEN;
-		}
-		else
-		{
-			return ELSE;
-		};
+		return mapConditionalTokenToStackValue(InToken);
 	case END_OF_FILE:
 		return END_OF_STREAM;
-	default:
-		break;
 	}
 
-	throw runtime_error("REPLACE DIS MESSAGE"); // REPLACE DIZ
+	throw runtime_error("ERROR: Parser got in a bad state attmpting to map TokenType to StackValue. Token value - " + InToken.getValue());
+}
 
+Parser::StackValues Parser::mapArithmeticOperatorTokenToStackValue(Token InToken)
+{
+	if (InToken.getValue() == "+")
+	{
+		return PLUS_OPERATOR;
+	}
+	else if (InToken.getValue() == "-")
+	{
+		return MINUS_OPERATOR;
+	}
+	else if (InToken.getValue() == "/")
+	{
+		return DIVIDES_OPERATOR;
+	}
+	else
+	{
+		return MULTIPLY_OPERATOR;
+	};
+}
+
+Parser::StackValues Parser::mapLogicalOperatorTokenToStackValue(Token InToken)
+{
+	if (InToken.getValue() == "and")
+	{
+		return AND;
+	}
+	else if (InToken.getValue() == "not")
+	{
+		return NOT;
+	}
+	else
+	{
+		return OR;
+	};
+}
+
+Parser::StackValues Parser::mapConditionalTokenToStackValue(Token InToken)
+{
+	if (InToken.getValue() == "if")
+	{
+		return IF;
+	}
+	else if (InToken.getValue() == "then")
+	{
+		return THEN;
+	}
+	else
+	{
+		return ELSE;
+	};
 }

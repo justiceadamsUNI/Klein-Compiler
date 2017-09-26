@@ -1,4 +1,10 @@
 #include "catch.hpp"
-#include"../src/header/Parser.h"
+#include "../src/header/Parser.h"
 
-// Need to fill out once we actually have a public method for our Parser API.
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps INTEGER to INTEGER_LITERAL", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(INTEGER, "123");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::INTEGER_LITERAL);
+}
