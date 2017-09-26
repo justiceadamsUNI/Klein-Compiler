@@ -92,4 +92,6 @@ Parser::StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
 		break;
 	}
 
+	throw runtime_error("REPLACE DIS MESSAGE"); // REPLACE DIZ
+
 }
