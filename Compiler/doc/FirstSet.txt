@@ -1,4 +1,4 @@
-First(Print-Statement) = {print}
+﻿First(Print-Statement) = {print}
 First(Literal) = {NUMBER, BOOLEAN}
 First(Nonemptyactuals-tail) = {<comma>, ε}
 First(Nonemptyactuals) = {First(Expr)} = {if, not, identifier, NUMBER, BOOLEAN, -}
@@ -18,5 +18,5 @@ First(Nonemptyformals-tail) = {<comma>, ε}
 First(Nonemptyformals) = {identifier}
 First(Formals) = {identifier, ε}
 First(Def) = {function}
-First(Definitions) = {$}
-First(Program) = {$}
+First(Definitions) = {function, ε}
+First(Program) = {function, ε}
