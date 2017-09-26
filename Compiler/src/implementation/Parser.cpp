@@ -43,11 +43,7 @@ Parser::StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
 	case COLON:
 		return COLON_LITERAL;
 	case IDENTIFIER:
-		if (InToken.getValue() == "main")
-		{
-			return MAIN;
-		}
-		else if (InToken.getValue() == "print")
+		if (InToken.getValue() == "print")
 		{
 			return PRINT;
 		}
@@ -95,4 +91,5 @@ Parser::StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
 	default:
 		break;
 	}
+
 }
