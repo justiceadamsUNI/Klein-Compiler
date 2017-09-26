@@ -1,8 +1,8 @@
-﻿First(Print-Statement) = {print}
+First(Print-Statement) = {print}
 First(Literal) = {NUMBER, BOOLEAN}
 First(Nonemptyactuals-tail) = {<comma>, ε}
-First(Nonemptyactuals) = {First(Expr)} = {if, not, identifier, NUMBER, BOOLEAN, -}
-First(Actuals) = {if, not, identifier, NUMBER, BOOLEAN, -, ε}
+First(Nonemptyactuals) = {First(Expr)} = {if, not, identifier, NUMBER, BOOLEAN, -, (}
+First(Actuals) = {if, not, identifier, NUMBER, BOOLEAN, -, (, ε}
 First(Factor-ID-tail) = {(, ε}
 First(Factor) = {if, not, identifier, NUMBER, BOOLEAN, -, (}
 First(Term-tail) = {and, *, /, ε}
@@ -10,9 +10,9 @@ First(Term) = {if, not, identifier, NUMBER, BOOLEAN, -, (}
 First(Simple-Expr-tail) = {or, +, -, ε}
 First(Simple-Expr) = {First(Term)} = {if, not, identifier, NUMBER, BOOLEAN, -, (}
 First(Expr-tail) = {< , = ,ε}
-First(Expr) = {First(Simple-Expr)} = {or, +, -, ε}
+First(Expr) = {First(Simple-Expr)} = {if, not, identifier, NUMBER, BOOLEAN, -, (}
 First(Type) = {intger, boolean}
-First(Body) = {First(Print-Statement), First(Expr)} = {print, or, +, -, ε}
+First(Body) = {First(Print-Statement), First(Expr)} = {print, if, not, identifier, NUMBER, BOOLEAN, -, (}
 First(Formal) = {identifier}
 First(Nonemptyformals-tail) = {<comma>, ε}
 First(Nonemptyformals) = {identifier}

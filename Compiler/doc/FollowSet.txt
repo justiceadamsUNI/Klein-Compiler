@@ -6,17 +6,17 @@ Follow(Nonemptyformals) = {Follow(Formals)} = {)}
 Follow(Nonemptyformals-tail) = {Follow(Nonemptyformals)} = {)}
 Follow(Formal) = {First(Nonemptyformals-tail), Follow(Nonemptyformals-tail)} = {<comma>, )}
 Follow(Body) = {Follow(Def)} = {function, $}
-Follow(Type) = {Follow(Formal), First(Body)} = {<comma>, ), print, if, not, identifier, NUMBER, BOOLEAN, -}
-Follow(Expr) = {then, else, Follow(Factor), Follow(Nonemptyactuals), First(Nonemptyactuals-tail), Follow(Body), )} = {then, else, ), <comma>, function, $}
-Follow(Expr-tail) = {Follow(Expr)} = {then, else, ), <comma>, function, $}
-Follow(Simple-Expr) = {Follow(Expr), First(Expr-tail)} = {<, =, then, else, <comma>, ), function, $}
-Follow(Simple-Expr-tail) = {Follow(Simple-Expr)} = {<, =, then, else, <comma>, ), function, $}
-Follow(Term) = {Follow(Simple-Expr), First(Simple-Expr-tail)} = {+, -, <, =, or, then, else, <comma>, ), function, $}
-Follow(Term-tail) = {Follow(Term)} = {+, -, <, =, or, then, else, <comma>, ), function, $}
+Follow(Type) = {Follow(Formal), First(Body)} = {<comma>, ), print, if, not, identifier, NUMBER, BOOLEAN, -, (}
+Follow(Expr) = {then, else, Follow(Factor), Follow(Nonemptyactuals), First(Nonemptyactuals-tail), Follow(Body), )} = {+, -, *, /, <, = , and, or, then, else, <comma>, ), function, $}
+Follow(Expr-tail) = {Follow(Expr)} = {+, -, *, /, <, = , and, or, then, else, <comma>, ), function, $}
+Follow(Simple-Expr) = {Follow(Expr), First(Expr-tail)} = {+, -, *, /, <, = , and, or, then, else, <comma>, ), function, $}
+Follow(Simple-Expr-tail) = {Follow(Simple-Expr)} = {+, -, *, /, <, = , and, or, then, else, <comma>, ), function, $}
+Follow(Term) = {Follow(Simple-Expr), First(Simple-Expr-tail)} = {+, -, *, /, <, = , and, or, then, else, <comma>, ), function, $}
+Follow(Term-tail) = {Follow(Term)} = {+, -, *, /, <, = , and, or, then, else, <comma>, ), function, $}
 Follow(Factor) = {Follow(Term), First(Term-tail)} = {+, -, *, /, <, = , and, or, then, else, <comma>, ), function, $}
-Follow(Factor-ID-tail) = {Follow(Factor)} = {+, -, *, /, <, =, and, then, else, <comma>, ), function, $}
+Follow(Factor-ID-tail) = {Follow(Factor)} = {+, -, *, /, <, = , and, or, then, else, <comma>, ), function, $}
 Follow(Actuals) = {)}
 Follow(Nonemptyactuals) = {Follow(Actuals)} = {)}
 Follow(Nonemptyactuals-tail) = {Follow(Nonemptyactuals)} = {)}
 Follow(Literal) = {Follow(Factor)} = {+, -, *, /, <, = , and, or, then, else, <comma>, ), function, $}
-Follow(Print-Statement) = {First(Body)} = {print, if, not, identifier, NUMBER, BOOLEAN, -}
+Follow(Print-Statement) = {First(Body)} = {print, if, not, identifier, NUMBER, BOOLEAN, -, (}
