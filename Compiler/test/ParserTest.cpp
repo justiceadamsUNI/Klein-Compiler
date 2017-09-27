@@ -1,0 +1,194 @@
+#include "catch.hpp"
+#include "../src/header/Parser.h"
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps INTEGER to INTEGER_LITERAL", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(INTEGER, "123");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::INTEGER_LITERAL);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps Int DATA_TYPE to INTEGER_DATA_TYPE", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(DATA_TYPE, "integer");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::INTEGER_DATA_TYPE);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps bool DATA_TYPE to BOOLEAN_DATA_TYPE", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(DATA_TYPE, "boolean");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::BOOLEAN_DATA_TYPE);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps boolean literal to BOOLEAN_LITERAL", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(BOOLEAN, "true");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::BOOLEAN_LITERAL);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps  + ARITHMETIC_OPERATOR to PLUS_OPERATOR", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(ARITHMETIC_OPERATOR, "+");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::PLUS_OPERATOR);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps  - ARITHMETIC_OPERATOR to MINUS_OPERATOR", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(ARITHMETIC_OPERATOR, "-");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::MINUS_OPERATOR);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps  / ARITHMETIC_OPERATOR to DIVIDES_OPERATOR", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(ARITHMETIC_OPERATOR, "/");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::DIVIDES_OPERATOR);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps  * ARITHMETIC_OPERATOR to MULTIPLY_OPERATOR", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(ARITHMETIC_OPERATOR, "*");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::MULTIPLY_OPERATOR);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps PRIMITIVE_KEYWORD to FUNCTION", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(PRIMITIVE_KEYWORD, "function");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::FUNCTION);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps PARENTHESIS of ( to LEFT_PAREN", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(PARENTHESIS, "(");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::LEFT_PAREN);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps PARENTHESIS of ) to RIGHT_PAREN", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(PARENTHESIS, ")");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::RIGHT_PAREN);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps COLON to COLON_LITERAL", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(COLON, "");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::COLON_LITERAL);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps COMMA to COMMA_LITERAL", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(COMMA, "");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::COMMA_LITERAL);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps IDENTIFIER that's not print to IDENTIFIER", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(IDENTIFIER, "identifier_12");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::IDENTIFIER_LITERAL);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps IDENTIFIER of print to PRINT", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(IDENTIFIER, "print");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::PRINT);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps COMPARATOR of < to LESS_THAN_OPERATOR", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(COMPARATOR, "<");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::LESS_THAN_OPERATOR);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps COMPARATOR of = to EQUAL_SIGN", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(COMPARATOR, "=");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::EQUAL_SIGN);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps LOGICAL_OPERATOR of or to OR", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(LOGICIAL_OPERATOR, "or");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::OR);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps LOGICAL_OPERATOR of and to AND", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(LOGICIAL_OPERATOR, "and");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::AND);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps LOGICAL_OPERATOR of not to NOT", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(LOGICIAL_OPERATOR, "not");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::NOT);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps CONDITIONAL of if to IF", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(CONDITIONAL, "if");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::IF);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps CONDITIONAL of then to THEN", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(CONDITIONAL, "then");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::THEN);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps CONDITIONAL of else to ELSE", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(CONDITIONAL, "else");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::ELSE);
+}
+
+TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps END_OF_FILE to END_OF_STREAM", "[Parser]") {
+	Scanner Scanner("", true);
+	Parser Parser(Scanner);
+	Token Token(END_OF_FILE, "");
+
+	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == Parser::END_OF_STREAM);
+}
