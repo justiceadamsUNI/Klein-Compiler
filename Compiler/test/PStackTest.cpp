@@ -12,7 +12,7 @@ TEST_CASE("PStack pop() returns top of stack correctly and removes it from stack
 TEST_CASE("PStack pop() throws error when stack is empty", "[PStack]") {
 	PStack myStack;
 
-	REQUIRE_THROWS_AS(myStack.pop(), out_of_range)
+	REQUIRE_THROWS_AS(myStack.pop(), out_of_range);
 }
 
 TEST_CASE("PStack pop() returns top of stack correctly sequentually", "[PStack]") {
