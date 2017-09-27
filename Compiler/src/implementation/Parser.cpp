@@ -19,7 +19,7 @@ Parser::StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
 	case INTEGER:
 		return INTEGER_LITERAL;
 	case DATA_TYPE:
-		return InToken.getValue() == "integer" ? INTEGER_DATA_TYPE : BOOLEN_DATA_TYPE;
+		return InToken.getValue() == "integer" ? INTEGER_DATA_TYPE : BOOLEAN_DATA_TYPE;
 	case BOOLEAN:
 		return BOOLEAN_LITERAL;
 	case ARITHMETIC_OPERATOR:
@@ -33,7 +33,7 @@ Parser::StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
 	case COLON:
 		return COLON_LITERAL;
 	case IDENTIFIER:
-		return InToken.getValue() == "print" ? PRINT : IDENTIFIER;
+		return InToken.getValue() == "print" ? PRINT : IDENTIFIER_LITERAL;
 	case COMPARATOR:
 		return InToken.getValue() == "<" ? LESS_THAN_OPERATOR : EQUAL_SIGN;
 	case LOGICIAL_OPERATOR:
