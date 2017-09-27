@@ -1,6 +1,7 @@
 #pragma once
 #include "TokenType.h"
 #include "Scanner.h"
+#include "PStack.h"
 #include "Token.h"
 #include <list>
 #include <map>
@@ -67,8 +68,14 @@ public:
 
 	StackValues mapFromScannerTokenToStackValue(Token token);
 
+	void parseProgram();
+
+	bool isProgramValid();
+
 private:
 	Scanner ScannerVar;
+
+	PStack Stack;
 
 	// All the stack values that are terminals
 	list<StackValues> TerminalValues = { 

@@ -6,6 +6,39 @@ Parser::Parser(Scanner& InScanner): ScannerVar(InScanner) {
 	return;
 }
 
+void Parser::parseProgram()
+{
+	Stack.push(END_OF_STREAM);
+	Stack.push(PROGRAM);
+	
+	StackValues PeekedTokenValue = mapFromScannerTokenToStackValue(ScannerVar.peek());
+	while (PeekedTokenValue != END_OF_STREAM) {
+		StackValues StackTop = Stack.top();
+		
+		if (isTerminalValue(StackTop)) {
+			if (StackTop == PeekedTokenValue)
+			{
+				Stack.pop();
+				ScannerVar.next();
+			}
+			else {
+				// ToDo: Better error message
+				throw runtime_error("ERROR: error matching terminal value.");
+			}
+		}
+		else {
+			if (ParseTable.find(make_pair(StackTop, PeekedTokenValue)) != ParseTable.end()) {
+				list<StackValues> Rule = ParseTable.find(make_pair(StackTop, PeekedTokenValue))->second;
+
+				Stack.pop();
+
+				//Push rule to stack.
+			}
+		}
+
+	}
+}
+
 bool Parser::isTerminalValue(StackValues value)
 {
 	list<StackValues>::iterator foundElement = std::find(TerminalValues.begin(), TerminalValues.end(), value);

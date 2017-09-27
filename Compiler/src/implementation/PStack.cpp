@@ -9,7 +9,7 @@ PStack::PStack(){
 Parser::StackValues PStack::pop(){
 	if(isEmpty()) throw out_of_range("ERROR: Empty Stack");
 	else {
-		Parser::StackValues temp = parserStack.top();
+		Parser::StackValues temp = top();
 		parserStack.pop();
 		return temp;
 	}
@@ -17,6 +17,10 @@ Parser::StackValues PStack::pop(){
 
 void PStack::push(Parser::StackValues in){
 	parserStack.push(in);	
+}
+
+Parser::StackValues PStack::top() {
+	return parserStack.top();
 }
 
 bool PStack::isEmpty(){

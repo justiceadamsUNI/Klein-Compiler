@@ -12,6 +12,7 @@ class PStack  //A Stack used to hold states of the parser
 public:
 	PStack();
 	Parser::StackValues pop();
+	Parser::StackValues top();
 	void push(Parser::StackValues);
 	bool isEmpty(); 
 
