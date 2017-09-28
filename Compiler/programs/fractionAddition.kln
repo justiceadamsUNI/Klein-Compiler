@@ -6,3 +6,4 @@ Compiler Defilers
 function main(a : integer, b : integer, c : integer, d : integer) : integer
 	print(a*d + c*b)
 	print(b * d)
+	1
