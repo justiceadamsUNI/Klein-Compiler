@@ -1,0 +1,7 @@
+(*Return 1
+by Josh Hilliard, Harsha Varma, and Justice Adams
+CS 4550 Fall 2017
+Compiler Defilers
+*)
+function notMain(x : boolean : b : integer) : integer
+	1

@@ -1,0 +1,7 @@
+(*Return Boolean
+by Josh Hilliard, Harsha Varma, and Justice Adams
+CS 4550 Fall 2017
+Compiler Defilers
+*)
+Function main(a : boolaen) : boolean
+	true
