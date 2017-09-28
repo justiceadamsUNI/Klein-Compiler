@@ -1,0 +1,44 @@
+Token Type		Positive Example (Valid Example)		Negative Example (Invalid Example)
+-------------------------------------------------------------------------------------------------------------------------------------
+* Integer		100						2^100 (in integer form. Not going to write out, 
+										but it's outside the specified range)
+
+* Boolean		true						True (Since it's case sensitive)
+
+
+* Type			boolean						Boolean (Since it's case sensitive)
+
+
+* Arithmetic Operator	*						x (since x does not multiply)
+
+
+* Primitive Keyword	"function" or "main" or "print"			method (not a reserved keyword)
+
+
+* Parenthesis		"(" | ")"					"{" (since it's not a parenthesis)
+
+
+* Comma			","						' (since it's not a comma)
+
+
+* Colon			":"						";" (Semicolons =/= colons)
+
+
+* Identifier		an_identifier_variable				3rd_variable (identifiers can't start with numbers)
+
+
+* Comparator		"=" or "<"					">" since greater than is not supported in Klein
+
+
+* Logical operator	"and" or "or" or "not"				&& since the ampersand isn't supported in Klein
+
+
+* Conditional		"if"						while (since while loops are not supported)
+
+
+* Commentor		"(*"						*( since it's not in the correct order
+
+
+
+		
+
