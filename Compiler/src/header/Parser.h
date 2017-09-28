@@ -87,6 +87,8 @@ private:
 	
 	StackValues mapConditionalTokenToStackValue(Token InToken);
 
+	void addRuleToStack(list<StackValues> Rule);
+
 
 	// PARSE TABLE - Sparse 2D array representation.
 	// Read below the map for a better understanding. 
@@ -104,7 +106,7 @@ private:
 			{ make_pair<StackValues, StackValues>(FORMALS, RIGHT_PAREN), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(FORMALS, IDENTIFIER_LITERAL), list<StackValues>{NON_EMPTY_FORMALS} },
 			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS, IDENTIFIER_LITERAL), list<StackValues>{FORMAL, NON_EMPTY_FORMALS_TAIL} },
-			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS_TAIL, COMMA_LITERAL), list<StackValues>{COMMA_LITERAL, NON_EMPTY_FORMALS_TAIL} },
+			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS_TAIL, COMMA_LITERAL), list<StackValues>{COMMA_LITERAL, NON_EMPTY_FORMALS} },
 			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS_TAIL, RIGHT_PAREN), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(FORMAL, IDENTIFIER_LITERAL), list<StackValues>{IDENTIFIER_LITERAL, COLON_LITERAL, TYPE} },
 			{ make_pair<StackValues, StackValues>(BODY, PRINT), list<StackValues>{PRINT_STATEMENT, BODY} },

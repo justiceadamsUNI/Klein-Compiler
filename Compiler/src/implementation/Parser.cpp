@@ -1,5 +1,6 @@
 #include "../header/Parser.h"
 #include <algorithm>
+#include <iostream>
 
 
 Parser::Parser(Scanner& InScanner): ScannerVar(InScanner) {
@@ -10,10 +11,10 @@ void Parser::parseProgram()
 {
 	Stack.push(END_OF_STREAM);
 	Stack.push(PROGRAM);
+	StackValues StackTop = Stack.top();
 	
 	StackValues PeekedTokenValue = mapFromScannerTokenToStackValue(ScannerVar.peek());
-	while (PeekedTokenValue != END_OF_STREAM) {
-		StackValues StackTop = Stack.top();
+	while (StackTop != END_OF_STREAM) {
 		
 		if (isTerminalValue(StackTop)) {
 			if (StackTop == PeekedTokenValue)
@@ -23,6 +24,7 @@ void Parser::parseProgram()
 			}
 			else {
 				// ToDo: Better error message
+				std::cout << endl;
 				throw runtime_error("ERROR: error matching terminal value.");
 			}
 		}
@@ -32,10 +34,26 @@ void Parser::parseProgram()
 
 				Stack.pop();
 
-				//Push rule to stack.
+				addRuleToStack(Rule);
+			}
+			else {
+				// ToDo: Better error message
+				throw runtime_error("ERROR: error matching for rule.");
 			}
 		}
 
+		PeekedTokenValue = mapFromScannerTokenToStackValue(ScannerVar.peek());
+		StackTop = Stack.top();
+	}
+
+	if (Stack.top() == END_OF_STREAM && PeekedTokenValue == END_OF_STREAM)
+	{
+		Stack.pop();
+	}
+
+	if (!Stack.isEmpty())
+	{
+		throw runtime_error("ERROR: There are still values on the stack, but input stream has ended.");
 	}
 }
 
@@ -130,4 +148,14 @@ StackValues Parser::mapConditionalTokenToStackValue(Token InToken)
 	{
 		return ELSE;
 	};
+}
+
+void Parser::addRuleToStack(list<StackValues> Rule)
+{
+	// Adds values to stack in reverse order
+	while (!Rule.empty())
+	{
+		Stack.push(Rule.back());
+		Rule.pop_back();
+	}
 }
