@@ -45,7 +45,7 @@ bool Parser::isTerminalValue(StackValues value)
 	return foundElement != TerminalValues.end();
 }
 
-Parser::StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
+StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
 {
 	switch (InToken.getTokenType())
 	{
@@ -80,7 +80,7 @@ Parser::StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
 	throw runtime_error("ERROR: Parser got in a bad state attmpting to map TokenType to StackValue. Token value - " + InToken.getValue());
 }
 
-Parser::StackValues Parser::mapArithmeticOperatorTokenToStackValue(Token InToken)
+StackValues Parser::mapArithmeticOperatorTokenToStackValue(Token InToken)
 {
 	if (InToken.getValue() == "+")
 	{
@@ -100,7 +100,7 @@ Parser::StackValues Parser::mapArithmeticOperatorTokenToStackValue(Token InToken
 	};
 }
 
-Parser::StackValues Parser::mapLogicalOperatorTokenToStackValue(Token InToken)
+StackValues Parser::mapLogicalOperatorTokenToStackValue(Token InToken)
 {
 	if (InToken.getValue() == "and")
 	{
@@ -116,7 +116,7 @@ Parser::StackValues Parser::mapLogicalOperatorTokenToStackValue(Token InToken)
 	};
 }
 
-Parser::StackValues Parser::mapConditionalTokenToStackValue(Token InToken)
+StackValues Parser::mapConditionalTokenToStackValue(Token InToken)
 {
 	if (InToken.getValue() == "if")
 	{

@@ -14,58 +14,6 @@ class Parser
 public:
 	Parser(Scanner& InScanner);
 
-	// Represents every terminal/non-terminal that could 
-	// possibly be put onto the stack.
-	enum StackValues
-	{
-		INTEGER_LITERAL,
-		INTEGER_DATA_TYPE,
-		BOOLEAN_DATA_TYPE,
-		BOOLEAN_LITERAL,
-		PLUS_OPERATOR,
-		MINUS_OPERATOR,
-		DIVIDES_OPERATOR,
-		MULTIPLY_OPERATOR,
-		FUNCTION,
-		LEFT_PAREN,
-		RIGHT_PAREN,
-		COMMA_LITERAL,
-		COLON_LITERAL,
-		IDENTIFIER_LITERAL,
-		PRINT,
-		LESS_THAN_OPERATOR,
-		EQUAL_SIGN,
-		AND,
-		OR,
-		NOT,
-		IF,
-		THEN,
-		ELSE,
-		END_OF_STREAM,
-		PROGRAM,
-		DEFINITIONS,
-		DEF,
-		FORMALS,
-		NON_EMPTY_FORMALS,
-		NON_EMPTY_FORMALS_TAIL,
-		FORMAL,
-		BODY,
-		TYPE,
-		EXPR,
-		EXPR_TAIL,
-		SIMPLE_EXPR,
-		SIMPLE_EXPR_TAIL,
-		TERM,
-		TERM_TAIL,
-		FACTOR,
-		FACTOR_ID_TAIL,
-		ACTUALS,
-		NON_EMPTY_ACTUALS,
-		NON_EMPTY_ACTUALS_TAIL,
-		LITERAL,
-		PRINT_STATEMENT,
-	};
-
 	StackValues mapFromScannerTokenToStackValue(Token token);
 
 	void parseProgram();
