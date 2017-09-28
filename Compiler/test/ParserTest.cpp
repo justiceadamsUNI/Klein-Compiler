@@ -192,3 +192,10 @@ TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps END_OF_FILE t
 
 	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == END_OF_STREAM);
 }
+
+TEST_CASE("Parser doesnt find the rule from ParseTable.find()", "[Parser]") {
+	Scanner Scanner("parser_failing_program_no_return_value.kln", true);
+	Parser Parser(Scanner);
+	
+	REQUIRE_THROWS_AS(Parser.parseProgram(), runtime_error);
+}
