@@ -1,4 +1,7 @@
-#pragma once
+#include <map>
+#include <string>
+
+using namespace std;
 
 // Represents every terminal/non-terminal that could 
 // possibly be put onto the stack.
@@ -50,4 +53,53 @@ enum StackValues
 	NON_EMPTY_ACTUALS_TAIL,
 	LITERAL,
 	PRINT_STATEMENT,
+};
+
+const map<StackValues, string> StackValuesPrintMap {
+	{ INTEGER_LITERAL, "INTEGER_LITERAL" },
+	{ INTEGER_DATA_TYPE, "INTEGER_DATA_TYPE" },
+	{ BOOLEAN_DATA_TYPE, "BOOLEAN_DATA_TYPE" },
+	{ BOOLEAN_LITERAL, "BOOLEAN_LITERAL" },
+	{ PLUS_OPERATOR, "PLUS_OPERATOR { + }" },
+	{ MINUS_OPERATOR, "MINUS_OPERATOR { - }" },
+	{ DIVIDES_OPERATOR, "DIVIDES_OPERATOR { / } " },
+	{ MULTIPLY_OPERATOR, "MULTIPLY_OPERATOR { * }" },
+	{ FUNCTION, "FUNCTION" },
+	{ LEFT_PAREN, "LEFT_PAREN  { ( }" },
+	{ RIGHT_PAREN, "RIGHT_PAREN { ) }" },
+	{ COMMA_LITERAL, "COMMA_LITERAL { , }" },
+	{ COLON_LITERAL, "COLON_LITERAL { : }" },
+	{ IDENTIFIER_LITERAL, "IDENTIFIER_LITERAL" },
+	{ PRINT, "PRINT" },
+	{ LESS_THAN_OPERATOR, "LESS_THAN_OPERATOR { < }" },
+	{ EQUAL_SIGN, "EQUAL_SIGN { = }" },
+	{ AND, "AND" },
+	{ OR, "OR" },
+	{ NOT, "NOT" },
+	{ IF, "IF" },
+	{ THEN, "THEN" },
+	{ ELSE, "ELSE" },
+	{ END_OF_STREAM, "END_OF_STREAM" },
+	{ PROGRAM, "PROGRAM" },
+	{ DEFINITIONS, "DEFINITIONS" },
+	{ DEF, "DEF" },
+	{ FORMALS, "FORMALS" },
+	{ NON_EMPTY_FORMALS, "NON_EMPTY_FORMALS" },
+	{ NON_EMPTY_FORMALS_TAIL, "NON_EMPTY_FORMALS_TAIL" },
+	{ FORMAL, "FORMAL" },
+	{ BODY, "BODY" },
+	{ TYPE, "TYPE" },
+	{ EXPR, "EXPR" },
+	{ EXPR_TAIL, "EXPR_TAIL" },
+	{ SIMPLE_EXPR, "SIMPLE_EXPR" },
+	{ SIMPLE_EXPR_TAIL, "SIMPLE_EXPR_TAIL" },
+	{ TERM, "TERM" },
+	{ TERM_TAIL, "TERM_TAIL" },
+	{ FACTOR, "FACTOR" },
+	{ FACTOR_ID_TAIL, "FACTOR_ID_TAIL" },
+	{ ACTUALS, "ACTUALS" },
+	{ NON_EMPTY_ACTUALS, "NON_EMPTY_ACTUALS" },
+	{ NON_EMPTY_ACTUALS_TAIL, "NON_EMPTY_ACTUALS_TAIL" },
+	{ LITERAL, "LITERAL" },
+	{ PRINT_STATEMENT, "PRINT_STATEMENT" }
 };

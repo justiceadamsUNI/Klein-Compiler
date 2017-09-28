@@ -6,7 +6,7 @@ int main()
 {
 	try
 	{
-		Scanner Scanner("test.kln");
+		Scanner Scanner("programs/isExcellent.kln");
 		Parser Parser(Scanner);
 		
 		Parser.parseProgram();

@@ -23,9 +23,9 @@ void Parser::parseProgram()
 				ScannerVar.next();
 			}
 			else {
-				// ToDo: Better error message
-				std::cout << endl;
-				throw runtime_error("ERROR: error matching terminal value.");
+				string StackTopString = StackValuesPrintMap.find(StackTop)->second;
+				string PeekedTokenSting = StackValuesPrintMap.find(PeekedTokenValue)->second;
+				throw runtime_error("ERROR: Problem matching terminal value. Token from input stream - " + PeekedTokenSting + ", Stack Top - " + StackTopString);
 			}
 		}
 		else {
@@ -33,12 +33,12 @@ void Parser::parseProgram()
 				list<StackValues> Rule = ParseTable.find(make_pair(StackTop, PeekedTokenValue))->second;
 
 				Stack.pop();
-
 				addRuleToStack(Rule);
 			}
 			else {
-				// ToDo: Better error message
-				throw runtime_error("ERROR: error matching for rule.");
+				string StackTopString = StackValuesPrintMap.find(StackTop)->second;
+				string PeekedTokenSting = StackValuesPrintMap.find(PeekedTokenValue)->second;
+				throw runtime_error("ERROR: No Rule exist in the Parse Table for (" + StackTopString + ", " + PeekedTokenSting + ")");
 			}
 		}
 
@@ -53,7 +53,8 @@ void Parser::parseProgram()
 
 	if (!Stack.isEmpty())
 	{
-		throw runtime_error("ERROR: There are still values on the stack, but input stream has ended.");
+		string StackTopString = StackValuesPrintMap.find(StackTop)->second;
+		throw runtime_error("ERROR: There are still values on the stack, but input stream has ended. Top of stack - " + StackTopString);
 	}
 }
 
