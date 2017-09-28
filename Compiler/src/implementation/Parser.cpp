@@ -58,6 +58,24 @@ void Parser::parseProgram()
 	}
 }
 
+bool Parser::isProgramValid()
+{
+	// This method is only for unit testing. It provides a public method to 
+	// the Parser API so that we can run test accordingly.
+	try
+	{
+		parseProgram();
+
+		// valid if no exception thrown
+		return true;
+	}
+	catch (const std::exception& e)
+	{
+		cout << endl << e.what() << endl;
+		return false;
+	}
+}
+
 bool Parser::isTerminalValue(StackValues value)
 {
 	list<StackValues>::iterator foundElement = std::find(TerminalValues.begin(), TerminalValues.end(), value);

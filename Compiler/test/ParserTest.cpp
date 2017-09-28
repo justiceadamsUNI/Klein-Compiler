@@ -1,6 +1,12 @@
 #include "catch.hpp"
 #include "../src/header/Parser.h"
 
+Parser createParserWithBodyContaining(string text) {
+	Scanner Scanner("function main(x:integer):integer " + text, true);
+
+	return Parser(Scanner);
+}
+
 TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps INTEGER to INTEGER_LITERAL", "[Parser]") {
 	Scanner Scanner("", true);
 	Parser Parser(Scanner);
@@ -198,4 +204,10 @@ TEST_CASE("Parser doesnt find the rule from ParseTable.find()", "[Parser]") {
 	Parser Parser(Scanner);
 	
 	REQUIRE_THROWS_AS(Parser.parseProgram(), runtime_error);
+}
+
+TEST_CASE("Parser doesnt throw error for program containing run on boolean operators()", "[Parser]") {
+	Parser Parser = createParserWithBodyContaining("if ((diff = 7) or (diff = 0) or (diff = -7) or (diff = -14)) then true else false");
+
+	REQUIRE(Parser.isProgramValid() == true);
 }
