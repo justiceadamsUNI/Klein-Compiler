@@ -2,20 +2,26 @@
 #include "header/Parser.h"
 #include "header/Scanner.h"
 
-int main()
+int main(int argv, char* argc[])
 {
+	if (argv==1){
+		cout << "Please insert a KLEIN file to scan for tokens." << endl;
+		return 1;
+	}
+
 	try
 	{
-		Scanner Scanner("programs/isExcellent.kln");
+		Scanner Scanner(argc[1]);
 		Parser Parser(Scanner);
 		
 		Parser.parseProgram();
 
-		cout << endl << "IT'S VALID" << endl;
+		cout << "IS VALID PROGRAM:  TRUE" << endl;
 	}
 	catch (const std::exception& e)
 	{
 		//Print Error Message
+		cout << "IS VALID PROGRAM:  FALSE" << endl;
 		cout << endl << e.what() << endl;
 		return 1;
 	}
