@@ -30,6 +30,3 @@ StackValues PStack::top() {
 bool PStack::isEmpty(){
 	return parserStack.empty();
 }
-
-
-

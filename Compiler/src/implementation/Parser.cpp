@@ -1,6 +1,5 @@
 #include "../header/Parser.h"
 #include <algorithm>
-#include <iostream>
 
 
 Parser::Parser(Scanner& InScanner): ScannerVar(InScanner) {
@@ -12,10 +11,9 @@ void Parser::parseProgram()
 	Stack.push(END_OF_STREAM);
 	Stack.push(PROGRAM);
 	StackValues StackTop = Stack.top();
-	
 	StackValues PeekedTokenValue = mapFromScannerTokenToStackValue(ScannerVar.peek());
+
 	while (StackTop != END_OF_STREAM) {
-		
 		if (isTerminalValue(StackTop)) {
 			if (StackTop == PeekedTokenValue)
 			{
@@ -31,7 +29,6 @@ void Parser::parseProgram()
 		else {
 			if (ParseTable.find(make_pair(StackTop, PeekedTokenValue)) != ParseTable.end()) {
 				list<StackValues> Rule = ParseTable.find(make_pair(StackTop, PeekedTokenValue))->second;
-
 				Stack.pop();
 				addRuleToStack(Rule);
 			}
@@ -46,16 +43,7 @@ void Parser::parseProgram()
 		StackTop = Stack.top();
 	}
 
-	if (Stack.top() == END_OF_STREAM && PeekedTokenValue == END_OF_STREAM)
-	{
-		Stack.pop();
-	}
-
-	if (!Stack.isEmpty())
-	{
-		string StackTopString = StackValuesPrintMap.find(StackTop)->second;
-		throw runtime_error("ERROR: There are still values on the stack, but input stream has ended. Top of stack - " + StackTopString);
-	}
+	checkValidEndState(PeekedTokenValue);
 }
 
 bool Parser::isProgramValid()
@@ -71,14 +59,13 @@ bool Parser::isProgramValid()
 	}
 	catch (const std::exception& e)
 	{
-		cout << endl << e.what() << endl;
 		return false;
 	}
 }
 
 bool Parser::isTerminalValue(StackValues value)
 {
-	list<StackValues>::iterator foundElement = std::find(TerminalValues.begin(), TerminalValues.end(), value);
+	list<StackValues>::iterator foundElement = find(TerminalValues.begin(), TerminalValues.end(), value);
 	return foundElement != TerminalValues.end();
 }
 
@@ -114,7 +101,7 @@ StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
 		return END_OF_STREAM;
 	}
 
-	throw runtime_error("ERROR: Parser got in a bad state attmpting to map TokenType to StackValue. Token value - " + InToken.getValue());
+	throw runtime_error("ERROR: Parser got in a bad state attempting to map TokenType to StackValue. Token value - " + InToken.getValue());
 }
 
 StackValues Parser::mapArithmeticOperatorTokenToStackValue(Token InToken)
@@ -176,5 +163,19 @@ void Parser::addRuleToStack(list<StackValues> Rule)
 	{
 		Stack.push(Rule.back());
 		Rule.pop_back();
+	}
+}
+
+void Parser::checkValidEndState(StackValues PeekedTokenValue)
+{
+	if (Stack.top() == END_OF_STREAM && PeekedTokenValue == END_OF_STREAM)
+	{
+		Stack.pop();
+	}
+
+	if (!Stack.isEmpty())
+	{
+		string StackTopString = StackValuesPrintMap.find(Stack.top())->second;
+		throw runtime_error("ERROR: There are still values on the stack, but input stream has ended. Top of stack - " + StackTopString);
 	}
 }

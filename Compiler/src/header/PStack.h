@@ -5,8 +5,9 @@
 using namespace std;
 
 
-//Throws Error for popping an empty stack
-class PStack  //A Stack used to hold states of the parser
+// Throws Error for popping an empty stack
+// A Stack used to hold states of the parser
+class PStack 
 {
 	
 public:

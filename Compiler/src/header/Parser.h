@@ -1,5 +1,4 @@
 #pragma once
-#include "TokenType.h"
 #include "Scanner.h"
 #include "PStack.h"
 #include "Token.h"
@@ -89,11 +88,12 @@ private:
 
 	void addRuleToStack(list<StackValues> Rule);
 
+	void checkValidEndState(StackValues PeekedTokenValue);
+
 
 	// PARSE TABLE - Sparse 2D array representation.
-	// Read below the map for a better understanding. 
 	// After struggling for a while, I think this is the best data structure to use here.
-	// Ideally from our cpp file we could for example call map.find(make_pair<StackValues, StackValues>(BODY, LEFT_PAREN)) and it
+	// Ideally from our cpp file we call for example map.find(make_pair<StackValues, StackValues>(BODY, LEFT_PAREN)) and it
 	// would return {EXPR} as a list! (see last row here). Anyway, if a pair isn't a key in the table, we're in an error state.
 
 	const map<pair<StackValues, StackValues>, list<StackValues>> ParseTable {
@@ -150,30 +150,30 @@ private:
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, OR), list<StackValues>{OR, TERM, SIMPLE_EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, PLUS_OPERATOR), list<StackValues>{PLUS_OPERATOR, TERM, SIMPLE_EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, MINUS_OPERATOR), list<StackValues>{MINUS_OPERATOR, TERM, SIMPLE_EXPR_TAIL} },
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, FUNCTION), list<StackValues>{}},
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, END_OF_STREAM), list<StackValues>{}},
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, RIGHT_PAREN), list<StackValues>{}},
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, COMMA_LITERAL), list<StackValues>{}},
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, THEN), list<StackValues>{}},
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, ELSE), list<StackValues>{}},
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, AND), list<StackValues>{}},
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, MULTIPLY_OPERATOR), list<StackValues>{}},
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, DIVIDES_OPERATOR), list<StackValues>{}},
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, LESS_THAN_OPERATOR), list<StackValues>{}},
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, EQUAL_SIGN), list<StackValues>{}},
-			{ make_pair<StackValues, StackValues>(TERM, IF), list<StackValues>{FACTOR, TERM_TAIL}},
-			{ make_pair<StackValues, StackValues>(TERM, NOT), list<StackValues>{FACTOR, TERM_TAIL}},
-			{ make_pair<StackValues, StackValues>(TERM, IDENTIFIER_LITERAL), list<StackValues>{FACTOR, TERM_TAIL}},
-			{ make_pair<StackValues, StackValues>(TERM, INTEGER_LITERAL), list<StackValues>{FACTOR, TERM_TAIL}},
-			{ make_pair<StackValues, StackValues>(TERM, BOOLEAN_LITERAL), list<StackValues>{FACTOR, TERM_TAIL}},
-			{ make_pair<StackValues, StackValues>(TERM, MINUS_OPERATOR), list<StackValues>{FACTOR, TERM_TAIL}},
-			{ make_pair<StackValues, StackValues>(TERM, LEFT_PAREN), list<StackValues>{FACTOR, TERM_TAIL}},
-			{ make_pair<StackValues, StackValues>(TERM_TAIL, AND), list<StackValues>{AND, FACTOR, TERM_TAIL}},
-			{ make_pair<StackValues, StackValues>(TERM_TAIL, MULTIPLY_OPERATOR), list<StackValues>{MULTIPLY_OPERATOR, FACTOR, TERM_TAIL}},
-			{ make_pair<StackValues, StackValues>(TERM_TAIL, DIVIDES_OPERATOR), list<StackValues>{DIVIDES_OPERATOR, FACTOR, TERM_TAIL}},
-			{ make_pair<StackValues, StackValues>(TERM_TAIL, FUNCTION), list<StackValues>{}},
-			{ make_pair<StackValues, StackValues>(TERM_TAIL, END_OF_STREAM), list<StackValues>{}},
-			{ make_pair<StackValues, StackValues>(TERM_TAIL, RIGHT_PAREN), list<StackValues>{}},
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, FUNCTION), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, END_OF_STREAM), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, RIGHT_PAREN), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, COMMA_LITERAL), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, THEN), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, ELSE), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, AND), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, MULTIPLY_OPERATOR), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, DIVIDES_OPERATOR), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, LESS_THAN_OPERATOR), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, EQUAL_SIGN), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(TERM, IF), list<StackValues>{FACTOR, TERM_TAIL} },
+			{ make_pair<StackValues, StackValues>(TERM, NOT), list<StackValues>{FACTOR, TERM_TAIL} },
+			{ make_pair<StackValues, StackValues>(TERM, IDENTIFIER_LITERAL), list<StackValues>{FACTOR, TERM_TAIL} },
+			{ make_pair<StackValues, StackValues>(TERM, INTEGER_LITERAL), list<StackValues>{FACTOR, TERM_TAIL} },
+			{ make_pair<StackValues, StackValues>(TERM, BOOLEAN_LITERAL), list<StackValues>{FACTOR, TERM_TAIL} },
+			{ make_pair<StackValues, StackValues>(TERM, MINUS_OPERATOR), list<StackValues>{FACTOR, TERM_TAIL} },
+			{ make_pair<StackValues, StackValues>(TERM, LEFT_PAREN), list<StackValues>{FACTOR, TERM_TAIL} },
+			{ make_pair<StackValues, StackValues>(TERM_TAIL, AND), list<StackValues>{AND, FACTOR, TERM_TAIL} },
+			{ make_pair<StackValues, StackValues>(TERM_TAIL, MULTIPLY_OPERATOR), list<StackValues>{MULTIPLY_OPERATOR, FACTOR, TERM_TAIL} },
+			{ make_pair<StackValues, StackValues>(TERM_TAIL, DIVIDES_OPERATOR), list<StackValues>{DIVIDES_OPERATOR, FACTOR, TERM_TAIL} },
+			{ make_pair<StackValues, StackValues>(TERM_TAIL, FUNCTION), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(TERM_TAIL, END_OF_STREAM), list<StackValues>{} },
+			{ make_pair<StackValues, StackValues>(TERM_TAIL, RIGHT_PAREN), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(TERM_TAIL, COMMA_LITERAL), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(TERM_TAIL, THEN), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(TERM_TAIL, ELSE), list<StackValues>{} },
@@ -223,7 +223,7 @@ private:
 			{ make_pair<StackValues, StackValues>(NON_EMPTY_ACTUALS_TAIL, RIGHT_PAREN), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(LITERAL, INTEGER_LITERAL), list<StackValues>{INTEGER_LITERAL} },
 			{ make_pair<StackValues, StackValues>(LITERAL, BOOLEAN_LITERAL), list<StackValues>{BOOLEAN_LITERAL} },
-			{ make_pair<StackValues, StackValues>(PRINT_STATEMENT, PRINT), list<StackValues>{PRINT, LEFT_PAREN, EXPR, RIGHT_PAREN}}
+			{ make_pair<StackValues, StackValues>(PRINT_STATEMENT, PRINT), list<StackValues>{PRINT, LEFT_PAREN, EXPR, RIGHT_PAREN} }
 		}
 	};
 };
