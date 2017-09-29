@@ -22,11 +22,12 @@ Hello, we are the compiler defilers. Our Group Consist of
 This is the code repository for the Klein Compiler we are writing. We are 
 implementing a Klein compiler that will translate .kln files into machine 
 language. This compiler implementation is written in C++. Currently we have a
-working Scanner which converts characters in a .kln file into tokens. We 
-developed this using a feature-branch workflow utilizing github. View the 
-repo here: (https://github.com/justiceadamsUNI/Klein-Compiler) You'll notice 
-the repo has an extra outer directory for various reasons including continous 
-integration purposes.
+working Scanner which converts characters in a .kln file into tokens, and a 
+parser that validates klein programs. We developed this using a feature-branch
+workflow utilizing github. View the repo here: 
+(https://github.com/justiceadamsUNI/Klein-Compiler) You'll notice the repo has 
+an extra outer directory for various reasons including continous integration 
+purposes.
 
 For a much prettier README, I encourage you to check out the Github repo.
 
@@ -96,7 +97,7 @@ Then run the RunTest excecutable with RunTest.exe .There you have it.
 ALTERNATIVELY: you can run the bash script if you have a g++ compiler and bash :)
 We have verified that this works on STUDENT.CS.UNI.EDU server. Run it with
 
-chmod -x runtest.sh
+chmod +x runtest.sh
 
 and
 
@@ -105,16 +106,31 @@ and
 
 BUILD SCRIPTS:
 -------------------------------------------------------------------------------
-We will have a collection of build scripts set up to do various things 
-throughout the course of this project. Right now we just have kleins. 
-This script will print out all the valid tokens of any .kln file you pass it 
-as a paramater. You could run this bash script with
+We will have a build script that takes in several command line arguments. The 
+file name is build_klein.sh.  When first using, be sure to update the file 
+permissions to allow the file to be executible by entering the following 
+command:
 
-chmod -x kleins.sh
+chmod +x build_klein.sh
 
-and
+The options for build_klein.sh are
 
-./kleins test_file_path.kln
+-s or --kleins:  This will build an executible file named kleins that will 
+print out all tokens in a .kln file.  'kleins' takes one command line argument
+which is the location relative to the current file and returns tokens for each
+valid token found.
+
+-p or --kleinp:  This will build an executible file named kleinp that will
+determine if a file parses to the grammar of Klein.  'kleinp' will let the user
+know if the file parses as a valid Klein file, or will return an error. kleinp'
+takes in 1 command line argument, a .kln file location relative to the current
+file.
+
+-f or --kleinp: Functionality coming soon!
+
+-v or --kleinv: Functionality coming soon!
+
+-c or --kleinc: Functionality coming soon!
 
 We have verified that this works on STUDENT.CS.UNI.EDU server.
 

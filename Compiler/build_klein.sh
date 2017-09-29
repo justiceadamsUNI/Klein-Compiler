@@ -14,7 +14,9 @@ kleinf (){
 }
 kleinp (){
 	buffer="$buffer -p --kleinp"
-	blank
+	echo "Creating kleinp.  Please Wait."
+	g++ -std=gnu++11 -o kleinp src/ProgramValidator.cpp src/implementation/*.cpp
+	echo "kleinp has been created."
 }
 kleinv (){
 	buffer="$buffer -v --kleinv"
