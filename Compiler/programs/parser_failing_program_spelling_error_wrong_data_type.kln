@@ -2,6 +2,9 @@
 by Josh Hilliard, Harsha Varma, and Justice Adams
 CS 4550 Fall 2017
 Compiler Defilers
+
+boolean is spelled wrong and is thus an identifier, not a data type
 *)
-Function main(a : boolaen) : boolean
+
+function main(a : boolaen) : boolean
 	true

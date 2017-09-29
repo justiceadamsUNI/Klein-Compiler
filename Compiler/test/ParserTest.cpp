@@ -199,15 +199,144 @@ TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps END_OF_FILE t
 	REQUIRE(Parser.mapFromScannerTokenToStackValue(Token) == END_OF_STREAM);
 }
 
-TEST_CASE("Parser doesnt find the rule from ParseTable.find()", "[Parser]") {
-	Scanner Scanner("parser_failing_program_no_return_value.kln", true);
+TEST_CASE("Parser throws error for failing program with no return value", "[Parser]") {
+	Scanner Scanner("programs/parser_failing_program_no_return_value.kln");
 	Parser Parser(Scanner);
 	
 	REQUIRE_THROWS_AS(Parser.parseProgram(), runtime_error);
 }
 
-TEST_CASE("Parser doesnt throw error for program containing run on boolean operators()", "[Parser]") {
+TEST_CASE("Parser throws error for failing program with that misuses a colon", "[Parser]") {
+	Scanner Scanner("programs/parser_failing_program_misuse_colon.kln");
+	Parser Parser(Scanner);
+
+	REQUIRE_THROWS_AS(Parser.parseProgram(), runtime_error);
+}
+
+TEST_CASE("Parser throws error for failing with a non-finished function declaration", "[Parser]") {
+	Scanner Scanner("programs/parser_failing_program_new_function.kln");
+	Parser Parser(Scanner);
+
+	REQUIRE_THROWS_AS(Parser.parseProgram(), runtime_error);
+}
+
+TEST_CASE("Parser throws error for failing program that spells boolean wrong when defining a data type", "[Parser]") {
+	Scanner Scanner("programs/parser_failing_program_spelling_error_wrong_data_type.kln");
+	Parser Parser(Scanner);
+
+	REQUIRE_THROWS_AS(Parser.parseProgram(), runtime_error);
+}
+
+TEST_CASE("Parser throws error for failing program that uses an int data type instead of integer", "[Parser]") {
+	Scanner Scanner("programs/parser_failing_program_wrong_data_type.kln");
+	Parser Parser(Scanner);
+
+	REQUIRE_THROWS_AS(Parser.parseProgram(), runtime_error);
+}
+
+TEST_CASE("Parser determines program is valid for program containing run on boolean operators", "[Parser]") {
 	Parser Parser = createParserWithBodyContaining("if ((diff = 7) or (diff = 0) or (diff = -7) or (diff = -14)) then true else false");
 
 	REQUIRE(Parser.isProgramValid() == true);
+}
+
+TEST_CASE("Parser determines program is valid for program containing multiple parenthesised terms", "[Parser]") {
+	Parser Parser = createParserWithBodyContaining("(x / 10 + (mod(x, 10) * pow(10, log10(x))))");
+
+	REQUIRE(Parser.isProgramValid() == true);
+}
+
+TEST_CASE("Parser determines program is valid for program containing nested if statements", "[Parser]") {
+	string nestedIfs = " if (diff = 7) then if diff < 14 then true else false else if diff < 14 then false else main(diff)";
+	Parser Parser = createParserWithBodyContaining(nestedIfs);
+
+	REQUIRE(Parser.isProgramValid() == true);
+}
+
+TEST_CASE("Parser determines program is valid for program containing run on arithmetic operators", "[Parser]") {
+	Parser Parser = createParserWithBodyContaining(" 8 - 9/2 * diff * wallingford + is + cool  + 9 * 8 / 10");
+
+	REQUIRE(Parser.isProgramValid() == true);
+}
+
+TEST_CASE("Parser determines program is valid for program containing function calls within functions", "[Parser]") {
+	Parser Parser = createParserWithBodyContaining("not hasDivisorFrom(2, n)");
+
+	REQUIRE(Parser.isProgramValid() == true);
+}
+
+TEST_CASE("Parser determines program is valid for program containing multiple print statements", "[Parser]") {
+	Parser Parser = createParserWithBodyContaining("print(number) print(reverse(number)) 1");
+
+	REQUIRE(Parser.isProgramValid() == true);
+}
+
+TEST_CASE("Parser determines program is valid for program containing comments within te body", "[Parser]") {
+	Parser Parser = createParserWithBodyContaining("gcd(a,b) (*comment*) + 1445");
+
+	REQUIRE(Parser.isProgramValid() == true);
+}
+
+TEST_CASE("Parser determines program is Invalid for program containing function with no return", "[Parser]") {
+	Parser Parser = createParserWithBodyContaining("print(wheres_da_return)");
+
+	REQUIRE(Parser.isProgramValid() == false);
+}
+
+TEST_CASE("Parser determines program is Invalid for program containing non-closing parenthesis", "[Parser]") {
+	Parser Parser = createParserWithBodyContaining("((test + 98/90-(1))");
+
+	REQUIRE(Parser.isProgramValid() == false);
+}
+
+TEST_CASE("Parser determines program is Invalid for program containing invalid paramaters", "[Parser]") {
+	Scanner Scanner("function remainder(a : integer, b : )", true);
+	Parser Parser(Scanner);
+
+	REQUIRE(Parser.isProgramValid() == false);
+}
+
+TEST_CASE("Parser determines program is Invalid for program containing if statement without then", "[Parser]") {
+	Parser Parser = createParserWithBodyContaining("if d > 0 45 else 66");
+
+	REQUIRE(Parser.isProgramValid() == false);
+}
+
+TEST_CASE("Parser determines program is Invalid for program containing if statement without else", "[Parser]") {
+	Parser Parser = createParserWithBodyContaining("if d > 0 45 then 6");
+
+	REQUIRE(Parser.isProgramValid() == false);
+}
+
+TEST_CASE("Parser determines program is Invalid for program containing boolean operators on single values", "[Parser]") {
+	Parser Parser = createParserWithBodyContaining("65 or ()");
+
+	REQUIRE(Parser.isProgramValid() == false);
+}
+
+TEST_CASE("Parser determines program is Invalid for program containing arithmetic operators on single values", "[Parser]") {
+	Parser Parser = createParserWithBodyContaining("65 + ()");
+
+	REQUIRE(Parser.isProgramValid() == false);
+}
+
+TEST_CASE("Parser determines program is Invalid for function with no return type", "[Parser]") {
+	Scanner Scanner("function main(x : integer) : horner(x, 3, 0)", true);
+	Parser Parser(Scanner);
+
+	REQUIRE(Parser.isProgramValid() == false);
+}
+
+TEST_CASE("Parser determines program is Invalid for ", "[Parser]") {
+	Scanner Scanner("function main(x : integer) : horner(x, 3, 0)", true);
+	Parser Parser(Scanner);
+
+	REQUIRE(Parser.isProgramValid() == false);
+}
+
+TEST_CASE("Parser determines program is Invalid for function that returns two types (not possible)", "[Parser]") {
+	Scanner Scanner("function main(x : integer) : integer or boolean horner(x, 3, 0)", true);
+	Parser Parser(Scanner);
+
+	REQUIRE(Parser.isProgramValid() == false);
 }

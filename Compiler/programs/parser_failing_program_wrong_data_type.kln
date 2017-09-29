@@ -2,6 +2,9 @@
 by Josh Hilliard, Harsha Varma, and Justice Adams
 CS 4550 Fall 2017
 Compiler Defilers
+
+must use integer when refering to the data type. Not int.
+
 *)
 function main (a : integer, b : integer) : int
 	print(a + b)

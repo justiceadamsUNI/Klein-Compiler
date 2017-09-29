@@ -2,6 +2,9 @@
 by Josh Hilliard, Harsha Varma, and Justice Adams
 CS 4550 Fall 2017
 Compiler Defilers
+
+Can't have a colon seperating parameters. Must be a comma
 *)
 function notMain(x : boolean : b : integer) : integer
+	print(abc)
 	1
