@@ -1,9 +1,79 @@
 #include "../header/Parser.h"
 #include <algorithm>
+#include <iostream>
 
 
 Parser::Parser(Scanner& InScanner): ScannerVar(InScanner) {
 	return;
+}
+
+void Parser::parseProgram()
+{
+	Stack.push(END_OF_STREAM);
+	Stack.push(PROGRAM);
+	StackValues StackTop = Stack.top();
+	
+	StackValues PeekedTokenValue = mapFromScannerTokenToStackValue(ScannerVar.peek());
+	while (StackTop != END_OF_STREAM) {
+		
+		if (isTerminalValue(StackTop)) {
+			if (StackTop == PeekedTokenValue)
+			{
+				Stack.pop();
+				ScannerVar.next();
+			}
+			else {
+				string StackTopString = StackValuesPrintMap.find(StackTop)->second;
+				string PeekedTokenSting = StackValuesPrintMap.find(PeekedTokenValue)->second;
+				throw runtime_error("ERROR: Problem matching terminal value. Token from input stream - " + PeekedTokenSting + ", Stack Top - " + StackTopString);
+			}
+		}
+		else {
+			if (ParseTable.find(make_pair(StackTop, PeekedTokenValue)) != ParseTable.end()) {
+				list<StackValues> Rule = ParseTable.find(make_pair(StackTop, PeekedTokenValue))->second;
+
+				Stack.pop();
+				addRuleToStack(Rule);
+			}
+			else {
+				string StackTopString = StackValuesPrintMap.find(StackTop)->second;
+				string PeekedTokenSting = StackValuesPrintMap.find(PeekedTokenValue)->second;
+				throw runtime_error("ERROR: No Rule exist in the Parse Table for (" + StackTopString + ", " + PeekedTokenSting + ")");
+			}
+		}
+
+		PeekedTokenValue = mapFromScannerTokenToStackValue(ScannerVar.peek());
+		StackTop = Stack.top();
+	}
+
+	if (Stack.top() == END_OF_STREAM && PeekedTokenValue == END_OF_STREAM)
+	{
+		Stack.pop();
+	}
+
+	if (!Stack.isEmpty())
+	{
+		string StackTopString = StackValuesPrintMap.find(StackTop)->second;
+		throw runtime_error("ERROR: There are still values on the stack, but input stream has ended. Top of stack - " + StackTopString);
+	}
+}
+
+bool Parser::isProgramValid()
+{
+	// This method is only for unit testing. It provides a public method to 
+	// the Parser API so that we can run test accordingly.
+	try
+	{
+		parseProgram();
+
+		// valid if no exception thrown
+		return true;
+	}
+	catch (const std::exception& e)
+	{
+		cout << endl << e.what() << endl;
+		return false;
+	}
 }
 
 bool Parser::isTerminalValue(StackValues value)
@@ -12,7 +82,7 @@ bool Parser::isTerminalValue(StackValues value)
 	return foundElement != TerminalValues.end();
 }
 
-Parser::StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
+StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
 {
 	switch (InToken.getTokenType())
 	{
@@ -47,7 +117,7 @@ Parser::StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
 	throw runtime_error("ERROR: Parser got in a bad state attmpting to map TokenType to StackValue. Token value - " + InToken.getValue());
 }
 
-Parser::StackValues Parser::mapArithmeticOperatorTokenToStackValue(Token InToken)
+StackValues Parser::mapArithmeticOperatorTokenToStackValue(Token InToken)
 {
 	if (InToken.getValue() == "+")
 	{
@@ -67,7 +137,7 @@ Parser::StackValues Parser::mapArithmeticOperatorTokenToStackValue(Token InToken
 	};
 }
 
-Parser::StackValues Parser::mapLogicalOperatorTokenToStackValue(Token InToken)
+StackValues Parser::mapLogicalOperatorTokenToStackValue(Token InToken)
 {
 	if (InToken.getValue() == "and")
 	{
@@ -83,7 +153,7 @@ Parser::StackValues Parser::mapLogicalOperatorTokenToStackValue(Token InToken)
 	};
 }
 
-Parser::StackValues Parser::mapConditionalTokenToStackValue(Token InToken)
+StackValues Parser::mapConditionalTokenToStackValue(Token InToken)
 {
 	if (InToken.getValue() == "if")
 	{
@@ -97,4 +167,14 @@ Parser::StackValues Parser::mapConditionalTokenToStackValue(Token InToken)
 	{
 		return ELSE;
 	};
+}
+
+void Parser::addRuleToStack(list<StackValues> Rule)
+{
+	// Adds values to stack in reverse order
+	while (!Rule.empty())
+	{
+		Stack.push(Rule.back());
+		Rule.pop_back();
+	}
 }

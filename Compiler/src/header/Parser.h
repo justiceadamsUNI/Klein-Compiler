@@ -1,6 +1,7 @@
 #pragma once
 #include "TokenType.h"
 #include "Scanner.h"
+#include "PStack.h"
 #include "Token.h"
 #include <list>
 #include <map>
@@ -13,62 +14,16 @@ class Parser
 public:
 	Parser(Scanner& InScanner);
 
-	// Represents every terminal/non-terminal that could 
-	// possibly be put onto the stack.
-	enum StackValues
-	{
-		INTEGER_LITERAL,
-		INTEGER_DATA_TYPE,
-		BOOLEAN_DATA_TYPE,
-		BOOLEAN_LITERAL,
-		PLUS_OPERATOR,
-		MINUS_OPERATOR,
-		DIVIDES_OPERATOR,
-		MULTIPLY_OPERATOR,
-		FUNCTION,
-		LEFT_PAREN,
-		RIGHT_PAREN,
-		COMMA_LITERAL,
-		COLON_LITERAL,
-		IDENTIFIER_LITERAL,
-		PRINT,
-		LESS_THAN_OPERATOR,
-		EQUAL_SIGN,
-		AND,
-		OR,
-		NOT,
-		IF,
-		THEN,
-		ELSE,
-		END_OF_STREAM,
-		PROGRAM,
-		DEFINITIONS,
-		DEF,
-		FORMALS,
-		NON_EMPTY_FORMALS,
-		NON_EMPTY_FORMALS_TAIL,
-		FORMAL,
-		BODY,
-		TYPE,
-		EXPR,
-		EXPR_TAIL,
-		SIMPLE_EXPR,
-		SIMPLE_EXPR_TAIL,
-		TERM,
-		TERM_TAIL,
-		FACTOR,
-		FACTOR_ID_TAIL,
-		ACTUALS,
-		NON_EMPTY_ACTUALS,
-		NON_EMPTY_ACTUALS_TAIL,
-		LITERAL,
-		PRINT_STATEMENT,
-	};
-
 	StackValues mapFromScannerTokenToStackValue(Token token);
+
+	void parseProgram();
+
+	bool isProgramValid();
 
 private:
 	Scanner ScannerVar;
+
+	PStack Stack;
 
 	// All the stack values that are terminals
 	list<StackValues> TerminalValues = { 
@@ -132,6 +87,8 @@ private:
 	
 	StackValues mapConditionalTokenToStackValue(Token InToken);
 
+	void addRuleToStack(list<StackValues> Rule);
+
 
 	// PARSE TABLE - Sparse 2D array representation.
 	// Read below the map for a better understanding. 
@@ -149,7 +106,7 @@ private:
 			{ make_pair<StackValues, StackValues>(FORMALS, RIGHT_PAREN), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(FORMALS, IDENTIFIER_LITERAL), list<StackValues>{NON_EMPTY_FORMALS} },
 			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS, IDENTIFIER_LITERAL), list<StackValues>{FORMAL, NON_EMPTY_FORMALS_TAIL} },
-			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS_TAIL, COMMA_LITERAL), list<StackValues>{COMMA_LITERAL, NON_EMPTY_FORMALS_TAIL} },
+			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS_TAIL, COMMA_LITERAL), list<StackValues>{COMMA_LITERAL, NON_EMPTY_FORMALS} },
 			{ make_pair<StackValues, StackValues>(NON_EMPTY_FORMALS_TAIL, RIGHT_PAREN), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(FORMAL, IDENTIFIER_LITERAL), list<StackValues>{IDENTIFIER_LITERAL, COLON_LITERAL, TYPE} },
 			{ make_pair<StackValues, StackValues>(BODY, PRINT), list<StackValues>{PRINT_STATEMENT, BODY} },
@@ -169,8 +126,8 @@ private:
 			{ make_pair<StackValues, StackValues>(EXPR, BOOLEAN_LITERAL), list<StackValues>{SIMPLE_EXPR, EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(EXPR, MINUS_OPERATOR), list<StackValues>{SIMPLE_EXPR, EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(EXPR, LEFT_PAREN), list<StackValues>{SIMPLE_EXPR, EXPR_TAIL} },
-			{ make_pair<StackValues, StackValues>(EXPR_TAIL, LESS_THAN_OPERATOR), list<StackValues>{LESS_THAN_OPERATOR, SIMPLE_EXPR} },
-			{ make_pair<StackValues, StackValues>(EXPR_TAIL, EQUAL_SIGN), list<StackValues>{EQUAL_SIGN, SIMPLE_EXPR} },
+			{ make_pair<StackValues, StackValues>(EXPR_TAIL, LESS_THAN_OPERATOR), list<StackValues>{LESS_THAN_OPERATOR, SIMPLE_EXPR, EXPR_TAIL} },
+			{ make_pair<StackValues, StackValues>(EXPR_TAIL, EQUAL_SIGN), list<StackValues>{EQUAL_SIGN, SIMPLE_EXPR, EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(EXPR_TAIL, FUNCTION), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(EXPR_TAIL, END_OF_STREAM), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(EXPR_TAIL, RIGHT_PAREN), list<StackValues>{} },
@@ -190,9 +147,9 @@ private:
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR, BOOLEAN_LITERAL), list<StackValues>{TERM, SIMPLE_EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR, MINUS_OPERATOR), list<StackValues>{TERM, SIMPLE_EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR, LEFT_PAREN), list<StackValues>{TERM, SIMPLE_EXPR_TAIL} },
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, OR), list<StackValues>{OR, TERM} },
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, PLUS_OPERATOR), list<StackValues>{PLUS_OPERATOR, TERM} },
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, MINUS_OPERATOR), list<StackValues>{MINUS_OPERATOR, TERM} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, OR), list<StackValues>{OR, TERM, SIMPLE_EXPR_TAIL} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, PLUS_OPERATOR), list<StackValues>{PLUS_OPERATOR, TERM, SIMPLE_EXPR_TAIL} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, MINUS_OPERATOR), list<StackValues>{MINUS_OPERATOR, TERM, SIMPLE_EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, FUNCTION), list<StackValues>{}},
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, END_OF_STREAM), list<StackValues>{}},
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, RIGHT_PAREN), list<StackValues>{}},
@@ -211,9 +168,9 @@ private:
 			{ make_pair<StackValues, StackValues>(TERM, BOOLEAN_LITERAL), list<StackValues>{FACTOR, TERM_TAIL}},
 			{ make_pair<StackValues, StackValues>(TERM, MINUS_OPERATOR), list<StackValues>{FACTOR, TERM_TAIL}},
 			{ make_pair<StackValues, StackValues>(TERM, LEFT_PAREN), list<StackValues>{FACTOR, TERM_TAIL}},
-			{ make_pair<StackValues, StackValues>(TERM_TAIL, AND), list<StackValues>{AND, FACTOR}},
-			{ make_pair<StackValues, StackValues>(TERM_TAIL, MULTIPLY_OPERATOR), list<StackValues>{MULTIPLY_OPERATOR, FACTOR}},
-			{ make_pair<StackValues, StackValues>(TERM_TAIL, DIVIDES_OPERATOR), list<StackValues>{DIVIDES_OPERATOR, FACTOR}},
+			{ make_pair<StackValues, StackValues>(TERM_TAIL, AND), list<StackValues>{AND, FACTOR, TERM_TAIL}},
+			{ make_pair<StackValues, StackValues>(TERM_TAIL, MULTIPLY_OPERATOR), list<StackValues>{MULTIPLY_OPERATOR, FACTOR, TERM_TAIL}},
+			{ make_pair<StackValues, StackValues>(TERM_TAIL, DIVIDES_OPERATOR), list<StackValues>{DIVIDES_OPERATOR, FACTOR, TERM_TAIL}},
 			{ make_pair<StackValues, StackValues>(TERM_TAIL, FUNCTION), list<StackValues>{}},
 			{ make_pair<StackValues, StackValues>(TERM_TAIL, END_OF_STREAM), list<StackValues>{}},
 			{ make_pair<StackValues, StackValues>(TERM_TAIL, RIGHT_PAREN), list<StackValues>{}},
@@ -262,7 +219,7 @@ private:
 			{ make_pair<StackValues, StackValues>(NON_EMPTY_ACTUALS, BOOLEAN_LITERAL), list<StackValues>{EXPR, NON_EMPTY_ACTUALS_TAIL} },
 			{ make_pair<StackValues, StackValues>(NON_EMPTY_ACTUALS, MINUS_OPERATOR), list<StackValues>{EXPR, NON_EMPTY_ACTUALS_TAIL} },
 			{ make_pair<StackValues, StackValues>(NON_EMPTY_ACTUALS, LEFT_PAREN), list<StackValues>{EXPR, NON_EMPTY_ACTUALS_TAIL} },
-			{ make_pair<StackValues, StackValues>(NON_EMPTY_ACTUALS_TAIL, COMMA_LITERAL), list<StackValues>{COMMA_LITERAL, NON_EMPTY_ACTUALS} },
+			{ make_pair<StackValues, StackValues>(NON_EMPTY_ACTUALS_TAIL, COMMA_LITERAL), list<StackValues>{COMMA_LITERAL, NON_EMPTY_ACTUALS, NON_EMPTY_ACTUALS_TAIL} },
 			{ make_pair<StackValues, StackValues>(NON_EMPTY_ACTUALS_TAIL, RIGHT_PAREN), list<StackValues>{} },
 			{ make_pair<StackValues, StackValues>(LITERAL, INTEGER_LITERAL), list<StackValues>{INTEGER_LITERAL} },
 			{ make_pair<StackValues, StackValues>(LITERAL, BOOLEAN_LITERAL), list<StackValues>{BOOLEAN_LITERAL} },

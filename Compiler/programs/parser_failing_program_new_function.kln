@@ -1,0 +1,12 @@
+(*Integer Addition
+by Josh Hilliard, Harsha Varma, and Justice Adams
+CS 4550 Fall 2017
+Compiler Defilers
+
+Can't have a function with no proper definition
+*)
+function main(a : integer) : integer
+	a = a + 1
+	print(a)
+	1
+function

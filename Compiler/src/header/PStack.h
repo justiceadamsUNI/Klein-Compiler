@@ -1,4 +1,4 @@
-#include "Parser.h"
+#include "StackValues.h"
 #include <stack>
 #include <stdexcept>
 
@@ -11,10 +11,15 @@ class PStack  //A Stack used to hold states of the parser
 	
 public:
 	PStack();
-	Parser::StackValues pop();
-	void push(Parser::StackValues);
+
+	StackValues pop();
+
+	StackValues top();
+
+	void push(StackValues);
+
 	bool isEmpty(); 
 
 private:
-	stack<Parser::StackValues> parserStack;
+	stack<StackValues> parserStack;
 };

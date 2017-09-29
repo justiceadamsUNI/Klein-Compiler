@@ -30,6 +30,12 @@
     <ClInclude Include="src\header\Parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\header\PStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\header\StackValues.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test\RunAllTest.cpp">
@@ -47,10 +53,13 @@
     <ClCompile Include="test\ScannerTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\BuildTokens.cpp">
+    <ClCompile Include="src\implementation\Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\implementation\Parser.cpp">
+    <ClCompile Include="src\implementation\PStack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ProgramValidator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

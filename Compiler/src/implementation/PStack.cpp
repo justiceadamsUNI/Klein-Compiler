@@ -3,20 +3,28 @@
 using namespace std;
 
 PStack::PStack(){
-	stack<Parser::StackValues> parserStack;
+	stack<StackValues> parserStack;
 }
 
-Parser::StackValues PStack::pop(){
-	if(isEmpty()) throw out_of_range("ERROR: Empty Stack");
+StackValues PStack::pop(){
+	if(isEmpty()) throw out_of_range("ERROR: Can't call pop() on an Empty Stack");
 	else {
-		Parser::StackValues temp = parserStack.top();
+		StackValues temp = top();
 		parserStack.pop();
 		return temp;
 	}
 }
 
-void PStack::push(Parser::StackValues in){
+void PStack::push(StackValues in){
 	parserStack.push(in);	
+}
+
+StackValues PStack::top() {
+	if (isEmpty()) throw out_of_range("ERROR: Can't call top() on an Empty Stack");
+	else {
+		StackValues temp = parserStack.top();
+		return temp;
+	}
 }
 
 bool PStack::isEmpty(){
