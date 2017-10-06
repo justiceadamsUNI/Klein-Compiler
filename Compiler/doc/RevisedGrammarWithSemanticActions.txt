@@ -1,0 +1,67 @@
+             <PROGRAM> ::= <DEFINITIONS> Build-ProgramNode
+
+         <DEFINITIONS> ::= Biild-DefinitionsNode
+                         | <DEF> <DEFINITIONS>
+
+                 <DEF> ::= function <IDENTIFIER> Build-IdentifierNode ( <FORMALS> ) : <TYPE>
+                              <BODY> Build-DefNode
+
+             <FORMALS> ::= Build-FormalsNode
+                         | <NONEMPTYFORMALS> 
+
+     <NONEMPTYFORMALS> ::= <FORMAL> <NONEMPTYFORMALS-TAIL>
+
+<NONEMPTYFORMALS-TAIL> ::= , <NONEMPTYFORMALS>
+                         | Build-NonEmptyFormalsNode
+
+              <FORMAL> ::= <IDENTIFIER> Build-IdentifierNode : <TYPE> Build-FormalNode
+
+                <BODY> ::= <PRINT-STATEMENT> <BODY>
+                         | <EXPR> Build-BodyNode
+
+                <TYPE> ::= integer Build-TypeNode
+                         | boolean Build-TypeNode
+
+                <EXPR> ::= <SIMPLE-EXPR> <EXPR-TAIL>
+
+           <EXPR-TAIL> ::= < <SIMPLE-EXPR> Build-LessThanNode
+                         | = <SIMPLE-EXPR> Build-EqualNode
+                         | Build-BaseExprNode
+
+         <SIMPLE-EXPR> ::= <TERM> <SIMPLE-EXPR-TAIL>
+
+    <SIMPLE-EXPR-TAIL> ::= or <TERM> Build-OrNode
+                         | + <TERM>	Build-AdditionNode
+                         | - <TERM> Build-SubractionNode
+                         | Build-BaseSimpleExprNode
+
+                <TERM> ::= <FACTOR> <TERM-TAIL>
+
+           <TERM-TAIL> ::= and <FACTOR> Build-AndNode
+                         | * <FACTOR> Build-MultiplicatorNode
+                         | / <FACTOR> Build-DividerNode
+                         | Build-BaseTermNode
+
+              <FACTOR> ::= if <EXPR> then <EXPR> else <EXPR> Build-IfFactorNode
+                         | not <FACTOR> Build-NotFactorNode
+                         | <IDENTIFIER> Build-IdentifierNode <FACTOR-ID-TAIL> 
+                         | <LITERAL> Build-LiteralFactorNode
+                         | - <FACTOR> Build-SubtractionFactorNode
+                         | ( <EXPR> ) Build-ParenExprNode
+
+      <FACTOR-ID-TAIL> ::= ( <ACTUALS> ) Build-IdentifierActualsNode
+                         | Build-SingletonIdentifierFactorNode
+
+             <ACTUALS> ::= Build-BaseActualsNode
+                         | <NONEMPTYACTUALS> Build-NonBaseActualsNode
+
+     <NONEMPTYACTUALS> ::= <EXPR> <NONEMPTYACTUALS-TAIL> 
+
+<NONEMPTYACTUALS-TAIL> ::= , <NONEMPTYACTUALS>
+                         | Build-NonEmptyActualsNode
+
+             <LITERAL> ::= <NUMBER> Build-IntegerLiteralNode
+                         | <BOOLEAN> Build-BooleanLiteralNode
+
+     <PRINT-STATEMENT> ::= print ( <EXPR> ) Build-PrintStatementNode
+
