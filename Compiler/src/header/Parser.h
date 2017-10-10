@@ -117,6 +117,8 @@ private:
 
 	bool isTerminalValue(StackValues Value);
 
+	bool isSemanticAction(StackValues value);
+
 	StackValues mapArithmeticOperatorTokenToStackValue(Token InToken);
 
 	StackValues mapLogicalOperatorTokenToStackValue(Token InToken);

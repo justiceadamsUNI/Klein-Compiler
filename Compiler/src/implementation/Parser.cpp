@@ -14,6 +14,15 @@ void Parser::parseProgram()
 	StackValues PeekedTokenValue = mapFromScannerTokenToStackValue(ScannerVar.peek());
 
 	while (StackTop != END_OF_STREAM) {
+		if (isSemanticAction(StackTop))
+		{
+			// If semantic action, just pop and ignore that shit for now. 
+			// We'll change this code to call factory methods.a
+			Stack.pop();
+			StackTop = Stack.top();
+			continue;
+		}
+
 		if (isTerminalValue(StackTop)) {
 			if (StackTop == PeekedTokenValue)
 			{
@@ -67,6 +76,12 @@ bool Parser::isTerminalValue(StackValues value)
 {
 	list<StackValues>::iterator foundElement = find(TerminalValues.begin(), TerminalValues.end(), value);
 	return foundElement != TerminalValues.end();
+}
+
+bool Parser::isSemanticAction(StackValues value)
+{
+	list<StackValues>::iterator foundElement = find(SemanticActions.begin(), SemanticActions.end(), value);
+	return foundElement != SemanticActions.end();
 }
 
 StackValues Parser::mapFromScannerTokenToStackValue(Token InToken)
