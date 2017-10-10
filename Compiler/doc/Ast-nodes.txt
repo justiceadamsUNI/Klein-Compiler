@@ -1,0 +1,154 @@
+AST NODES
+---------------------------
+
+Program Node:
+	- List of Definition Node's
+
+
+Definitions Node:
+	- List of Def Nodes.
+
+
+Def Node:
+	- Identifier Node
+	- Formals Node
+	- Type Node
+	- Body Node
+
+
+Formals Node:
+	- THIS BASE NODE CONTAINS NOTHING
+
+
+Non Empty Formals Node (Same superclass as Formals Node):
+	- List of Formal Node's
+
+
+Formal Node:
+	- Identifier Node
+	- Type Node
+
+
+ Body Node:
+	- List of Print Statement Node's
+	- Expr Node
+
+
+Type Node:
+	- Data Type (string value)
+
+
+Less Than Expr Node:
+	- Simple Expression Node 1
+	- Simpe Expression Node 2
+
+
+Equal To Expr Node:
+	- Simple Expression Node 1
+	- Simpe Expression Node 2
+
+
+Base Expr Node (others could extend from this):
+	- Simple Expression Node
+
+
+Base Simple Expr Node (others could extend from this):
+	- Term
+
+
+Addition Simple Expr Node:
+	- Term 1
+	- Term 2
+
+
+Or operator Simple Expr Node:
+	- Term 1
+	- Term 2
+
+
+Subtraction Simple Expr Node:
+	- Term 1
+	- Term 2
+
+
+Base Term Node (others could extend this):
+	-Factor Node
+
+
+And operator Term Node:
+	- Factor Node 1
+	- Factor Node 2
+
+
+Division Term Node:
+	- Factor Node 1
+	- Factor Node 2
+
+
+Multiplication Term Node:
+	- Factor Node 1
+	- Factor Node 2
+
+
+If statement factor node:
+	- Expr Node 1
+	- Expr Node 2
+	- Expr Node 3
+
+
+Not statement factor node:
+	- Factor Node
+
+
+Singleton Indetfier factor node:
+	- Identifier Node
+
+
+Indentifier with actuals factor node:
+	- Identifier Node
+	- Actuals Node
+
+
+Literal factor node:
+	- Literal Node
+
+
+Subtraction Factor Node:
+	- Factor Node
+
+
+Parenthesised Expression Factor Node:
+	- Expression
+
+
+Base Actuals Node:
+	- THIS HOLDS NOTHING.
+
+
+Non Base Actuals (etends from Base Actuals) Node:  //Didn't want to call this non empty actuals actuals.
+	- Non Empty Actuals Node
+
+
+Non Empty Actuals Node
+	- List of Expr Nodes
+
+
+Boolean Literal Node
+	- literal value
+
+
+Integer Literal Node
+	- literal value
+
+
+Print statement Node:
+	-Expr Node
+
+
+Identifier Node
+	- string literal value
+
+
+
+
+
