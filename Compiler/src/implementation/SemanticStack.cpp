@@ -4,24 +4,26 @@
 using namespace std;
 
 SemanticStack::SemanticStack() {
-	stack<ASTNode> SStack;
+	stack<ASTNode*> SStack;
 }
 
-ASTNode SemanticStack::pop() {
+ASTNode* SemanticStack::pop() {
 	if (isEmpty()) throw out_of_range("ERROR: Can't call pop() on an Empty Stack");
 	else {
-		ASTNode temp = top();
+		ASTNode* temp = top();
 		SStack.pop();
 		return temp;
 	}
 }
 
-void SemanticStack::push(ASTNode in) {
+void SemanticStack::push(ASTNode* in) {
 	SStack.push(in);
 }
 
-ASTNode SemanticStack::top() {
-	if (isEmpty()) throw out_of_range("ERROR: Can't call top() on an Empty Stack");
+ASTNode* SemanticStack::top() {
+	if (isEmpty()) {
+		throw out_of_range("ERROR: Can't call top() on an Empty Stack");
+	}
 	else {
 		return SStack.top();
 	}

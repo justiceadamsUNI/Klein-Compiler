@@ -5,186 +5,187 @@
 using namespace std;
 
 class ASTNode {
+	virtual void polymorphicEnabler() {}
 	// Base AST Node from which every class extends.
 };
 
-class IdentifierNode : ASTNode {
+class IdentifierNode : public ASTNode {
 public:
 	string IdentifierName;
 };
 
-class FactorNode : ASTNode {
+class FactorNode : public ASTNode {
 	// Base Factor Node that the others extend from
 	// Should never be on the stack.
 };
 
-class BaseActualsNode : ASTNode {
+class BaseActualsNode : public ASTNode {
 	// Contains nothing.
 	// Can be on the stack.
 };
 
-class BaseTermNode : ASTNode {
+class BaseTermNode : public ASTNode {
 public:
-	FactorNode Factor1;
+	FactorNode* Factor1;
 };
 
-class BaseSimpleExprNode : ASTNode {
+class BaseSimpleExprNode : public ASTNode {
 public:
-	BaseTermNode  Term1;
+	BaseTermNode*  Term1;
 };
 
-class BaseExprNode : ASTNode {
+class BaseExprNode : public ASTNode {
 public:
-	BaseSimpleExprNode SimpleExpression1;
+	BaseSimpleExprNode* SimpleExpression1;
 };
 
-class FormalsNode : ASTNode {
+class FormalsNode : public ASTNode {
 	// Contains Nothing
 	// Can be on the stack since Formals can be epsilon
 };
 
-class PrintStatementNode : ASTNode {
+class PrintStatementNode : public ASTNode {
 public:
-	BaseExprNode Expression;
+	BaseExprNode* Expression;
 };
 
-class LiteralNode : ASTNode {
+class LiteralNode : public ASTNode {
 public:
 	string LiteralValue;
 	// This is a base class
 	// Can not be on the stack.
 };
 
-class IntegerLiteralNode : LiteralNode {
+class IntegerLiteralNode : public LiteralNode {
 };
 
-class BooleanLiteralNode : LiteralNode {
+class BooleanLiteralNode : public LiteralNode {
 };
 
-class NonEmptyActualsNode : ASTNode {
+class NonEmptyActualsNode : public ASTNode {
 public:
-	vector<BaseExprNode> Expressions;
+	vector<BaseExprNode*> Expressions;
 };
 
-class NonBaseActualsNode : BaseActualsNode {
+class NonBaseActualsNode : public BaseActualsNode {
 public:
-	NonEmptyActualsNode NonEmptyActuals;
+	NonEmptyActualsNode* NonEmptyActuals;
 };
 
-class ParenExprFactorNode : FactorNode {
+class ParenExprFactorNode : public FactorNode {
 public:
-	BaseExprNode Expression;
+	BaseExprNode* Expression;
 };
 
-class SubtractionFactorNode : FactorNode {
+class SubtractionFactorNode : public FactorNode {
 public:
-	FactorNode Factor;
+	FactorNode* Factor;
 };
 
-class LiteralFactorNode : FactorNode {
+class LiteralFactorNode : public FactorNode {
 public:
-	LiteralNode Literal;
+	LiteralNode* Literal;
 };
 
-class IdentifierFactorNode : FactorNode {
+class IdentifierFactorNode : public FactorNode {
 public:
-	IdentifierNode Identifier;
-	BaseActualsNode Actuals;
+	IdentifierNode* Identifier;
+	BaseActualsNode* Actuals;
 };
 
-class SingletonIdentifierFactorNode : FactorNode {
+class SingletonIdentifierFactorNode : public FactorNode {
 public:
-	IdentifierNode Identifier;
+	IdentifierNode* Identifier;
 };
 
-class NotFactorNode : FactorNode {
+class NotFactorNode : public FactorNode {
 public:
-	FactorNode Factor;
+	FactorNode* Factor;
 };
 
-class IfFactorNode : FactorNode {
+class IfFactorNode : public FactorNode {
 public:
-	BaseExprNode ExpressionFollowingIf;
-	BaseExprNode ExpressionFollowingThen;
-	BaseExprNode ExpressionFollowingElse;
+	BaseExprNode* Expression1;
+	BaseExprNode* Expression2;
+	BaseExprNode* Expression3;
 };
 
-class MultiplicatorTermNode : BaseTermNode {
+class MultiplicatorTermNode : public BaseTermNode {
 public:
-	FactorNode Factor2;
+	FactorNode* Factor2;
 };
 
-class DividerTermNode : BaseTermNode {
+class DividerTermNode : public BaseTermNode {
 public:
-	FactorNode Factor2;
+	FactorNode* Factor2;
 };
 
-class AndTermNode : BaseTermNode {
+class AndTermNode : public BaseTermNode {
 public:
-	FactorNode Factor2;
+	FactorNode* Factor2;
 };
 
-class SubtractorSimpleExprNode : BaseSimpleExprNode {
+class SubtractorSimpleExprNode : public BaseSimpleExprNode {
 public:
-	BaseTermNode  Term2;
+	BaseTermNode*  Term2;
 };
 
-class OrSimpleExprNode : BaseSimpleExprNode {
+class OrSimpleExprNode : public BaseSimpleExprNode {
 public:
-	BaseTermNode  Term2;
+	BaseTermNode*  Term2;
 };
 
-class AdditionSimpleExprNode : BaseSimpleExprNode {
+class AdditionSimpleExprNode : public BaseSimpleExprNode {
 public:
-	BaseTermNode  Term2;
+	BaseTermNode*  Term2;
 };
 
-class EqualToExprNode : BaseExprNode {
+class EqualToExprNode : public BaseExprNode {
 public:
-	BaseSimpleExprNode SimpleExpression2;
+	BaseSimpleExprNode* SimpleExpression2;
 };
 
-class LessThanExprNode : BaseExprNode {
+class LessThanExprNode : public BaseExprNode {
 public:
-	BaseSimpleExprNode SimpleExpression2;
+	BaseSimpleExprNode* SimpleExpression2;
 };
 
-class TypeNode : ASTNode {
+class TypeNode : public ASTNode {
 public:
 	string DataType;
 };
 
-class BodyNode : ASTNode {
+class BodyNode : public ASTNode {
 public:
-	vector<PrintStatementNode> PrintStatements;
-	BaseExprNode Expression;
+	vector<PrintStatementNode*> PrintStatements;
+	BaseExprNode* Expression;
 };
 
-class FormalNode : ASTNode {
+class FormalNode : public ASTNode {
 public:
-	IdentifierNode Identifier;
-	TypeNode Type;
+	IdentifierNode* Identifier;
+	TypeNode* Type;
 };
 
-class NonEmptyFormalsNode : FormalsNode {
+class NonEmptyFormalsNode : public FormalsNode {
 public:
-	vector<FormalNode> FormalNodes;
+	vector<FormalNode*> FormalNodes;
 };
 
-class DefNode : ASTNode {
+class DefNode : public ASTNode {
 public:
-	IdentifierNode Identifier;
-	FormalsNode Formals;
-	TypeNode Type;
-	BodyNode Body;
+	IdentifierNode* Identifier;
+	FormalsNode* Formals;
+	TypeNode* Type;
+	BodyNode* Body;
 };
 
-class DefinitionsNode : ASTNode {
+class DefinitionsNode : public ASTNode {
 public:
-	vector<DefNode> DefNodes;
+	vector<DefNode*> DefNodes;
 };
 
-class ProgramNode : ASTNode {
+class ProgramNode : public ASTNode {
 public:
-	vector<DefinitionsNode> Definitions;
+	vector<DefinitionsNode*> Definitions;
 };

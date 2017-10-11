@@ -14,12 +14,15 @@ void Parser::parseProgram()
 	Stack.push(PROGRAM);
 	StackValues StackTop = Stack.top();
 	StackValues PeekedTokenValue = mapFromScannerTokenToStackValue(ScannerVar.peek());
+	NodeBuilderVisitor BuilderVisitor;
+	SemanticStack SemanticStack;
 
 	while (StackTop != END_OF_STREAM) {
 		if (isSemanticAction(StackTop))
 		{
 			// If semantic action, just pop and ignore that shit for now. 
 			// We'll change this code to call factory methods.a
+			BuilderVisitor.accept(StackTop, SemanticStack, "test", 0);
 			Stack.pop();
 			StackTop = Stack.top();
 			continue;
