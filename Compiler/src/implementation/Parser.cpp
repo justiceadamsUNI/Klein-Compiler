@@ -1,4 +1,6 @@
+#pragma once
 #include "../header/Parser.h"
+#include "../header/NodeBuilderVisitor.h"
 #include <algorithm>
 
 

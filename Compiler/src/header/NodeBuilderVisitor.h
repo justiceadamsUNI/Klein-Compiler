@@ -1,22 +1,23 @@
+#pragma once
 #include "../header/ASTNodeVisitor.h"
 
 class NodeBuilderVisitor : public ASTNodeVisitor {
 public:
-	virtual void visitProgramNode(PStack& SemanticStack) {
+	virtual void visitProgramNode(SemanticStack& SemanticStack) {
 		// pop off every defenition node from the stack and store it inside a program node.
 		// Then push that program node back onto the stack.
 	}
 
-	virtual void visitDefinitionsNode(PStack& SemanticStack) {
+	virtual void visitDefinitionsNode(SemanticStack& SemanticStack) {
 		// pop off every def node from the stack and store it inside a definitions node.
 		// Then push that definitions node back onto the stack.
 	}
 
-	virtual void visitIdentifierNode(PStack& SemanticStack, string IdentifierName) {
+	virtual void visitIdentifierNode(SemanticStack& SemanticStack, string IdentifierName) {
 		// store the identifier name inside the identifier node, then push the identifier node onto the stack.
 	}
 
-	virtual void visitDefNode(PStack& SemanticStack) {
+	virtual void visitDefNode(SemanticStack& SemanticStack) {
 		// pop off identifier node and store it in Def node.
 		// pop off formals node and store it in Def node.
 		// pop off type node and store it in Def node.
@@ -25,69 +26,69 @@ public:
 		// push Def node onto stack.
 	}
 
-	virtual void visitFormalsNode(PStack& SemanticStack) {
+	virtual void visitFormalsNode(SemanticStack& SemanticStack) {
 		// Not sure why we need this? <-------------
 	}
 
-	virtual void visitNonEmptyFormalsNode(PStack& SemanticStack) {
+	virtual void visitNonEmptyFormalsNode(SemanticStack& SemanticStack) {
 		// pop off every Formal node from the stack and store it inside a Non Empty Formals Node.
 		// Then push that Non Empty Formals Node node back onto the stack.
 	}
 
-	virtual void visitFormalNode(PStack& SemanticStack) {
+	virtual void visitFormalNode(SemanticStack& SemanticStack) {
 		// pop off identifier node and store it in Formal node.
 		// pop off type node and store it in Formal node.
 
 		// push Formal Node onto stack.
 	}
 
-	virtual void visitBodyNode(PStack& SemanticStack) {
+	virtual void visitBodyNode(SemanticStack& SemanticStack) {
 		// pop off list of print statment nodes and store it in Body node.
 		// pop off expr node and store it in Body node.
 
 		// push Body node onto stack..
 	}
 
-	virtual void visitTypeNode(PStack& SemanticStack, string Type) {
+	virtual void visitTypeNode(SemanticStack& SemanticStack, string Type) {
 		// store Type string inside the Type Node.
 		// push Type node onto the stack
 	}
 
-	virtual void visitLessThanNode(PStack& SemanticStack) {
+	virtual void visitLessThanNode(SemanticStack& SemanticStack) {
 		// pop off simple expression node and store it in Less than node.
 		// pop off simple expression node and store it in Less than node.
 
 		// push less than Node onto stack.
 	}
 
-	virtual void visitEqualNode(PStack& SemanticStack) {
+	virtual void visitEqualNode(SemanticStack& SemanticStack) {
 		// pop off simple expression node and store it in equal than node.
 		// pop off simple expression node and store it in equal than node.
 
 		// pushequal Node onto stack.
 	}
 
-	virtual void visitBaseExpressionNode(PStack& SemanticStack) {
+	virtual void visitBaseExpressionNode(SemanticStack& SemanticStack) {
 		// pop off simple expression node and store it in base expression node
 
 		// push Base expression node onto the stack.
 	}
 
-	virtual void visitOrNode(PStack& SemanticStack) {
+	virtual void visitOrNode(SemanticStack& SemanticStack) {
 		// pop off term node and store it in or node.
 		// pop off term node and store it in or node.
 
 		// push or Node onto stack.
 	}
 
-	virtual void visitAdditionNode(PStack& SemanticStack) {
+	virtual void visitAdditionNode(SemanticStack& SemanticStack) {
 		// pop off term node and store it in addition node.
 		// pop off term node and store it in addition node.
 
 		// push addition Node onto stack.
 	}
 
-	virtual void visitSubtractionNode(PStack& SemanticStack) {
+	virtual void visitSubtractionNode(SemanticStack& SemanticStack) {
 		// pop off term node and store it in subtaction node.
 		// pop off term node and store it in subtraction node.
 
@@ -95,14 +96,14 @@ public:
 
 	}
 
-	virtual void visitBaseSimpleExpressionNode(PStack& SemanticStack) {
+	virtual void visitBaseSimpleExpressionNode(SemanticStack& SemanticStack) {
 		// pop off term node and store it in Base simple expression node.
 
 		// push Base simple expression Node onto stack.
 
 	}
 
-	virtual void visitAndNode(PStack& SemanticStack) {
+	virtual void visitAndNode(SemanticStack& SemanticStack) {
 		// pop off factor node and store it in and node.
 		// pop off factor node and store it in and node.
 
@@ -110,7 +111,7 @@ public:
 
 	}
 
-	virtual void visitMultiplicatorNode(PStack& SemanticStack) {
+	virtual void visitMultiplicatorNode(SemanticStack& SemanticStack) {
 		// pop off factor node and store it in multiplicator node.
 		// pop off factor node and store it in multiplicator node.
 
@@ -118,22 +119,22 @@ public:
 
 	}
 
-	virtual void visitDividerNode(PStack& SemanticStack) {
+	virtual void visitDividerNode(SemanticStack& SemanticStack) {
 		// pop off factor node and store it in Divider node.
 		// pop off factor node and store it in Divider node.
 
 		// push Divider note onto stack.
-	
+
 	}
 
-	virtual void visitBaseTermNode(PStack& SemanticStack) {
+	virtual void visitBaseTermNode(SemanticStack& SemanticStack) {
 		// pop off factor node and store it in Base term expression node.
 
 		// push Base term expression Node onto stack.
 
 	}
 
-	virtual void visitIfFactorNode(PStack& SemanticStack) {
+	virtual void visitIfFactorNode(SemanticStack& SemanticStack) {
 		// pop off expr node and store it in if factor node.
 		// pop off expr node and store it in if factor node.
 		// pop off expr node and store it in if factor node.
@@ -141,68 +142,68 @@ public:
 		// push if factor node onto stack.
 	}
 
-	virtual void visitNotFactorNode(PStack& SemanticStack) {
+	virtual void visitNotFactorNode(SemanticStack& SemanticStack) {
 		// pop off factor node and store it in not factor node
 
 		// push not factor node onto stack.
 	}
 
-	virtual void visitLiteralFactorNode(PStack& SemanticStack) {
+	virtual void visitLiteralFactorNode(SemanticStack& SemanticStack) {
 		// pop off literal node and store it in literal factor node
 
 		// push literal factor node onto stack.
 	}
 
-	virtual void visitSubtractionFactorNode(PStack& SemanticStack) {
+	virtual void visitSubtractionFactorNode(SemanticStack& SemanticStack) {
 		// pop off factor node and store it in subtraction factor node
 
 		// push subtraction factor node onto stack.
 
 	}
 
-	virtual void visitParenthesisedExpressionNode(PStack& SemanticStack) {
+	virtual void visitParenthesisedExpressionNode(SemanticStack& SemanticStack) {
 		// pop off expr node and store it in parenthesised expression node.
 
 		// push parenthesised expression node onto stack.
 	}
 
-	virtual void visitIdentifierActualsNode(PStack& SemanticStack) {
+	virtual void visitIdentifierActualsNode(SemanticStack& SemanticStack) {
 		// pop off identifier node and store it in identifier actuals node.
 		// pop off actuals node and store it in identifier actuals node.
 
 		// push identifier actuals node onto stack.
 	}
 
-	virtual void visitSingletonIdentifierFactorNode(PStack& SemanticStack) {
+	virtual void visitSingletonIdentifierFactorNode(SemanticStack& SemanticStack) {
 		// pop off identifier node and store it in singleton identifier factor node.
 
 		// push singleton identifier factor node onto stack.
 	}
 
-	virtual void visitBaseActualsNode(PStack& SemanticStack) {
+	virtual void visitBaseActualsNode(SemanticStack& SemanticStack) {
 		// Why do we want something that holds nothing? <--------
 	}
 
-	virtual void visitNonBaseActualsNode(PStack& SemanticStack) {
+	virtual void visitNonBaseActualsNode(SemanticStack& SemanticStack) {
 		// pop non empty actuals node and store it in non base actuals node.
-		
+
 		// push non base actuals node onto stack.
 	}
 
-	virtual void visitNonEmptyActualsNode(PStack& SemanticStack) {
+	virtual void visitNonEmptyActualsNode(SemanticStack& SemanticStack) {
 		// pop off every expr node from the stack and store it inside a non empty actuals node.
 		// Then push that non empty actuals node back onto the stack.
 	}
 
-	virtual void visitIntegerLiteralNode(PStack& SemanticStack, int IntData) {
+	virtual void visitIntegerLiteralNode(SemanticStack& SemanticStack, int IntData) {
 		// store IntData inside the integer literal node and push that integer literal node onto the stack
 	}
 
-	virtual void visitBooleanLiteralNode(PStack& SemanticStack, string BooleanValue) {
+	virtual void visitBooleanLiteralNode(SemanticStack& SemanticStack, string BooleanValue) {
 		// store BooleanValue inside the boolean literal node and push that boolean literal node onto the stack
 	}
 
-	virtual void visitPrintStatementNode(PStack& SemanticStack) {
+	virtual void visitPrintStatementNode(SemanticStack& SemanticStack) {
 		// pop off expr node from the stack and store it inside a print statment node.
 		// Then push that  print statment node back onto the stack.
 	}

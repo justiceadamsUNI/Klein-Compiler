@@ -1,3 +1,4 @@
+#pragma once
 #include "../header/Scanner.h"
 #include <fstream>
 #include <iostream>

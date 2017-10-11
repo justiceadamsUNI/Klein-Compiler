@@ -1,14 +1,15 @@
 #pragma once
-#include "PStack.h"
 #include <string>
 #include <stdexcept>
+#include "SemanticStack.h"
+#include "StackValues.h"
 
 using namespace std;
 
 class ASTNodeVisitor {
 public:
-	// PStack needs to be SemanticStack! Just here to compile for right now until harsha is done.
-	void accept(StackValues ParserStackValue, PStack& SemanticStack, string StringData, int IntData) {
+	// SemanticStack needs to be SemanticStack! Just here to compile for right now until harsha is done.
+	void accept(StackValues ParserStackValue, SemanticStack& SemanticStack, string StringData, int IntData) {
 		switch (ParserStackValue)
 		{
 		case BUILD_PROGRAM_NODE:
@@ -118,37 +119,37 @@ public:
 	}
 
 	// Visitor methods
-	virtual void visitProgramNode(PStack& SemanticStack) = 0;
-	virtual void visitDefinitionsNode(PStack& SemanticStack) = 0;
-	virtual void visitIdentifierNode(PStack& SemanticStack, string IdentifierName) = 0;
-	virtual void visitDefNode(PStack& SemanticStack) = 0;
-	virtual void visitFormalsNode(PStack& SemanticStack) = 0;
-	virtual void visitNonEmptyFormalsNode(PStack& SemanticStack) = 0;
-	virtual void visitFormalNode(PStack& SemanticStack) = 0;
-	virtual void visitBodyNode(PStack& SemanticStack) = 0;
-	virtual void visitTypeNode(PStack& SemanticStack, string IdentifierName) = 0;
-	virtual void visitLessThanNode(PStack& SemanticStack) = 0;
-	virtual void visitEqualNode(PStack& SemanticStack) = 0;
-	virtual void visitBaseExpressionNode(PStack& SemanticStack) = 0;
-	virtual void visitOrNode(PStack& SemanticStack) = 0;
-	virtual void visitAdditionNode(PStack& SemanticStack) = 0;
-	virtual void visitSubtractionNode(PStack& SemanticStack) = 0;
-	virtual void visitBaseSimpleExpressionNode(PStack& SemanticStack) = 0;
-	virtual void visitAndNode(PStack& SemanticStack) = 0;
-	virtual void visitMultiplicatorNode(PStack& SemanticStack) = 0;
-	virtual void visitDividerNode(PStack& SemanticStack) = 0;
-	virtual void visitBaseTermNode(PStack& SemanticStack) = 0;
-	virtual void visitIfFactorNode(PStack& SemanticStack) = 0;
-	virtual void visitNotFactorNode(PStack& SemanticStack) = 0;
-	virtual void visitLiteralFactorNode(PStack& SemanticStack) = 0;
-	virtual void visitSubtractionFactorNode(PStack& SemanticStack) = 0;
-	virtual void visitParenthesisedExpressionNode(PStack& SemanticStack) = 0;
-	virtual void visitIdentifierActualsNode(PStack& SemanticStack) = 0;
-	virtual void visitSingletonIdentifierFactorNode(PStack& SemanticStack) = 0;
-	virtual void visitBaseActualsNode(PStack& SemanticStack) = 0;
-	virtual void visitNonBaseActualsNode(PStack& SemanticStack) = 0;
-	virtual void visitNonEmptyActualsNode(PStack& SemanticStack) = 0;
-	virtual void visitIntegerLiteralNode(PStack& SemanticStack, int IntData) = 0;
-	virtual void visitBooleanLiteralNode(PStack& SemanticStack, string BooleanValue) = 0;
-	virtual void visitPrintStatementNode(PStack& SemanticStack) = 0;
+	virtual void visitProgramNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitDefinitionsNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitIdentifierNode(SemanticStack& SemanticStack, string IdentifierName) = 0;
+	virtual void visitDefNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitFormalsNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitNonEmptyFormalsNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitFormalNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitBodyNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitTypeNode(SemanticStack& SemanticStack, string IdentifierName) = 0;
+	virtual void visitLessThanNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitEqualNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitBaseExpressionNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitOrNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitAdditionNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitSubtractionNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitBaseSimpleExpressionNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitAndNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitMultiplicatorNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitDividerNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitBaseTermNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitIfFactorNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitNotFactorNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitLiteralFactorNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitSubtractionFactorNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitParenthesisedExpressionNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitIdentifierActualsNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitSingletonIdentifierFactorNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitBaseActualsNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitNonBaseActualsNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitNonEmptyActualsNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitIntegerLiteralNode(SemanticStack& SemanticStack, int IntData) = 0;
+	virtual void visitBooleanLiteralNode(SemanticStack& SemanticStack, string BooleanValue) = 0;
+	virtual void visitPrintStatementNode(SemanticStack& SemanticStack) = 0;
 };

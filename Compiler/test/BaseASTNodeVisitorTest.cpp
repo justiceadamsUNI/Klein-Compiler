@@ -6,7 +6,7 @@ using namespace fakeit;
 
 void mockVisitorAccept(Mock <ASTNodeVisitor>& MockVisitor, StackValues SemanticAction) {
 	ASTNodeVisitor& AstNodeVisitorImpl = MockVisitor.get();
-	PStack SemanticStack;
+	SemanticStack SemanticStack;
 	AstNodeVisitorImpl.accept(SemanticAction, SemanticStack, "", 0);
 }
 

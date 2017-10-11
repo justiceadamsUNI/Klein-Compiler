@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <vector>
 
@@ -10,6 +11,36 @@ class ASTNode {
 class IdentifierNode : ASTNode {
 public:
 	string IdentifierName;
+};
+
+class FactorNode : ASTNode {
+	// Base Factor Node that the others extend from
+	// Should never be on the stack.
+};
+
+class BaseActualsNode : ASTNode {
+	// Contains nothing.
+	// Can be on the stack.
+};
+
+class BaseTermNode : ASTNode {
+public:
+	FactorNode Factor1;
+};
+
+class BaseSimpleExprNode : ASTNode {
+public:
+	BaseTermNode  Term1;
+};
+
+class BaseExprNode : ASTNode {
+public:
+	BaseSimpleExprNode SimpleExpression1;
+};
+
+class FormalsNode : ASTNode {
+	// Contains Nothing
+	// Can be on the stack since Formals can be epsilon
 };
 
 class PrintStatementNode : ASTNode {
@@ -35,19 +66,9 @@ public:
 	vector<BaseExprNode> Expressions;
 };
 
-class BaseActualsNode : ASTNode {
-	// Contains nothing.
-	// Can be on the stack.
-};
-
 class NonBaseActualsNode : BaseActualsNode {
 public:
 	NonEmptyActualsNode NonEmptyActuals;
-};
-
-class FactorNode : ASTNode {
-	// Base Factor Node that the others extend from
-	// Should never be on the stack.
 };
 
 class ParenExprFactorNode : FactorNode {
@@ -88,11 +109,6 @@ public:
 	BaseExprNode ExpressionFollowingElse;
 };
 
-class BaseTermNode : ASTNode {
-public:
-	FactorNode Factor1;
-};
-
 class MultiplicatorTermNode : BaseTermNode {
 public:
 	FactorNode Factor2;
@@ -108,11 +124,6 @@ public:
 	FactorNode Factor2;
 };
 
-class BaseSimpleExprNode : ASTNode {
-public:
-	BaseTermNode  Term1;
-};
-
 class SubtractorSimpleExprNode : BaseSimpleExprNode {
 public:
 	BaseTermNode  Term2;
@@ -126,11 +137,6 @@ public:
 class AdditionSimpleExprNode : BaseSimpleExprNode {
 public:
 	BaseTermNode  Term2;
-};
-
-class BaseExprNode : ASTNode {
-public:
-	BaseSimpleExprNode SimpleExpression1;
 };
 
 class EqualToExprNode : BaseExprNode {
@@ -158,11 +164,6 @@ class FormalNode : ASTNode {
 public:
 	IdentifierNode Identifier;
 	TypeNode Type;
-};
-
-class FormalsNode : ASTNode {
-	// Contains Nothing
-	// Can be on the stack since Formals can be epsilon
 };
 
 class NonEmptyFormalsNode : FormalsNode {
