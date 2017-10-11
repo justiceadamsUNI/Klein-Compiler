@@ -36,6 +36,9 @@
     <ClInclude Include="src\header\StackValues.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\header\ASTNodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test\RunAllTest.cpp">
