@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\header\ASTNodes.h" />
     <ClInclude Include="src\header\Parser.h" />
     <ClInclude Include="src\header\PStack.h" />
     <ClInclude Include="src\header\Scanner.h" />
