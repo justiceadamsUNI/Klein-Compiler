@@ -36,7 +36,7 @@ public:
 			visitBodyNode(SemanticStack);
 			return;
 		case BUILD_TYPE_NODE:
-			visitTypeNode(SemanticStack);
+			visitTypeNode(SemanticStack, StringData);
 			return;
 		case BUILD_LESSTHAN_NODE:
 			visitLessThanNode(SemanticStack);
@@ -126,7 +126,7 @@ public:
 	virtual void visitNonEmptyFormalsNode(PStack& SemanticStack) = 0;
 	virtual void visitFormalNode(PStack& SemanticStack) = 0;
 	virtual void visitBodyNode(PStack& SemanticStack) = 0;
-	virtual void visitTypeNode(PStack& SemanticStack) = 0;
+	virtual void visitTypeNode(PStack& SemanticStack, string IdentifierName) = 0;
 	virtual void visitLessThanNode(PStack& SemanticStack) = 0;
 	virtual void visitEqualNode(PStack& SemanticStack) = 0;
 	virtual void visitBaseExpressionNode(PStack& SemanticStack) = 0;
