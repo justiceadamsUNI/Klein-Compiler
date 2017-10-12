@@ -1,189 +1,281 @@
+#pragma once
 #include <string>
 #include <vector>
 
 using namespace std;
 
+enum ASTNodeType {
+	IdentifierNode,
+	FactorNodeType,
+	BaseActualsNodeType,
+	BaseTermNodeType,
+	BaseSimpleExprNodeType,
+	BaseExprNodeType,
+	FormalsNodeType,
+	PrintStatemetNode,
+	LiteralNode,
+	IntegerLiteralNode,
+	BooleanLiteralNode,
+	NonEmptyActualsNode,
+	NonBaseActualsNode,
+	ParenExprFactorNode,
+	SubtractionFactorNode,
+	LiteralFactorNode,
+	IdentifierFactorNode,
+	SingletonIdentifierFactorNode,
+	NotFactorNode,
+	IfFactorNode,
+	MultiplicatorTermNode,
+	DividerTermNode,
+	AndTermNode,
+	SubtractorSimpleExprNode,
+	OrSimpleExprNode,
+	AdditionSimpleExprNode,
+	EqualToExprNode,
+	LessThanExprNode,
+	TypeNode,
+	BodyNode,
+	FormalNode,
+	NonEmptyFormalsNode,
+	DefNode,
+	DefinitionsNode,
+	ProgramNode
+};
+
 class ASTNode {
-	// Base AST Node from which every class extends.
-};
-
-class IdentifierNode : ASTNode {
 public:
+	ASTNode(ASTNodeType InputNode){
+		NodeType = InputNode;
+	}
+
+	ASTNodeType getAstNodeType() {
+		return NodeType;
+	}
+
+	string getIdentifierName() {
+		return IdentifierName;
+	}
+	ASTNode* getFactorNode() {
+		return FactorNode;
+	}
+	ASTNode* getBaseTermNode() {
+		return BaseTermNode;
+	}
+		ASTNode* getBaseSimpleExprNode() {
+		return BaseSimpleExprNode;
+	}
+	ASTNode* getBaseExprNode(){
+		return BaseExprNode;
+	}
+	string getLiteralValue(){
+		return LiteralValue;
+	}
+	vector<ASTNode*> getExpressions(){
+		return Expressions;
+	}
+	ASTNode* getNonEmptyActualsNode(){
+		return NonEmptyActualsNode;
+	}
+	ASTNode* getLiteralNode(){
+		return LiteralNode;
+	}
+	ASTNode* getIdentifierNode(){
+		return IdentifierNodeVar;
+	}
+	ASTNode* getBaseActualsNode(){
+		return BaseActualsNode;
+	}
+	ASTNode* getBaseExprNode2(){
+		return BaseExprNode2;
+	}
+	ASTNode* getBaseExprNode3(){
+		return BaseExprNode3;
+	}
+	ASTNode* getFactorNode2(){
+		return FactorNode2;
+	}
+	ASTNode* getBaseTermNode2(){
+		return BaseTermNode2;
+	}
+	ASTNode* getBaseSimpleExprNode2(){
+		return BaseSimpleExprNode2;
+	}
+	string getDataType(){
+		return DataType;
+	}
+	ASTNode* getIdentifierNode2(){
+		return IdentifierNode2;
+	}
+	ASTNode* getTypeNode(){
+		return TypeNode;
+	}
+	vector<ASTNode*> getPrintStatements(){
+		return PrintStatements;
+	}
+	vector<ASTNode*> getFormalNodes(){
+		return FormalNodes;
+	}
+	ASTNode* getFormalsNode(){
+		return FormalsNode;
+	}
+	ASTNode* getBodyNode(){
+		return BodyNode;
+	}
+	vector<ASTNode*> getDefNodes(){
+		return DefNodes;
+	}
+	vector<ASTNode*> getDefinitions() {
+		return Definitions;
+	}
+
+	//Validator methods
+	bool isFormalsNode() {
+		return NodeType == FormalsNodeType || NodeType == NonEmptyFormalsNode;
+	}
+
+	bool isExpressionNode() {
+		return NodeType == BaseExprNodeType ||
+			NodeType == LessThanExprNode ||
+			NodeType == EqualToExprNode;
+	}
+
+	bool isSimpleExpressionNode() {
+		return NodeType == BaseSimpleExprNodeType ||
+			NodeType == AdditionSimpleExprNode ||
+			NodeType == SubtractorSimpleExprNode ||
+			NodeType == OrSimpleExprNode;
+	}
+
+	bool isTermNode() {
+		return NodeType == BaseTermNodeType ||
+			NodeType == MultiplicatorTermNode ||
+			NodeType == DividerTermNode ||
+			NodeType == AndTermNode;
+	}
+
+	bool isFactorNode() {
+		return NodeType == FactorNodeType ||
+			NodeType == ParenExprFactorNode ||
+			NodeType == SubtractionFactorNode ||
+			NodeType == LiteralFactorNode ||
+			NodeType == IdentifierFactorNode ||
+			NodeType == SingletonIdentifierFactorNode ||
+			NodeType == NotFactorNode ||
+			NodeType == IfFactorNode;
+	}
+
+	bool isLiteralNode() {
+		return NodeType == BooleanLiteralNode ||
+			NodeType == IntegerLiteralNode;
+	}
+
+	bool isActualsNode() {
+		return NodeType == BaseActualsNodeType ||
+			NodeType == NonBaseActualsNode;
+	}
+	
+	//Setters
+		void setIdentifierName(string inIdentifierName) {
+		IdentifierName = inIdentifierName;
+	}
+	void setFactorNode(ASTNode* inFactorNode) {
+		FactorNode = inFactorNode;
+	}
+	void setBaseTermNode(ASTNode* inBaseTermNode) {
+		BaseTermNode = inBaseTermNode;
+	}
+	void setBaseSimpleExprNode(ASTNode* inBaseSimpleExprNode) {
+		BaseSimpleExprNode = inBaseSimpleExprNode;
+	}
+	void setBaseExprNode(ASTNode* inBaseExprNode) {
+		BaseExprNode = inBaseExprNode;
+	}
+	void setLiteralValue(string inLiteralValue) {
+		LiteralValue = inLiteralValue;
+	}
+	void addExpressionToVector(ASTNode* inExpressions) {
+		Expressions.push_back(inExpressions);
+	}
+	void setNonEmptyActualsNode(ASTNode* inNoneEmptyActualsNode) {
+		NonEmptyActualsNode = inNoneEmptyActualsNode;
+	}
+	void setLiteralNode(ASTNode* inLiteralNode) {
+		LiteralNode = inLiteralNode;
+	}
+	void setIdentifierNode(ASTNode* inIdentifierNodeVar) {
+		IdentifierNodeVar = inIdentifierNodeVar;
+	}
+	void setBaseActualsNode(ASTNode* inBaseActualsNode) {
+		BaseActualsNode = inBaseActualsNode;
+	}
+	void setBaseExprNode2(ASTNode* inBaseExprNode2) {
+		BaseExprNode2 = inBaseExprNode2;
+	}
+	void setBaseExprNode3(ASTNode* inBaseExprNode3) {
+		BaseExprNode3 = inBaseExprNode3;
+	}
+	void setFactorNode2(ASTNode* inFactorNode2) {
+		FactorNode2 = inFactorNode2;
+	}
+	void setBaseTermNode2(ASTNode* inBaseTermNode2) {
+		BaseTermNode2 = inBaseTermNode2;
+	}
+	void setBaseSimpleExprNode2(ASTNode* inBaseSimpleExprNode2) {
+		BaseSimpleExprNode2 = inBaseSimpleExprNode2;
+	}
+	void setDataType(string inDataType) {
+		DataType = inDataType;
+	}
+	void setIdentifierNode2(ASTNode* inIdentifierNode2) {
+		IdentifierNode2 = inIdentifierNode2;
+	}
+	void setTypeNode(ASTNode* inTypeNode) {
+		TypeNode = inTypeNode;
+	}
+	void addPrintStatementToVector(ASTNode* inPrintStatement) {
+		PrintStatements.push_back(inPrintStatement);
+	}
+	void addFormalNodeToVector(ASTNode* Formal) {
+		FormalNodes.push_back(Formal);
+	}
+	void setFormalsNode(ASTNode* inFormalsNode) {
+		FormalsNode = inFormalsNode;
+	}
+	void setBodyNode(ASTNode* inBodyNode) {
+		BodyNode = inBodyNode;
+	}
+	void addDefinitionToVector(ASTNode* Definition) {
+		Definitions.push_back(Definition);
+	}
+	void addDefToVector(ASTNode* Def) {
+		DefNodes.push_back(Def);
+	}
+private :
+	ASTNodeType NodeType;
+
 	string IdentifierName;
-};
-
-class PrintStatementNode : ASTNode {
-public:
-	BaseExprNode Expression;
-};
-
-class LiteralNode : ASTNode {
-public:
+	ASTNode* FactorNode;
+	ASTNode* BaseTermNode;
+	ASTNode* BaseSimpleExprNode;
+	ASTNode* BaseExprNode;
 	string LiteralValue;
-	// This is a base class
-	// Can not be on the stack.
-};
-
-class IntegerLiteralNode : LiteralNode {
-};
-
-class BooleanLiteralNode : LiteralNode {
-};
-
-class NonEmptyActualsNode : ASTNode {
-public:
-	vector<BaseExprNode> Expressions;
-};
-
-class BaseActualsNode : ASTNode {
-	// Contains nothing.
-	// Can be on the stack.
-};
-
-class NonBaseActualsNode : BaseActualsNode {
-public:
-	NonEmptyActualsNode NonEmptyActuals;
-};
-
-class FactorNode : ASTNode {
-	// Base Factor Node that the others extend from
-	// Should never be on the stack.
-};
-
-class ParenExprFactorNode : FactorNode {
-public:
-	BaseExprNode Expression;
-};
-
-class SubtractionFactorNode : FactorNode {
-public:
-	FactorNode Factor;
-};
-
-class LiteralFactorNode : FactorNode {
-public:
-	LiteralNode Literal;
-};
-
-class IdentifierFactorNode : FactorNode {
-public:
-	IdentifierNode Identifier;
-	BaseActualsNode Actuals;
-};
-
-class SingletonIdentifierFactorNode : FactorNode {
-public:
-	IdentifierNode Identifier;
-};
-
-class NotFactorNode : FactorNode {
-public:
-	FactorNode Factor;
-};
-
-class IfFactorNode : FactorNode {
-public:
-	BaseExprNode ExpressionFollowingIf;
-	BaseExprNode ExpressionFollowingThen;
-	BaseExprNode ExpressionFollowingElse;
-};
-
-class BaseTermNode : ASTNode {
-public:
-	FactorNode Factor1;
-};
-
-class MultiplicatorTermNode : BaseTermNode {
-public:
-	FactorNode Factor2;
-};
-
-class DividerTermNode : BaseTermNode {
-public:
-	FactorNode Factor2;
-};
-
-class AndTermNode : BaseTermNode {
-public:
-	FactorNode Factor2;
-};
-
-class BaseSimpleExprNode : ASTNode {
-public:
-	BaseTermNode  Term1;
-};
-
-class SubtractorSimpleExprNode : BaseSimpleExprNode {
-public:
-	BaseTermNode  Term2;
-};
-
-class OrSimpleExprNode : BaseSimpleExprNode {
-public:
-	BaseTermNode  Term2;
-};
-
-class AdditionSimpleExprNode : BaseSimpleExprNode {
-public:
-	BaseTermNode  Term2;
-};
-
-class BaseExprNode : ASTNode {
-public:
-	BaseSimpleExprNode SimpleExpression1;
-};
-
-class EqualToExprNode : BaseExprNode {
-public:
-	BaseSimpleExprNode SimpleExpression2;
-};
-
-class LessThanExprNode : BaseExprNode {
-public:
-	BaseSimpleExprNode SimpleExpression2;
-};
-
-class TypeNode : ASTNode {
-public:
+	vector<ASTNode*> Expressions;
+	ASTNode* NonEmptyActualsNode;
+	ASTNode* LiteralNode;
+	ASTNode* IdentifierNodeVar;
+	ASTNode* BaseActualsNode;
+	ASTNode* BaseExprNode2;
+	ASTNode* BaseExprNode3;
+	ASTNode* FactorNode2;
+	ASTNode* BaseTermNode2;
+	ASTNode* BaseSimpleExprNode2;
 	string DataType;
-};
-
-class BodyNode : ASTNode {
-public:
-	vector<PrintStatementNode> PrintStatements;
-	BaseExprNode Expression;
-};
-
-class FormalNode : ASTNode {
-public:
-	IdentifierNode Identifier;
-	TypeNode Type;
-};
-
-class FormalsNode : ASTNode {
-	// Contains Nothing
-	// Can be on the stack since Formals can be epsilon
-};
-
-class NonEmptyFormalsNode : FormalsNode {
-public:
-	vector<FormalNode> FormalNodes;
-};
-
-class DefNode : ASTNode {
-public:
-	IdentifierNode Identifier;
-	FormalsNode Formals;
-	TypeNode Type;
-	BodyNode Body;
-};
-
-class DefinitionsNode : ASTNode {
-public:
-	vector<DefNode> DefNodes;
-};
-
-class ProgramNode : ASTNode {
-public:
-	vector<DefinitionsNode> Definitions;
+	ASTNode* IdentifierNode2;
+	ASTNode* TypeNode;
+	vector<ASTNode*> PrintStatements;
+	vector<ASTNode*> FormalNodes;
+	ASTNode* FormalsNode;
+	ASTNode* BodyNode;
+	vector<ASTNode*> DefNodes;
+	vector<ASTNode*>Definitions;
 };

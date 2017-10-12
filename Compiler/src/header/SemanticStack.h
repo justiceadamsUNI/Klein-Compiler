@@ -1,5 +1,5 @@
 #pragma once
-#include "StackValues.h"
+#include "ASTNodes.h"
 #include <stack>
 #include <stdexcept>
 
@@ -8,20 +8,21 @@ using namespace std;
 
 // Throws Error for popping an empty stack
 // A Stack used to hold states of the parser
-class PStack 
+class SemanticStack
 {
-	
+
 public:
-	PStack();
+	SemanticStack();
 
-	StackValues pop();
+	ASTNode pop();
 
-	StackValues top();
+	ASTNode top();
 
-	void push(StackValues);
+	void push(ASTNode);
 
-	bool isEmpty(); 
+	bool isEmpty();
 
 private:
-	stack<StackValues> parserStack;
+	stack<ASTNode> SStack;
 };
+
