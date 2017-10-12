@@ -104,8 +104,8 @@ public:
 	void setLiteralValue(string inLiteralValue) {
 		LiteralValue = inLiteralValue;
 	}
-	void setExpressions(vector<ASTNode*> inExpressions) {
-		Expressions = inExpressions;
+	void addExpressionsToVector(ASTNode* inExpressions) {
+		Expressions.push_back(inExpressions);
 	}
 	void setNonEmptyActualsNode(ASTNode* inNoneEmptyActualsNode) {
 		NonEmptyActualsNode = inNoneEmptyActualsNode;
@@ -144,8 +144,8 @@ public:
 	void setTypeNode(ASTNode* inTypeNode) {
 		TypeNode = inTypeNode;
 	}
-	void setPrintStatements(vector<ASTNode*> inPrintStatement) {
-		PrintStatements = inPrintStatement;
+	void addPrintStatementsToVector(ASTNode* inPrintStatement) {
+		PrintStatements.push_back(inPrintStatement);
 	}
 	void setFormalNodes(vector<ASTNode*> inFormalNodes) {
 		FormalNodes = inFormalNodes;
