@@ -39,6 +39,15 @@
     <ClInclude Include="src\header\ASTNodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\header\NodeBuilderVisitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\header\ASTNodeVisitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\header\SemanticStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test\RunAllTest.cpp">
@@ -63,6 +72,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ProgramValidator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\implementation\SemanticStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

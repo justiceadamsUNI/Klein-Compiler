@@ -14,15 +14,15 @@ class SemanticStack
 public:
 	SemanticStack();
 
-	ASTNode* pop();
+	ASTNode pop();
 
-	ASTNode* top();
+	ASTNode top();
 
-	void push(ASTNode*);
+	void push(ASTNode);
 
 	bool isEmpty();
 
 private:
-	stack<ASTNode*> SStack;
+	stack<ASTNode> SStack;
 };
 

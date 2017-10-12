@@ -4,11 +4,54 @@
 
 using namespace std;
 
+enum ASTNodeType {
+	IdentifierNode,
+	FactorNode,
+	BaseActualsNode,
+	BaseTermNode,
+	BaseSimpleExprNodeType,
+	BaseExprNodeType,
+	FormalsNodeType,
+	PrintStatemetNode,
+	LiteralNode,
+	IntegerLiteralNode,
+	BooleanLiteralNode,
+	NonEmptyActualsNode,
+	NonBaseActualsNode,
+	ParenExprFactorNode,
+	SubtractionFactorNode,
+	LiteralFactorNode,
+	IdentifierFactorNode,
+	SingletonIdentifierFactorNode,
+	NotFactorNode,
+	IfFactorNode,
+	MultiplicatorTermNode,
+	DividerTermNode,
+	AndTermNode,
+	SubtractorSimpleExprNode,
+	OrSimpleExprNode,
+	AdditionSimpleExprNode,
+	EqualToExprNode,
+	LessThanExprNode,
+	TypeNode,
+	BodyNode,
+	FormalNode,
+	NonEmptyFormalsNode,
+	DefNode,
+	DefinitionsNode,
+	ProgramNode
+};
+
 class ASTNode {
 public:
 	ASTNode(ASTNodeType InputNode){
 		NodeType = InputNode;
 	}
+
+	ASTNodeType getAstNodeType() {
+		return NodeType;
+	}
+
 	string getIdentifierName() {
 		return IdentifierName;
 	}
@@ -41,7 +84,6 @@ public:
 	}
 	ASTNode* getBaseActualsNode(){
 		return BaseActualsNode;
-
 	}
 	ASTNode* getBaseExprNode2(){
 		return BaseExprNode2;
@@ -61,8 +103,8 @@ public:
 	string getDataType(){
 		return DataType;
 	}
-	ASTNode* getIdentifierNode(){
-		return IdentifierNode;
+	ASTNode* getIdentifierNode2(){
+		return IdentifierNode2;
 	}
 	ASTNode* getTypeNode(){
 		return TypeNode;
@@ -86,7 +128,26 @@ public:
 		return Definitions;
 	}
 
-	void setIdentifierName(string inIdentifierName) {
+	//Validator methods
+	bool isFormalsNode() {
+		return NodeType == FormalsNodeType || NodeType == NonEmptyFormalsNode;
+	}
+
+	bool isExpressionNode() {
+		return NodeType == BaseExprNodeType ||
+			NodeType == LessThanExprNode ||
+			NodeType == EqualToExprNode;
+	}
+
+	bool isSimpleExpressionNode() {
+		return NodeType == BaseSimpleExprNodeType ||
+			NodeType == AdditionSimpleExprNode ||
+			NodeType == SubtractorSimpleExprNode ||
+			NodeType == OrSimpleExprNode;
+	}
+	
+	//Setters
+		void setIdentifierName(string inIdentifierName) {
 		IdentifierName = inIdentifierName;
 	}
 	void setFactorNode(ASTNode* inFactorNode) {
@@ -118,7 +179,6 @@ public:
 	}
 	void setBaseActualsNode(ASTNode* inBaseActualsNode) {
 		BaseActualsNode = inBaseActualsNode;
-
 	}
 	void setBaseExprNode2(ASTNode* inBaseExprNode2) {
 		BaseExprNode2 = inBaseExprNode2;
@@ -144,11 +204,11 @@ public:
 	void setTypeNode(ASTNode* inTypeNode) {
 		TypeNode = inTypeNode;
 	}
-	void addPrintStatementsToVector(ASTNode* inPrintStatement) {
+	void addPrintStatementToVector(ASTNode* inPrintStatement) {
 		PrintStatements.push_back(inPrintStatement);
 	}
-	void setFormalNodes(vector<ASTNode*> inFormalNodes) {
-		FormalNodes = inFormalNodes;
+	void addFormalNodeToVector(ASTNode* Formal) {
+		FormalNodes.push_back(Formal);
 	}
 	void setFormalsNode(ASTNode* inFormalsNode) {
 		FormalsNode = inFormalsNode;
@@ -156,14 +216,15 @@ public:
 	void setBodyNode(ASTNode* inBodyNode) {
 		BodyNode = inBodyNode;
 	}
-	void setDefNodes(vector<ASTNode*> inDefNodes) {
-		DefNodes = inDefNodes;
+	void addDefinitionToVector(ASTNode* Definition) {
+		Definitions.push_back(Definition);
 	}
-	void setDefinitions(vector<ASTNode*> inDefinitions) {
-		Definitions = inDefinitions;
+	void addDefToVector(ASTNode* Def) {
+		DefNodes.push_back(Def);
 	}
 private :
 	ASTNodeType NodeType;
+
 	string IdentifierName;
 	ASTNode* FactorNode;
 	ASTNode* BaseTermNode;
@@ -190,42 +251,3 @@ private :
 	vector<ASTNode*> DefNodes;
 	vector<ASTNode*>Definitions;
 };
-
-enum ASTNodeType {
-	IdentifierNode,
-	FactorNode,
-	BaseActualsNode,
-	BaseTermNode,
-	BaseSimpleExprNode,
-	BaseExprNode,
-	FormalsNode,
-	PrintStatemetNode,
-	LiteralNode,
-	IntegerLiteralNode,
-	BooleanLiteralNode,
-	NonEmptyActualsNode,
-	NonBaseActualsNode,
-	ParenExprFactorNode,
-	SubtractionFactorNode,
-	LiteralFactorNode,
-	IdentifierFactorNode,
-	SingletonIdentifierFactorNode,
-	NotFactorNode,
-	IfFactorNode,
-	MultiplicatorTermNode,
-	DividerTermNode,
-	AndTermNode,
-	SubtractorSimpleExprNode,
-	OrSimpleExprNode,
-	AdditionSimpleExprNode,
-	EqualToExprNode,
-	LessThanExprNode,
-	TypeNode,
-	BodyNode,
-	FormalNode,
-	NonEmptyFormalsNode,
-	DefNode,
-	DefinitionsNode,
-	ProgramNode
-};
-
