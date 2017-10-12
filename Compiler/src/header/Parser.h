@@ -2,6 +2,7 @@
 #include "Scanner.h"
 #include "PStack.h"
 #include "Token.h"
+#include "NodeBuilderVisitor.h"
 #include <list>
 #include <map>
 #include <stdexcept>
@@ -23,6 +24,8 @@ private:
 	Scanner ScannerVar;
 
 	PStack Stack;
+
+	SemanticStack SemanticStack;
 
 	// All the stack values that are terminals
 	list<StackValues> TerminalValues = { 

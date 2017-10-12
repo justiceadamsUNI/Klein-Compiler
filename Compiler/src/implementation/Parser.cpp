@@ -1,6 +1,5 @@
 #pragma once
 #include "../header/Parser.h"
-#include "../header/NodeBuilderVisitor.h"
 #include <algorithm>
 
 
@@ -15,7 +14,6 @@ void Parser::parseProgram()
 	StackValues StackTop = Stack.top();
 	StackValues PeekedTokenValue = mapFromScannerTokenToStackValue(ScannerVar.peek());
 	NodeBuilderVisitor BuilderVisitor;
-	SemanticStack SemanticStack;
 
 	while (StackTop != END_OF_STREAM) {
 		if (isSemanticAction(StackTop))
@@ -197,5 +195,15 @@ void Parser::checkValidEndState(StackValues PeekedTokenValue)
 	{
 		string StackTopString = StackValuesPrintMap.find(Stack.top())->second;
 		throw runtime_error("ERROR: There are still values on the stack, but input stream has ended. Top of stack - " + StackTopString);
+	}
+
+	ASTNode FinalASTNode = SemanticStack.pop();
+	if (FinalASTNode.getAstNodeType() != ProgramNode)
+	{
+		throw runtime_error("ERROR: The top of the semantic stack isn't a Program Node.");
+	}
+	if (!SemanticStack.isEmpty())
+	{
+		throw runtime_error("ERROR: There are still nodes left on the Semantic Stack!");
 	}
 }

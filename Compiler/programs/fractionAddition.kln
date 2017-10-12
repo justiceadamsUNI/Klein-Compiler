@@ -3,5 +3,7 @@ by Josh Hilliard, Harsha Varma, and Justice Adams
 CS 4550 Fall 2017
 Compiler Defilers
 *)
-function main() : integer
-8 - (9/2) * diff * wallingford + is + cool  + 9
+function main(a : integer, b : integer, c : integer, d : integer) : integer
+	print(a*d + c*b)
+	print(b * d)
+	1
