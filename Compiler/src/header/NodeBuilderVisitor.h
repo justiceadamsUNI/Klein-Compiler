@@ -242,14 +242,14 @@ public:
 			EqualNode.setBaseSimpleExprNode(&SemanticStack.pop());
 		}
 		else {
-			throw runtime_error("ERROR: Attempted to build Less Than Node, but didn't find (First) Simple Expression Node on stack");
+			throw runtime_error("ERROR: Attempted to build Equal Node, but didn't find (First) Simple Expression Node on stack");
 		}
 		if (SemanticStack.top().isSimpleExpressionNode())
 		{
 			EqualNode.setBaseSimpleExprNode(&SemanticStack.pop());
 		}
 		else {
-			throw runtime_error("ERROR: Attempted to build Less Than Node, but didn't find (Second) Simple Expression Node on stack");
+			throw runtime_error("ERROR: Attempted to build Equal Node, but didn't find (Second) Simple Expression Node on stack");
 		}
 
 		cout << "adding an Equal to node!" << endl;
@@ -259,6 +259,13 @@ public:
 	virtual void visitBaseExpressionNode(SemanticStack& SemanticStack) {
 		// pop off simple expression node and store it in base expression node
 		// push Base expression node onto the stack.
+
+		// For run on scenarios
+		if (SemanticStack.top().isExpressionNode())
+		{
+			//We don't need to handle this case, so just return.
+			return;
+		}
 
 		ASTNode BaseExpression(BaseExprNodeType);
 
@@ -288,8 +295,12 @@ public:
 		else {
 			throw runtime_error("ERROR: Attempted to build Or Simple Expr Node, but didn't find (first) Term Node on stack");
 		}
-
-		if (SemanticStack.top().isTermNode())
+		// -------------- What follows could be another Or node if it's a run on Or scenario ------------- //
+		if (SemanticStack.top().getAstNodeType() == OrSimpleExprNode)
+		{
+			OrNode.setBaseSimpleExprNode(&SemanticStack.pop());
+		}
+		else if (SemanticStack.top().isTermNode())
 		{
 			OrNode.setBaseTermNode2(&SemanticStack.pop());
 		}
@@ -315,12 +326,17 @@ public:
 			throw runtime_error("ERROR: Attempted to build Addition Node, but didn't find (first) Term Node on stack");
 		}
 
-		if (SemanticStack.top().isTermNode())
+		// -------------- What follows could be another arithmetic based node if it's a run on arithmetic operator scenario ------------- //
+		if (SemanticStack.top().isArithmeticSimpleExpression())
+		{
+			AdditionNode.setBaseSimpleExprNode(&SemanticStack.pop());
+		}
+		else if (SemanticStack.top().isTermNode())
 		{
 			AdditionNode.setBaseTermNode2(&SemanticStack.pop());
 		}
 		else {
-			throw runtime_error("ERROR: Attempted to build Addition Node, but didn't find (second) Term Node on stack");
+			throw runtime_error("ERROR: Attempted to build Addition Node, but didn't find (second) Term Node/arithmetic Node on stack");
 		}
 
 		cout << "adding an Addition node!" << endl;
@@ -342,12 +358,17 @@ public:
 			throw runtime_error("ERROR: Attempted to build Subtraction Node, but didn't find (first) Term Node on stack");
 		}
 
-		if (SemanticStack.top().isTermNode())
+		// -------------- What follows could be another arithmetic based node if it's a run on arithmetic operator scenario ------------- //
+		if (SemanticStack.top().isArithmeticSimpleExpression())
+		{
+			SubtractionNode.setBaseSimpleExprNode(&SemanticStack.pop());
+		}
+		else if (SemanticStack.top().isTermNode())
 		{
 			SubtractionNode.setBaseTermNode2(&SemanticStack.pop());
 		}
 		else {
-			throw runtime_error("ERROR: Attempted to build Subtraction Node, but didn't find (second) Term Node on stack");
+			throw runtime_error("ERROR: Attempted to build Subtraction Node, but didn't find (second) Term Node/arithmetic Node on stack");
 		}
 
 		cout << "adding a Subtraction node!" << endl;
@@ -360,6 +381,13 @@ public:
 
 		// push Base simple expression Node onto stack.
 		ASTNode BaseSimpleExprNode(BaseSimpleExprNodeType);
+
+		// For run on scenarios.
+		if (SemanticStack.top().isSimpleExpressionNode())
+		{
+			//We don't need to handle this case, so just return.
+			return;
+		}
 
 		if (SemanticStack.top().isTermNode())
 		{
@@ -389,12 +417,17 @@ public:
 			throw runtime_error("ERROR: Attempted to build And Node, but didn't find (first) Factor Node on stack");
 		}
 
-		if (SemanticStack.top().isFactorNode())
+		// -------------- What follows could be another and node if it's a run on and scenario ------------- //
+		if (SemanticStack.top().getAstNodeType() == AndTermNode)
+		{
+			AndNode.setBaseTermNode(&SemanticStack.pop());
+		}
+		else if (SemanticStack.top().isFactorNode())
 		{
 			AndNode.setFactorNode(&SemanticStack.pop());
 		}
 		else {
-			throw runtime_error("ERROR: Attempted to build And Node, but didn't find (Second) Factor Node on stack");
+			throw runtime_error("ERROR: Attempted to build And Node, but didn't find (Second) Factor/ And Node on stack");
 		}
 
 		cout << "adding an And node!" << endl;
@@ -406,7 +439,7 @@ public:
 		// pop off factor node and store it in multiplicator node.
 		// pop off factor node and store it in multiplicator node.
 
-		// push multiplicator note onto stack.
+		// push multiplicator node onto stack.
 		ASTNode MultiplicatorNode(MultiplicatorTermNode);
 
 		if (SemanticStack.top().isFactorNode())
@@ -417,12 +450,21 @@ public:
 			throw runtime_error("ERROR: Attempted to build Multiplication Node, but didn't find (first) Factor Node on stack");
 		}
 
-		if (SemanticStack.top().isFactorNode())
+		// -------------- What follows could be another arithmetic based node if it's a run on arithmetic operator scenario ------------- //
+		if (SemanticStack.top().isArithmeticSimpleExpression())
 		{
-			MultiplicatorNode.setFactorNode(&SemanticStack.pop());
+			MultiplicatorNode.setBaseSimpleExprNode(&SemanticStack.pop());
+		}
+		else if (SemanticStack.top().isArithmeticTerm())
+		{
+			MultiplicatorNode.setBaseTermNode(&SemanticStack.pop());
+		}
+		else if (SemanticStack.top().isFactorNode())
+		{
+			MultiplicatorNode.setFactorNode2(&SemanticStack.pop());
 		}
 		else {
-			throw runtime_error("ERROR: Attempted to build Multiplication Node, but didn't find (Second) Factor Node on stack");
+			throw runtime_error("ERROR: Attempted to build Multiplication Node, but didn't find (Second) Factor Node/arithmetic Node on stack");
 		}
 
 		cout << "adding a Multiplication node!" << endl;
@@ -444,12 +486,21 @@ public:
 			throw runtime_error("ERROR: Attempted to build Division Node, but didn't find (first) Factor Node on stack");
 		}
 
-		if (SemanticStack.top().isFactorNode())
+		// -------------- What follows could be another arithmetic based node if it's a run on arithmetic operator scenario ------------- //
+		if (SemanticStack.top().isArithmeticSimpleExpression())
 		{
-			DividerNode.setFactorNode(&SemanticStack.pop());
+			DividerNode.setBaseSimpleExprNode(&SemanticStack.pop());
+		}
+		else if (SemanticStack.top().isArithmeticTerm())
+		{
+			DividerNode.setBaseTermNode(&SemanticStack.pop());
+		}
+		else if (SemanticStack.top().isFactorNode())
+		{
+			DividerNode.setFactorNode2(&SemanticStack.pop());
 		}
 		else {
-			throw runtime_error("ERROR: Attempted to build Division Node, but didn't find (Second) Factor Node on stack");
+			throw runtime_error("ERROR: Attempted to build Division Node, but didn't find (Second) Factor Node/arithmetic Node on stack");
 		}
 
 		cout << "adding a Division node!" << endl;
@@ -459,9 +510,17 @@ public:
 
 	virtual void visitBaseTermNode(SemanticStack& SemanticStack) {
 		// pop off factor node and store it in Base term expression node.
-
 		// push Base term expression Node onto stack.
+
+		//Only want to happen if we're dealing with a term that hasn't already been built.
+		//This is because we account for run-on operators.
+
 		ASTNode BaseTermNode(BaseTermNodeType);
+		if (SemanticStack.top().isTermNode())
+		{
+			//We don't need to handle this case, so just return.
+			return;
+		}
 
 		if (SemanticStack.top().isFactorNode())
 		{
@@ -643,6 +702,16 @@ public:
 	virtual void visitNonEmptyActualsNode(SemanticStack& SemanticStack) {
 		// pop off every expr node from the stack and store it inside a non empty actuals node.
 		// Then push that non empty actuals node back onto the stack.
+
+		//Only want to happen if we're dealing with the case that non empty actuals hasn't already been built.
+		//This is because we account for run-on non empty actuals.
+		if (SemanticStack.top().getAstNodeType() == NonEmptyActualsNode)
+		{
+			//We don't need to handle this case, so just return.
+			return;
+		}
+
+
 		ASTNode NonEmptyActualsNode(NonEmptyActualsNode);
 		while (!SemanticStack.isEmpty())
 		{

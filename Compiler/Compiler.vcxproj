@@ -158,6 +158,7 @@
     <ClCompile Include="src\implementation\SemanticStack.cpp" />
     <ClCompile Include="src\implementation\Token.cpp" />
     <ClCompile Include="src\ProgramValidator.cpp" />
+    <ClCompile Include="test\ParserTest.cpp" />
     <ClCompile Include="test\RunAllTest.cpp" />
     <ClCompile Include="test\ScannerTest.cpp" />
     <ClCompile Include="test\TokenTest.cpp" />

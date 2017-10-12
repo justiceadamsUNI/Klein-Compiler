@@ -173,6 +173,16 @@ public:
 		return NodeType == BaseActualsNodeType ||
 			NodeType == NonBaseActualsNode;
 	}
+
+	bool isArithmeticTerm() {
+		return NodeType == DividerTermNode ||
+			NodeType == MultiplicatorTermNode;
+	}
+
+	bool isArithmeticSimpleExpression() {
+		return NodeType == AdditionSimpleExprNode ||
+			NodeType == SubtractorSimpleExprNode;
+	}
 	
 	//Setters
 		void setIdentifierName(string inIdentifierName) {
