@@ -85,6 +85,83 @@ public:
 	vector<ASTNode*> getDefinitions() {
 		return Definitions;
 	}
+
+	void setIdentifierName(string inIdentifierName) {
+		IdentifierName = inIdentifierName;
+	}
+	void setFactorNode(ASTNode* inFactorNode) {
+		FactorNode = inFactorNode;
+	}
+	void setBaseTermNode(ASTNode* inBaseTermNode) {
+		BaseTermNode = inBaseTermNode;
+	}
+	void setBaseSimpleExprNode(ASTNode* inBaseSimpleExprNode) {
+		BaseSimpleExprNode = inBaseSimpleExprNode;
+	}
+	void setBaseExprNode(ASTNode* inBaseExprNode) {
+		BaseExprNode = inBaseExprNode;
+	}
+	void setLiteralValue(string inLiteralValue) {
+		LiteralValue = inLiteralValue;
+	}
+	void setExpressions(vector<ASTNode*> inExpressions) {
+		Expressions = inExpressions;
+	}
+	void setNonEmptyActualsNode(ASTNode* inNoneEmptyActualsNode) {
+		NonEmptyActualsNode = inNoneEmptyActualsNode;
+	}
+	void setLiteralNode(ASTNode* inLiteralNode) {
+		LiteralNode = inLiteralNode;
+	}
+	void setIdentifierNode(ASTNode* inIdentifierNodeVar) {
+		IdentifierNodeVar = inIdentifierNodeVar;
+	}
+	void setBaseActualsNode(ASTNode* inBaseActualsNode) {
+		BaseActualsNode = inBaseActualsNode;
+
+	}
+	void setBaseExprNode2(ASTNode* inBaseExprNode2) {
+		BaseExprNode2 = inBaseExprNode2;
+	}
+	void setBaseExprNode3(ASTNode* inBaseExprNode3) {
+		BaseExprNode3 = inBaseExprNode3;
+	}
+	void setFactorNode2(ASTNode* inFactorNode2) {
+		FactorNode2 = inFactorNode2;
+	}
+	void setBaseTermNode2(ASTNode* inBaseTermNode2) {
+		BaseTermNode2 = inBaseTermNode2;
+	}
+	void setBaseSimpleExprNode2(ASTNode* inBaseSimpleExprNode2) {
+		BaseSimpleExprNode2 = inBaseSimpleExprNode2;
+	}
+	void setDataType(string inDataType) {
+		DataType = inDataType;
+	}
+	void setIdentifierNode2(ASTNode* inIdentifierNode2) {
+		IdentifierNode2 = inIdentifierNode2;
+	}
+	void setTypeNode(ASTNode* inTypeNode) {
+		TypeNode = inTypeNode;
+	}
+	void setPrintStatements(vector<ASTNode*> inPrintStatement) {
+		PrintStatements = inPrintStatement;
+	}
+	void setFormalNodes(vector<ASTNode*> inFormalNodes) {
+		FormalNodes = inFormalNodes;
+	}
+	void setFormalsNode(ASTNode* inFormalsNode) {
+		FormalsNode = inFormalsNode;
+	}
+	void setBodyNode(ASTNode* inBodyNode) {
+		BodyNode = inBodyNode;
+	}
+	void setDefNodes(vector<ASTNode*> inDefNodes) {
+		DefNodes = inDefNodes;
+	}
+	void setDefinitions(vector<ASTNode*> inDefinitions) {
+		Definitions = inDefinitions;
+	}
 private :
 	ASTNodeType NodeType;
 	string IdentifierName;
