@@ -5,41 +5,41 @@
 using namespace std;
 
 enum ASTNodeType {
-	IdentifierNode,
-	FactorNodeType,
-	BaseActualsNodeType,
-	BaseTermNodeType,
+	IDENTIFIERNODETYPE,
+	FactorNodeTYPE,
+	BaseActualsNodeTYPE,
+	BaseTermNodeTYPE,
 	BaseSimpleExprNodeType,
 	BaseExprNodeType,
 	FormalsNodeType,
-	PrintStatemetNode,
-	LiteralNode,
-	IntegerLiteralNode,
-	BooleanLiteralNode,
-	NonEmptyActualsNode,
-	NonBaseActualsNode,
-	ParenExprFactorNode,
-	SubtractionFactorNode,
-	LiteralFactorNode,
-	IdentifierFactorNode,
-	SingletonIdentifierFactorNode,
-	NotFactorNode,
-	IfFactorNode,
-	MultiplicatorTermNode,
-	DividerTermNode,
-	AndTermNode,
-	SubtractorSimpleExprNode,
-	OrSimpleExprNode,
-	AdditionSimpleExprNode,
-	EqualToExprNode,
-	LessThanExprNode,
-	TypeNode,
-	BodyNode,
-	FormalNode,
-	NonEmptyFormalsNode,
-	DefNode,
-	DefinitionsNode,
-	ProgramNode
+	PrintStatemetNodeTYPE,
+	LiteralNodeTYPE,
+	IntegerLiteralNodeTYPE,
+	BooleanLiteralNodeTYPE,
+	NonEmptyActualsNodeTYPE,
+	NonBaseActualsNodeTYPE,
+	ParenExprFactorNodeTYPE,
+	SubtractionFactorNodeTYPE,
+	LiteralFactorNodeTYPE,
+	IdentifierFactorNodeTYPE,
+	SingletonIdentifierFactorNodeTYPE,
+	NotFactorNodeTYPE,
+	IfFactorNodeTYPE,
+	MultiplicatorTermNodeTYPE,
+	DividerTermNodeTYPE,
+	AndTermNodeType,
+	SubtractorSimpleExprNodeTYPE,
+	OrSimpleExprNodeTYPE,
+	AdditionSimpleExprNodeTYPE,
+	EqualToExprNodeTYPE,
+	LessThanExprNodeTYPE,
+	TypeNodeTYPE,
+	BodyNodeTYPE,
+	FormalNodeTYPE,
+	NonEmptyFormalsNodeTYPE,
+	DefNodeTYPE,
+	DefinitionsNodeTYPE,
+	ProgramNodeTYPE
 };
 
 class ASTNode {
@@ -130,58 +130,58 @@ public:
 
 	//Validator methods
 	bool isFormalsNode() {
-		return NodeType == FormalsNodeType || NodeType == NonEmptyFormalsNode;
+		return NodeType == FormalsNodeType || NodeType == NonEmptyFormalsNodeTYPE;
 	}
 
 	bool isExpressionNode() {
 		return NodeType == BaseExprNodeType ||
-			NodeType == LessThanExprNode ||
-			NodeType == EqualToExprNode;
+			NodeType == LessThanExprNodeTYPE ||
+			NodeType == EqualToExprNodeTYPE;
 	}
 
 	bool isSimpleExpressionNode() {
 		return NodeType == BaseSimpleExprNodeType ||
-			NodeType == AdditionSimpleExprNode ||
-			NodeType == SubtractorSimpleExprNode ||
-			NodeType == OrSimpleExprNode;
+			NodeType == AdditionSimpleExprNodeTYPE ||
+			NodeType == SubtractorSimpleExprNodeTYPE ||
+			NodeType == OrSimpleExprNodeTYPE;
 	}
 
 	bool isTermNode() {
-		return NodeType == BaseTermNodeType ||
-			NodeType == MultiplicatorTermNode ||
-			NodeType == DividerTermNode ||
-			NodeType == AndTermNode;
+		return NodeType == BaseTermNodeTYPE ||
+			NodeType == MultiplicatorTermNodeTYPE ||
+			NodeType == DividerTermNodeTYPE ||
+			NodeType == AndTermNodeType;
 	}
 
 	bool isFactorNode() {
-		return NodeType == FactorNodeType ||
-			NodeType == ParenExprFactorNode ||
-			NodeType == SubtractionFactorNode ||
-			NodeType == LiteralFactorNode ||
-			NodeType == IdentifierFactorNode ||
-			NodeType == SingletonIdentifierFactorNode ||
-			NodeType == NotFactorNode ||
-			NodeType == IfFactorNode;
+		return NodeType == FactorNodeTYPE ||
+			NodeType == ParenExprFactorNodeTYPE ||
+			NodeType == SubtractionFactorNodeTYPE ||
+			NodeType == LiteralFactorNodeTYPE ||
+			NodeType == IdentifierFactorNodeTYPE ||
+			NodeType == SingletonIdentifierFactorNodeTYPE ||
+			NodeType == NotFactorNodeTYPE ||
+			NodeType == IfFactorNodeTYPE;
 	}
 
 	bool isLiteralNode() {
-		return NodeType == BooleanLiteralNode ||
-			NodeType == IntegerLiteralNode;
+		return NodeType == BooleanLiteralNodeTYPE ||
+			NodeType == IntegerLiteralNodeTYPE;
 	}
 
 	bool isActualsNode() {
-		return NodeType == BaseActualsNodeType ||
-			NodeType == NonBaseActualsNode;
+		return NodeType == BaseActualsNodeTYPE ||
+			NodeType == NonBaseActualsNodeTYPE;
 	}
 
 	bool isArithmeticTerm() {
-		return NodeType == DividerTermNode ||
-			NodeType == MultiplicatorTermNode;
+		return NodeType == DividerTermNodeTYPE ||
+			NodeType == MultiplicatorTermNodeTYPE;
 	}
 
 	bool isArithmeticSimpleExpression() {
-		return NodeType == AdditionSimpleExprNode ||
-			NodeType == SubtractorSimpleExprNode;
+		return NodeType == AdditionSimpleExprNodeTYPE ||
+			NodeType == SubtractorSimpleExprNodeTYPE;
 	}
 	
 	//Setters
@@ -261,31 +261,31 @@ public:
 		DefNodes.push_back(Def);
 	}
 private :
-	ASTNodeType NodeType;
+	ASTNodeType NodeType = ProgramNodeTYPE;
 
-	string IdentifierName;
-	ASTNode* FactorNode;
-	ASTNode* BaseTermNode;
-	ASTNode* BaseSimpleExprNode;
-	ASTNode* BaseExprNode;
-	string LiteralValue;
-	vector<ASTNode*> Expressions;
-	ASTNode* NonEmptyActualsNode;
-	ASTNode* LiteralNode;
-	ASTNode* IdentifierNodeVar;
-	ASTNode* BaseActualsNode;
-	ASTNode* BaseExprNode2;
-	ASTNode* BaseExprNode3;
-	ASTNode* FactorNode2;
-	ASTNode* BaseTermNode2;
-	ASTNode* BaseSimpleExprNode2;
-	string DataType;
-	ASTNode* IdentifierNode2;
-	ASTNode* TypeNode;
-	vector<ASTNode*> PrintStatements;
-	vector<ASTNode*> FormalNodes;
-	ASTNode* FormalsNode;
-	ASTNode* BodyNode;
-	vector<ASTNode*> DefNodes;
-	vector<ASTNode*>Definitions;
+	string IdentifierName = "test";
+	ASTNode* FactorNode = nullptr;
+	ASTNode* BaseTermNode = nullptr;
+	ASTNode* BaseSimpleExprNode = nullptr;
+	ASTNode* BaseExprNode = nullptr;
+	string LiteralValue = "test";
+	vector<ASTNode*> Expressions = {};
+	ASTNode* NonEmptyActualsNode = nullptr;
+	ASTNode* LiteralNode = nullptr;
+	ASTNode* IdentifierNodeVar = nullptr;
+	ASTNode* BaseActualsNode = nullptr;
+	ASTNode* BaseExprNode2 = nullptr;
+	ASTNode* BaseExprNode3 = nullptr;
+	ASTNode* FactorNode2 = nullptr;
+	ASTNode* BaseTermNode2 = nullptr;
+	ASTNode* BaseSimpleExprNode2 = nullptr;
+	string DataType = "test";
+	ASTNode* IdentifierNode2 = nullptr;
+	ASTNode* TypeNode = nullptr;
+	vector<ASTNode*> PrintStatements = {};
+	vector<ASTNode*> FormalNodes = {};
+	ASTNode* FormalsNode = nullptr;
+	ASTNode* BodyNode = nullptr;
+	vector<ASTNode*> DefNodes = {};
+	vector<ASTNode*>Definitions = {};
 };

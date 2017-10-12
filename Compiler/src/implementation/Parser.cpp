@@ -20,7 +20,7 @@ void Parser::parseProgram()
 		{
 			// If semantic action, just pop and ignore that shit for now. 
 			// We'll change this code to call factory methods.a
-			BuilderVisitor.accept(StackTop, SemanticStack, "test", 0);
+			BuilderVisitor.accept(StackTop, SemanticStackVar, "test", 0);
 			Stack.pop();
 			StackTop = Stack.top();
 			continue;
@@ -197,12 +197,12 @@ void Parser::checkValidEndState(StackValues PeekedTokenValue)
 		throw runtime_error("ERROR: There are still values on the stack, but input stream has ended. Top of stack - " + StackTopString);
 	}
 
-	ASTNode FinalASTNode = SemanticStack.pop();
-	if (FinalASTNode.getAstNodeType() != ProgramNode)
+	ASTNode FinalASTNode = SemanticStackVar.pop();
+	if (FinalASTNode.getAstNodeType() != ProgramNodeTYPE)
 	{
 		throw runtime_error("ERROR: The top of the semantic stack isn't a Program Node.");
 	}
-	if (!SemanticStack.isEmpty())
+	if (!SemanticStackVar.isEmpty())
 	{
 		throw runtime_error("ERROR: There are still nodes left on the Semantic Stack!");
 	}
