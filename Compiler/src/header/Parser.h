@@ -25,7 +25,7 @@ private:
 
 	PStack Stack;
 
-	SemanticStack SemanticStack;
+	SemanticStack SemanticStackVar;
 
 	// All the stack values that are terminals
 	list<StackValues> TerminalValues = { 

@@ -19,7 +19,9 @@ public:
 		{
 			if (SemanticStack.top().getAstNodeType() == DefinitionsNode)
 			{
-				ProgramNode.addDefinitionToVector(&SemanticStack.pop());
+				ASTNode StackTop = SemanticStack.pop();
+				VectorOfASTNodes.push_back(StackTop);
+				ProgramNode.addDefinitionToVector(&VectorOfASTNodes.back());
 				continue;
 			}
 			else {
@@ -41,7 +43,9 @@ public:
 		{
 			if (SemanticStack.top().getAstNodeType() == DefNode)
 			{
-				DefinitionsNode.addDefToVector(&SemanticStack.pop());
+				ASTNode StackTop = SemanticStack.pop();
+				VectorOfASTNodes.push_back(StackTop);
+				DefinitionsNode.addDefToVector(&VectorOfASTNodes.back());
 				continue;
 			}
 			else {
@@ -69,7 +73,9 @@ public:
 
 		if (SemanticStack.top().getAstNodeType() == BodyNode)
 		{
-			DefNode.setBodyNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			DefNode.setBodyNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Def Node, but didn't find Body Node on stack");
@@ -77,7 +83,9 @@ public:
 
 		if (SemanticStack.top().getAstNodeType() == TypeNode)
 		{
-			DefNode.setTypeNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			DefNode.setTypeNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Def Node, but didn't find Type Node on stack");
@@ -85,7 +93,9 @@ public:
 
 		if (SemanticStack.top().isFormalsNode())
 		{
-			DefNode.setFormalsNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			DefNode.setFormalsNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Def Node, but didn't find Formals Node on stack");
@@ -93,7 +103,9 @@ public:
 
 		if (SemanticStack.top().getAstNodeType() == IdentifierNode)
 		{
-			DefNode.setIdentifierNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			DefNode.setIdentifierNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Def Node, but didn't find Identifier Node on stack");
@@ -123,7 +135,9 @@ public:
 		{
 			if (SemanticStack.top().getAstNodeType() == FormalNode)
 			{
-				NonEmptyFormalsNode.addFormalNodeToVector(&SemanticStack.pop());
+				ASTNode StackTop = SemanticStack.pop();
+				VectorOfASTNodes.push_back(StackTop);
+				NonEmptyFormalsNode.addFormalNodeToVector(&VectorOfASTNodes.back());
 				continue;
 			}
 			else {
@@ -144,7 +158,9 @@ public:
 		ASTNode FormalNode(FormalNode);
 		if (SemanticStack.top().getAstNodeType() == TypeNode)
 		{
-			FormalNode.setTypeNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			FormalNode.setTypeNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Formal Node, but didn't find Type Node on stack");
@@ -152,7 +168,9 @@ public:
 
 		if (SemanticStack.top().getAstNodeType() == IdentifierNode)
 		{
-			FormalNode.setIdentifierNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			FormalNode.setIdentifierNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Formal Node, but didn't find Identifier Node on stack");
@@ -170,7 +188,9 @@ public:
 		ASTNode BodyNode(BodyNode);
 		if (SemanticStack.top().isExpressionNode())
 		{
-			BodyNode.setBaseExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			BodyNode.setBaseExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Body Node, but didn't find Expr Node on stack");
@@ -180,7 +200,9 @@ public:
 		{
 			if (SemanticStack.top().getAstNodeType() == PrintStatemetNode)
 			{
-				BodyNode.addPrintStatementToVector(&SemanticStack.pop());
+				ASTNode StackTop = SemanticStack.pop();
+				VectorOfASTNodes.push_back(StackTop);
+				BodyNode.addPrintStatementToVector(&VectorOfASTNodes.back());
 				continue;
 			}
 			else {
@@ -213,14 +235,18 @@ public:
 
 		if (SemanticStack.top().isSimpleExpressionNode())
 		{
-			LessThanExprNode.setBaseSimpleExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			LessThanExprNode.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Less Than Node, but didn't find (First) Simple Expression Node on stack");
 		}
 		if (SemanticStack.top().isSimpleExpressionNode())
 		{
-			LessThanExprNode.setBaseSimpleExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			LessThanExprNode.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Less Than Node, but didn't find (Second) Simple Expression Node on stack");
@@ -239,14 +265,18 @@ public:
 
 		if (SemanticStack.top().isSimpleExpressionNode())
 		{
-			EqualNode.setBaseSimpleExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			EqualNode.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Equal Node, but didn't find (First) Simple Expression Node on stack");
 		}
 		if (SemanticStack.top().isSimpleExpressionNode())
 		{
-			EqualNode.setBaseSimpleExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			EqualNode.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Equal Node, but didn't find (Second) Simple Expression Node on stack");
@@ -271,7 +301,9 @@ public:
 
 		if (SemanticStack.top().isSimpleExpressionNode())
 		{
-			BaseExpression.setBaseSimpleExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			BaseExpression.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Base Expression Node, but didn't find Simple Expression Node on stack");
@@ -290,7 +322,9 @@ public:
 
 		if (SemanticStack.top().isTermNode())
 		{
-			OrNode.setBaseTermNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			OrNode.setBaseTermNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Or Simple Expr Node, but didn't find (first) Term Node on stack");
@@ -298,11 +332,15 @@ public:
 		// -------------- What follows could be another Or node if it's a run on Or scenario ------------- //
 		if (SemanticStack.top().getAstNodeType() == OrSimpleExprNode)
 		{
-			OrNode.setBaseSimpleExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			OrNode.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else if (SemanticStack.top().isTermNode())
 		{
-			OrNode.setBaseTermNode2(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			OrNode.setBaseTermNode2(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Or Simple Expr Node, but didn't find (second) Term Node on stack");
@@ -320,7 +358,9 @@ public:
 
 		if (SemanticStack.top().isTermNode())
 		{
-			AdditionNode.setBaseTermNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			AdditionNode.setBaseTermNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Addition Node, but didn't find (first) Term Node on stack");
@@ -329,11 +369,15 @@ public:
 		// -------------- What follows could be another arithmetic based node if it's a run on arithmetic operator scenario ------------- //
 		if (SemanticStack.top().isArithmeticSimpleExpression())
 		{
-			AdditionNode.setBaseSimpleExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			AdditionNode.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else if (SemanticStack.top().isTermNode())
 		{
-			AdditionNode.setBaseTermNode2(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			AdditionNode.setBaseTermNode2(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Addition Node, but didn't find (second) Term Node/arithmetic Node on stack");
@@ -352,7 +396,9 @@ public:
 
 		if (SemanticStack.top().isTermNode())
 		{
-			SubtractionNode.setBaseTermNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			SubtractionNode.setBaseTermNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Subtraction Node, but didn't find (first) Term Node on stack");
@@ -361,11 +407,15 @@ public:
 		// -------------- What follows could be another arithmetic based node if it's a run on arithmetic operator scenario ------------- //
 		if (SemanticStack.top().isArithmeticSimpleExpression())
 		{
-			SubtractionNode.setBaseSimpleExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			SubtractionNode.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else if (SemanticStack.top().isTermNode())
 		{
-			SubtractionNode.setBaseTermNode2(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			SubtractionNode.setBaseTermNode2(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Subtraction Node, but didn't find (second) Term Node/arithmetic Node on stack");
@@ -391,7 +441,9 @@ public:
 
 		if (SemanticStack.top().isTermNode())
 		{
-			BaseSimpleExprNode.setBaseTermNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			BaseSimpleExprNode.setBaseTermNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Base Simple Expr Node, but didn't find Term Node on stack");
@@ -411,7 +463,9 @@ public:
 
 		if (SemanticStack.top().isFactorNode())
 		{
-			AndNode.setFactorNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			AndNode.setFactorNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build And Node, but didn't find (first) Factor Node on stack");
@@ -420,11 +474,15 @@ public:
 		// -------------- What follows could be another and node if it's a run on and scenario ------------- //
 		if (SemanticStack.top().getAstNodeType() == AndTermNode)
 		{
-			AndNode.setBaseTermNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			AndNode.setBaseTermNode(&VectorOfASTNodes.back());
 		}
 		else if (SemanticStack.top().isFactorNode())
 		{
-			AndNode.setFactorNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			AndNode.setFactorNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build And Node, but didn't find (Second) Factor/ And Node on stack");
@@ -444,7 +502,9 @@ public:
 
 		if (SemanticStack.top().isFactorNode())
 		{
-			MultiplicatorNode.setFactorNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			MultiplicatorNode.setFactorNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Multiplication Node, but didn't find (first) Factor Node on stack");
@@ -453,15 +513,21 @@ public:
 		// -------------- What follows could be another arithmetic based node if it's a run on arithmetic operator scenario ------------- //
 		if (SemanticStack.top().isArithmeticSimpleExpression())
 		{
-			MultiplicatorNode.setBaseSimpleExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			MultiplicatorNode.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else if (SemanticStack.top().isArithmeticTerm())
 		{
-			MultiplicatorNode.setBaseTermNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			MultiplicatorNode.setBaseTermNode(&VectorOfASTNodes.back());
 		}
 		else if (SemanticStack.top().isFactorNode())
 		{
-			MultiplicatorNode.setFactorNode2(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			MultiplicatorNode.setFactorNode2(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Multiplication Node, but didn't find (Second) Factor Node/arithmetic Node on stack");
@@ -480,7 +546,9 @@ public:
 
 		if (SemanticStack.top().isFactorNode())
 		{
-			DividerNode.setFactorNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			DividerNode.setFactorNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Division Node, but didn't find (first) Factor Node on stack");
@@ -489,15 +557,21 @@ public:
 		// -------------- What follows could be another arithmetic based node if it's a run on arithmetic operator scenario ------------- //
 		if (SemanticStack.top().isArithmeticSimpleExpression())
 		{
-			DividerNode.setBaseSimpleExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			DividerNode.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else if (SemanticStack.top().isArithmeticTerm())
 		{
-			DividerNode.setBaseTermNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			DividerNode.setBaseTermNode(&VectorOfASTNodes.back());
 		}
 		else if (SemanticStack.top().isFactorNode())
 		{
-			DividerNode.setFactorNode2(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			DividerNode.setFactorNode2(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Division Node, but didn't find (Second) Factor Node/arithmetic Node on stack");
@@ -524,7 +598,9 @@ public:
 
 		if (SemanticStack.top().isFactorNode())
 		{
-			BaseTermNode.setFactorNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			BaseTermNode.setFactorNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Base Term Node, but didn't find Factor Node on stack");
@@ -542,7 +618,9 @@ public:
 		ASTNode IfFactorNode(IfFactorNode);
 		if (SemanticStack.top().isExpressionNode())
 		{
-			IfFactorNode.setBaseExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			IfFactorNode.setBaseExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build If Statement Node, but didn't find (first) Expression Node on stack");
@@ -550,7 +628,9 @@ public:
 
 		if (SemanticStack.top().isExpressionNode())
 		{
-			IfFactorNode.setBaseExprNode2(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			IfFactorNode.setBaseExprNode2(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build If Statement Node, but didn't find (second) Expression Node on stack");
@@ -558,7 +638,9 @@ public:
 
 		if (SemanticStack.top().isExpressionNode())
 		{
-			IfFactorNode.setBaseExprNode3(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			IfFactorNode.setBaseExprNode3(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build If Statement Node, but didn't find (third) Expression Node on stack");
@@ -575,7 +657,9 @@ public:
 		ASTNode NotFactorNode(NotFactorNode);
 		if (SemanticStack.top().isFactorNode())
 		{
-			NotFactorNode.setFactorNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			NotFactorNode.setFactorNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Not Factor Node, but didn't find Factor Node on stack");
@@ -591,7 +675,9 @@ public:
 		ASTNode LiteralFactorNode(LiteralFactorNode);
 		if (SemanticStack.top().isLiteralNode())
 		{
-			LiteralFactorNode.setLiteralNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			LiteralFactorNode.setLiteralNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Literal Factor Node, but didn't find Literal Node on stack");
@@ -607,7 +693,9 @@ public:
 		ASTNode SubtractionFactorNode(SubtractionFactorNode);
 		if (SemanticStack.top().isFactorNode())
 		{
-			SubtractionFactorNode.setFactorNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			SubtractionFactorNode.setFactorNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Subtraction Factor Node, but didn't find Factor Node on stack");
@@ -624,7 +712,9 @@ public:
 		ASTNode ParenthesisedExpr(ParenExprFactorNode);
 		if (SemanticStack.top().isExpressionNode())
 		{
-			ParenthesisedExpr.setBaseExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			ParenthesisedExpr.setBaseExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Parenthesised Expression Node, but didn't find Factor Node on stack");
@@ -640,7 +730,9 @@ public:
 		
 		if (SemanticStack.top().isActualsNode())
 		{
-			IdentifierActualsNode.setBaseActualsNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			IdentifierActualsNode.setBaseActualsNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Identifier Actuals Node, but didn't find Actuals Node on stack");
@@ -648,7 +740,9 @@ public:
 
 		if (SemanticStack.top().getAstNodeType() == IdentifierNode)
 		{
-			IdentifierActualsNode.setIdentifierNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			IdentifierActualsNode.setIdentifierNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Identifier Actuals Node, but didn't find Identifier Node on stack");
@@ -664,11 +758,14 @@ public:
 		ASTNode SingletonIdentifierNode(SingletonIdentifierFactorNode);
 		if (SemanticStack.top().getAstNodeType() == IdentifierNode)
 		{
-			SingletonIdentifierNode.setIdentifierNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			SingletonIdentifierNode.setIdentifierNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Singelton Identifier Factor Node, but didn't find Identifier Node on stack");
 		}
+
 		cout << "adding a Singelton Identifier Factor node!" << endl;
 		SemanticStack.push(SingletonIdentifierNode);
 	}
@@ -689,7 +786,9 @@ public:
 
 		if (SemanticStack.top().getAstNodeType() == NonEmptyActualsNode)
 		{
-			NonBaseActualsNode.setBaseActualsNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			NonBaseActualsNode.setBaseActualsNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Non Base Actuals Node, but didn't find Non empty Actuals Node on stack");
@@ -717,7 +816,9 @@ public:
 		{
 			if (SemanticStack.top().isExpressionNode())
 			{
-				NonEmptyActualsNode.addExpressionToVector(&SemanticStack.pop());
+				ASTNode StackTop = SemanticStack.pop();
+				VectorOfASTNodes.push_back(StackTop);
+				NonEmptyActualsNode.addExpressionToVector(&VectorOfASTNodes.back());
 				continue;
 			}
 			else {
@@ -755,7 +856,9 @@ public:
 
 		if (SemanticStack.top().isExpressionNode())
 		{
-			PrintStatementNode.setBaseExprNode(&SemanticStack.pop());
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			PrintStatementNode.setBaseExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Print Statement Node, but didn't find Expression Node on stack");
@@ -764,4 +867,8 @@ public:
 		cout << "adding a Print Statment node!" << endl;
 		SemanticStack.push(PrintStatementNode);
 	}
+
+	private:
+		//This is to keep alive the objects which the pointers point to.
+		vector<ASTNode> VectorOfASTNodes;
 };
