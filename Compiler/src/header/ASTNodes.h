@@ -6,9 +6,9 @@ using namespace std;
 
 enum ASTNodeType {
 	IdentifierNode,
-	FactorNode,
-	BaseActualsNode,
-	BaseTermNode,
+	FactorNodeType,
+	BaseActualsNodeType,
+	BaseTermNodeType,
 	BaseSimpleExprNodeType,
 	BaseExprNodeType,
 	FormalsNodeType,
@@ -145,6 +145,34 @@ public:
 			NodeType == SubtractorSimpleExprNode ||
 			NodeType == OrSimpleExprNode;
 	}
+
+	bool isTermNode() {
+		return NodeType == BaseTermNodeType ||
+			NodeType == MultiplicatorTermNode ||
+			NodeType == DividerTermNode ||
+			NodeType == AndTermNode;
+	}
+
+	bool isFactorNode() {
+		return NodeType == FactorNodeType ||
+			NodeType == ParenExprFactorNode ||
+			NodeType == SubtractionFactorNode ||
+			NodeType == LiteralFactorNode ||
+			NodeType == IdentifierFactorNode ||
+			NodeType == SingletonIdentifierFactorNode ||
+			NodeType == NotFactorNode ||
+			NodeType == IfFactorNode;
+	}
+
+	bool isLiteralNode() {
+		return NodeType == BooleanLiteralNode ||
+			NodeType == IntegerLiteralNode;
+	}
+
+	bool isActualsNode() {
+		return NodeType == BaseActualsNodeType ||
+			NodeType == NonBaseActualsNode;
+	}
 	
 	//Setters
 		void setIdentifierName(string inIdentifierName) {
@@ -165,7 +193,7 @@ public:
 	void setLiteralValue(string inLiteralValue) {
 		LiteralValue = inLiteralValue;
 	}
-	void addExpressionsToVector(ASTNode* inExpressions) {
+	void addExpressionToVector(ASTNode* inExpressions) {
 		Expressions.push_back(inExpressions);
 	}
 	void setNonEmptyActualsNode(ASTNode* inNoneEmptyActualsNode) {
