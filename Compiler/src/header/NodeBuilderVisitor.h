@@ -155,12 +155,12 @@ public:
 		// pop off type node and store it in Formal node.
 
 		// push Formal Node onto stack.
-		ASTNode FormalNodeTYPE(FormalNodeTYPE);
+		ASTNode FormalNodeVar(FormalNodeTYPE);
 		if (SemanticStack.top().getAstNodeType() == TypeNodeTYPE)
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			FormalNodeTYPE.setTypeNode(&VectorOfASTNodes.back());
+			FormalNodeVar.setTypeNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Formal Node, but didn't find Type Node on stack");
@@ -170,7 +170,7 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			FormalNodeTYPE.setIdentifierNode(&VectorOfASTNodes.back());
+			FormalNodeVar.setIdentifierNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Formal Node, but didn't find Identifier Node on stack");
@@ -178,19 +178,19 @@ public:
 
 
 		cout << "adding a Formal node!" << endl;
-		SemanticStack.push(FormalNodeTYPE);
+		SemanticStack.push(FormalNodeVar);
 	}
 
 	virtual void visitBodyNode(SemanticStack& SemanticStack) {
 		// pop off list of print statment nodes and store it in Body node.
 		// pop off expr node and store it in Body node.
 
-		ASTNode BodyNodeTYPE(BodyNodeTYPE);
+		ASTNode BodyNodeVar(BodyNodeTYPE);
 		if (SemanticStack.top().isExpressionNode())
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			BodyNodeTYPE.setBaseExprNode(&VectorOfASTNodes.back());
+			BodyNodeVar.setBaseExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Body Node, but didn't find Expr Node on stack");
@@ -202,7 +202,7 @@ public:
 			{
 				ASTNode StackTop = SemanticStack.pop();
 				VectorOfASTNodes.push_back(StackTop);
-				BodyNodeTYPE.addPrintStatementToVector(&VectorOfASTNodes.back());
+				BodyNodeVar.addPrintStatementToVector(&VectorOfASTNodes.back());
 				continue;
 			}
 			else {
@@ -211,18 +211,18 @@ public:
 			}
 		}
 		cout << "adding a Body node!" << endl;
-		SemanticStack.push(BodyNodeTYPE);
+		SemanticStack.push(BodyNodeVar);
 	}
 
 	virtual void visitTypeNode(SemanticStack& SemanticStack, string Type) {
 		// store Type string inside the Type Node.
 		// push Type node onto the stack
 		
-		ASTNode TypeNodeTYPE(TypeNodeTYPE);
-		TypeNodeTYPE.setDataType(Type);
+		ASTNode TypeNodeVar(TypeNodeTYPE);
+		TypeNodeVar.setDataType(Type);
 
 		cout << "adding a Type node!" << endl;
-		SemanticStack.push(TypeNodeTYPE);
+		SemanticStack.push(TypeNodeVar);
 	}
 
 	virtual void visitLessThanNode(SemanticStack& SemanticStack) {
@@ -231,13 +231,13 @@ public:
 
 		// push less than Node onto stack.
 
-		ASTNode LessThanExprNodeTYPE(LessThanExprNodeTYPE);
+		ASTNode LessThanExprNodeVar(LessThanExprNodeTYPE);
 
 		if (SemanticStack.top().isSimpleExpressionNode())
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			LessThanExprNodeTYPE.setBaseSimpleExprNode(&VectorOfASTNodes.back());
+			LessThanExprNodeVar.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Less Than Node, but didn't find (First) Simple Expression Node on stack");
@@ -246,14 +246,14 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			LessThanExprNodeTYPE.setBaseSimpleExprNode(&VectorOfASTNodes.back());
+			LessThanExprNodeVar.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Less Than Node, but didn't find (Second) Simple Expression Node on stack");
 		}
 
 		cout << "adding a Less than node!" << endl;
-		SemanticStack.push(LessThanExprNodeTYPE);
+		SemanticStack.push(LessThanExprNodeVar);
 	}
 
 	virtual void visitEqualNode(SemanticStack& SemanticStack) {
@@ -615,12 +615,12 @@ public:
 		// pop off expr node and store it in if factor node.
 		// push if factor node onto stack.
 
-		ASTNode IfFactorNodeTYPE(IfFactorNodeTYPE);
+		ASTNode IfFactorNodeVar(IfFactorNodeTYPE);
 		if (SemanticStack.top().isExpressionNode())
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			IfFactorNodeTYPE.setBaseExprNode(&VectorOfASTNodes.back());
+			IfFactorNodeVar.setBaseExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build If Statement Node, but didn't find (first) Expression Node on stack");
@@ -630,7 +630,7 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			IfFactorNodeTYPE.setBaseExprNode2(&VectorOfASTNodes.back());
+			IfFactorNodeVar.setBaseExprNode2(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build If Statement Node, but didn't find (second) Expression Node on stack");
@@ -640,68 +640,68 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			IfFactorNodeTYPE.setBaseExprNode3(&VectorOfASTNodes.back());
+			IfFactorNodeVar.setBaseExprNode3(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build If Statement Node, but didn't find (third) Expression Node on stack");
 		}
 
 		cout << "adding an If Statement node!" << endl;
-		SemanticStack.push(IfFactorNodeTYPE);
+		SemanticStack.push(IfFactorNodeVar);
 	}
 
 	virtual void visitNotFactorNode(SemanticStack& SemanticStack) {
 		// pop off factor node and store it in not factor node
 		// push not factor node onto stack.
 
-		ASTNode NotFactorNodeTYPE(NotFactorNodeTYPE);
+		ASTNode NotFactorNodeVar(NotFactorNodeTYPE);
 		if (SemanticStack.top().isFactorNode())
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			NotFactorNodeTYPE.setFactorNode(&VectorOfASTNodes.back());
+			NotFactorNodeVar.setFactorNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Not Factor Node, but didn't find Factor Node on stack");
 		}
 		cout << "adding a Not Factor node!" << endl;
-		SemanticStack.push(NotFactorNodeTYPE);
+		SemanticStack.push(NotFactorNodeVar);
 	}
 
 	virtual void visitLiteralFactorNode(SemanticStack& SemanticStack) {
 		// pop off literal node and store it in literal factor node
 		// push literal factor node onto stack.
 
-		ASTNode LiteralFactorNodeTYPE(LiteralFactorNodeTYPE);
+		ASTNode LiteralFactorNodeVar(LiteralFactorNodeTYPE);
 		if (SemanticStack.top().isLiteralNode())
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			LiteralFactorNodeTYPE.setLiteralNode(&VectorOfASTNodes.back());
+			LiteralFactorNodeVar.setLiteralNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Literal Factor Node, but didn't find Literal Node on stack");
 		}
 		cout << "adding a Literal Factor node!" << endl;
-		SemanticStack.push(LiteralFactorNodeTYPE);
+		SemanticStack.push(LiteralFactorNodeVar);
 	}
 
 	virtual void visitSubtractionFactorNode(SemanticStack& SemanticStack) {
 		// pop off factor node and store it in subtraction factor node
 		// push subtraction factor node onto stack.
 
-		ASTNode SubtractionFactorNodeTYPE(SubtractionFactorNodeTYPE);
+		ASTNode SubtractionFactorNode(SubtractionFactorNodeTYPE);
 		if (SemanticStack.top().isFactorNode())
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			SubtractionFactorNodeTYPE.setFactorNode(&VectorOfASTNodes.back());
+			SubtractionFactorNode.setFactorNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Subtraction Factor Node, but didn't find Factor Node on stack");
 		}
 		cout << "adding a Subtraction Factor node!" << endl;
-		SemanticStack.push(SubtractionFactorNodeTYPE);
+		SemanticStack.push(SubtractionFactorNode);
 
 	}
 
@@ -782,20 +782,20 @@ public:
 		// pop non empty actuals node and store it in non base actuals node.
 
 		// push non base actuals node onto stack.
-		ASTNode NonBaseActualsNodeTYPE(NonBaseActualsNodeTYPE);
+		ASTNode NonBaseActualsNodeVar(NonBaseActualsNodeTYPE);
 
 		if (SemanticStack.top().getAstNodeType() == NonEmptyActualsNodeTYPE)
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			NonBaseActualsNodeTYPE.setBaseActualsNode(&VectorOfASTNodes.back());
+			NonBaseActualsNodeVar.setBaseActualsNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Non Base Actuals Node, but didn't find Non empty Actuals Node on stack");
 		}
 
 		cout << "adding a Non Base Actuals node!" << endl;
-		SemanticStack.push(NonBaseActualsNodeTYPE);
+		SemanticStack.push(NonBaseActualsNodeVar);
 	}
 
 	virtual void visitNonEmptyActualsNode(SemanticStack& SemanticStack) {
@@ -832,20 +832,20 @@ public:
 
 	virtual void visitIntegerLiteralNode(SemanticStack& SemanticStack, int IntData) {
 		// store IntData inside the integer literal node and push that integer literal node onto the stack
-		ASTNode IntegerLiteralNodeTYPE(IntegerLiteralNodeTYPE);
-		IntegerLiteralNodeTYPE.setLiteralValue("test"); // convert int to string
+		ASTNode IntegerLiteralNode(IntegerLiteralNodeTYPE);
+		IntegerLiteralNode.setLiteralValue("test"); // convert int to string
 
 		cout << "adding a Identifier Literal node!" << endl;
-		SemanticStack.push(IntegerLiteralNodeTYPE);
+		SemanticStack.push(IntegerLiteralNode);
 	}
 
 	virtual void visitBooleanLiteralNode(SemanticStack& SemanticStack, string BooleanValue) {
 		// store BooleanValue inside the boolean literal node and push that boolean literal node onto the stack
-		ASTNode BooleanLiteralNodeTYPE(BooleanLiteralNodeTYPE);
-		BooleanLiteralNodeTYPE.setLiteralValue(BooleanValue); // convert int to string
+		ASTNode BooleanLiteralNode(BooleanLiteralNodeTYPE);
+		BooleanLiteralNode.setLiteralValue(BooleanValue); // convert int to string
 
 		cout << "adding a Boolean Literal node!" << endl;
-		SemanticStack.push(BooleanLiteralNodeTYPE);
+		SemanticStack.push(BooleanLiteralNode);
 	}
 
 	virtual void visitPrintStatementNode(SemanticStack& SemanticStack) {
