@@ -1,3 +1,4 @@
+#pragma once
 #include "../header/Parser.h"
 #include <algorithm>
 
@@ -11,13 +12,18 @@ void Parser::parseProgram()
 	Stack.push(END_OF_STREAM);
 	Stack.push(PROGRAM);
 	StackValues StackTop = Stack.top();
-	StackValues PeekedTokenValue = mapFromScannerTokenToStackValue(ScannerVar.peek());
+	Token PeekedToken = ScannerVar.peek();
+	StackValues PeekedTokenValue = mapFromScannerTokenToStackValue(PeekedToken);
+	NodeBuilderVisitor BuilderVisitor;
+	string StringDataForSemanticAction = "ERROR";
+	string IntDataForSemanticAction = "ERROR";
 
 	while (StackTop != END_OF_STREAM) {
 		if (isSemanticAction(StackTop))
 		{
-			// If semantic action, just pop and ignore that shit for now. 
-			// We'll change this code to call factory methods.a
+			// If semantic action, call the visitor method which encapsulates the knowledge of how to modify
+			// The stack.
+			BuilderVisitor.accept(StackTop, SemanticStackVar, StringDataForSemanticAction, IntDataForSemanticAction);
 			Stack.pop();
 			StackTop = Stack.top();
 			continue;
@@ -26,6 +32,15 @@ void Parser::parseProgram()
 		if (isTerminalValue(StackTop)) {
 			if (StackTop == PeekedTokenValue)
 			{
+				// Update data to be stored in AST nodes.
+				if (StackTop = INTEGER_LITERAL)
+				{
+					IntDataForSemanticAction = PeekedToken.getValue();
+				}
+				else {
+					StringDataForSemanticAction = PeekedToken.getValue();
+				}
+
 				Stack.pop();
 				ScannerVar.next();
 			}
@@ -48,7 +63,8 @@ void Parser::parseProgram()
 			}
 		}
 
-		PeekedTokenValue = mapFromScannerTokenToStackValue(ScannerVar.peek());
+		PeekedToken = ScannerVar.peek();
+		PeekedTokenValue = mapFromScannerTokenToStackValue(PeekedToken);
 		StackTop = Stack.top();
 	}
 
@@ -192,5 +208,15 @@ void Parser::checkValidEndState(StackValues PeekedTokenValue)
 	{
 		string StackTopString = StackValuesPrintMap.find(Stack.top())->second;
 		throw runtime_error("ERROR: There are still values on the stack, but input stream has ended. Top of stack - " + StackTopString);
+	}
+
+	ASTNode FinalASTNode = SemanticStackVar.pop();
+	if (FinalASTNode.getAstNodeType() != ProgramNodeTYPE)
+	{
+		throw runtime_error("ERROR: The top of the semantic stack isn't a Program Node.");
+	}
+	if (!SemanticStackVar.isEmpty())
+	{
+		throw runtime_error("ERROR: There are still nodes left on the Semantic Stack!");
 	}
 }

@@ -150,6 +150,7 @@
     <ClInclude Include="src\header\Token.h" />
     <ClInclude Include="src\header\TokenType.h" />
     <ClInclude Include="test\catch.hpp" />
+    <ClInclude Include="test\fakeit.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\implementation\Parser.cpp" />
@@ -158,7 +159,9 @@
     <ClCompile Include="src\implementation\SemanticStack.cpp" />
     <ClCompile Include="src\implementation\Token.cpp" />
     <ClCompile Include="src\ProgramValidator.cpp" />
+    <ClCompile Include="test\BaseASTNodeVisitorTest.cpp" />
     <ClCompile Include="test\ParserTest.cpp" />
+    <ClCompile Include="test\PStackTest.cpp" />
     <ClCompile Include="test\RunAllTest.cpp" />
     <ClCompile Include="test\ScannerTest.cpp" />
     <ClCompile Include="test\TokenTest.cpp" />

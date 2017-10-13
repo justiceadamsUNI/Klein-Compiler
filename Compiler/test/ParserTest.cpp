@@ -271,7 +271,7 @@ TEST_CASE("Parser determines program is valid for program containing multiple pr
 	REQUIRE(Parser.isProgramValid() == true);
 }
 
-TEST_CASE("Parser determines program is valid for program containing comments within te body", "[Parser]") {
+TEST_CASE("Parser determines program is valid for program containing comments within the body", "[Parser]") {
 	Parser Parser = createParserWithBodyContaining("gcd(a,b) (*comment*) + 1445");
 
 	REQUIRE(Parser.isProgramValid() == true);
