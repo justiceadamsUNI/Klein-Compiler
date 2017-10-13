@@ -198,7 +198,7 @@ void Parser::checkValidEndState(StackValues PeekedTokenValue)
 	}
 
 	ASTNode FinalASTNode = SemanticStackVar.pop();
-	if (FinalASTNode.getAstNodeType() != ProgramNode)
+	if (FinalASTNode.getAstNodeType() != ProgramNodeTYPE)
 	{
 		throw runtime_error("ERROR: The top of the semantic stack isn't a Program Node.");
 	}

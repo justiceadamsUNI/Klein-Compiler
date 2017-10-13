@@ -14,10 +14,10 @@ public:
 		// pop off every defenition node from the stack and store it inside a program node.
 		// Then push that program node back onto the stack.
 		
-		ASTNode ProgramNodeVar(ProgramNode);
+		ASTNode ProgramNodeVar(ProgramNodeTYPE);
 		while (!SemanticStack.isEmpty())
 		{
-			if (SemanticStack.top().getAstNodeType() == DefinitionsNode)
+			if (SemanticStack.top().getAstNodeType() == DefinitionsNodeTYPE)
 			{
 				ASTNode StackTop = SemanticStack.pop();
 				VectorOfASTNodes.push_back(StackTop);
@@ -38,10 +38,10 @@ public:
 		// pop off every def node from the stack and store it inside a definitions node.
 		// Then push that definitions node back onto the stack.
 		
-		ASTNode DefinitionsNodeVar(DefinitionsNode);
+		ASTNode DefinitionsNodeVar(DefinitionsNodeTYPE);
 		while (!SemanticStack.isEmpty())
 		{
-			if (SemanticStack.top().getAstNodeType() == DefNode)
+			if (SemanticStack.top().getAstNodeType() == DefNodeTYPE)
 			{
 				ASTNode StackTop = SemanticStack.pop();
 				VectorOfASTNodes.push_back(StackTop);
@@ -61,17 +61,17 @@ public:
 
 	virtual void visitIdentifierNode(SemanticStack& SemanticStack, string IdentifierName) {
 		// store the identifier name inside the identifier node, then push the identifier node onto the stack.
-		ASTNode IdentifierNodeVar(IdentifierNode);
+		ASTNode IdentifierNodeVar(IDENTIFIERNODETYPE);
 		IdentifierNodeVar.setIdentifierName(IdentifierName);
 
 		cout << "adding a Identifier node!" << endl;
-		SemanticStack.push(IdentifierNode);
+		SemanticStack.push(IdentifierNodeVar);
 	}
 
 	virtual void visitDefNode(SemanticStack& SemanticStack) {
-		ASTNode DefNodeVar(DefNode);
+		ASTNode DefNodeVar(DefNodeTYPE);
 
-		if (SemanticStack.top().getAstNodeType() == BodyNode)
+		if (SemanticStack.top().getAstNodeType() == BodyNodeTYPE)
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
@@ -81,7 +81,7 @@ public:
 			throw runtime_error("ERROR: Attempted to build Def Node, but didn't find Body Node on stack");
 		}
 
-		if (SemanticStack.top().getAstNodeType() == TypeNode)
+		if (SemanticStack.top().getAstNodeType() == TypeNodeTYPE)
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
@@ -101,7 +101,7 @@ public:
 			throw runtime_error("ERROR: Attempted to build Def Node, but didn't find Formals Node on stack");
 		}
 
-		if (SemanticStack.top().getAstNodeType() == IdentifierNode)
+		if (SemanticStack.top().getAstNodeType() == IDENTIFIERNODETYPE)
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
@@ -130,10 +130,10 @@ public:
 		// pop off every Formal node from the stack and store it inside a Non Empty Formals Node.
 		// Then push that Non Empty Formals Node node back onto the stack.
 
-		ASTNode NonEmptyFormalsNodeVar(NonEmptyFormalsNode);
+		ASTNode NonEmptyFormalsNodeVar(NonEmptyFormalsNodeTYPE);
 		while (!SemanticStack.isEmpty())
 		{
-			if (SemanticStack.top().getAstNodeType() == FormalNode)
+			if (SemanticStack.top().getAstNodeType() == FormalNodeTYPE)
 			{
 				ASTNode StackTop = SemanticStack.pop();
 				VectorOfASTNodes.push_back(StackTop);
@@ -155,22 +155,22 @@ public:
 		// pop off type node and store it in Formal node.
 
 		// push Formal Node onto stack.
-		ASTNode FormalNode(FormalNode);
-		if (SemanticStack.top().getAstNodeType() == TypeNode)
+		ASTNode FormalNodeTYPE(FormalNodeTYPE);
+		if (SemanticStack.top().getAstNodeType() == TypeNodeTYPE)
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			FormalNode.setTypeNode(&VectorOfASTNodes.back());
+			FormalNodeTYPE.setTypeNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Formal Node, but didn't find Type Node on stack");
 		}
 
-		if (SemanticStack.top().getAstNodeType() == IdentifierNode)
+		if (SemanticStack.top().getAstNodeType() == IDENTIFIERNODETYPE)
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			FormalNode.setIdentifierNode(&VectorOfASTNodes.back());
+			FormalNodeTYPE.setIdentifierNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Formal Node, but didn't find Identifier Node on stack");
@@ -178,19 +178,19 @@ public:
 
 
 		cout << "adding a Formal node!" << endl;
-		SemanticStack.push(FormalNode);
+		SemanticStack.push(FormalNodeTYPE);
 	}
 
 	virtual void visitBodyNode(SemanticStack& SemanticStack) {
 		// pop off list of print statment nodes and store it in Body node.
 		// pop off expr node and store it in Body node.
 
-		ASTNode BodyNode(BodyNode);
+		ASTNode BodyNodeTYPE(BodyNodeTYPE);
 		if (SemanticStack.top().isExpressionNode())
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			BodyNode.setBaseExprNode(&VectorOfASTNodes.back());
+			BodyNodeTYPE.setBaseExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Body Node, but didn't find Expr Node on stack");
@@ -198,11 +198,11 @@ public:
 
 		while (!SemanticStack.isEmpty())
 		{
-			if (SemanticStack.top().getAstNodeType() == PrintStatemetNode)
+			if (SemanticStack.top().getAstNodeType() == PrintStatemetNodeTYPE)
 			{
 				ASTNode StackTop = SemanticStack.pop();
 				VectorOfASTNodes.push_back(StackTop);
-				BodyNode.addPrintStatementToVector(&VectorOfASTNodes.back());
+				BodyNodeTYPE.addPrintStatementToVector(&VectorOfASTNodes.back());
 				continue;
 			}
 			else {
@@ -211,18 +211,18 @@ public:
 			}
 		}
 		cout << "adding a Body node!" << endl;
-		SemanticStack.push(BodyNode);
+		SemanticStack.push(BodyNodeTYPE);
 	}
 
 	virtual void visitTypeNode(SemanticStack& SemanticStack, string Type) {
 		// store Type string inside the Type Node.
 		// push Type node onto the stack
 		
-		ASTNode TypeNode(TypeNode);
-		TypeNode.setDataType(Type);
+		ASTNode TypeNodeTYPE(TypeNodeTYPE);
+		TypeNodeTYPE.setDataType(Type);
 
 		cout << "adding a Type node!" << endl;
-		SemanticStack.push(TypeNode);
+		SemanticStack.push(TypeNodeTYPE);
 	}
 
 	virtual void visitLessThanNode(SemanticStack& SemanticStack) {
@@ -231,13 +231,13 @@ public:
 
 		// push less than Node onto stack.
 
-		ASTNode LessThanExprNode(LessThanExprNode);
+		ASTNode LessThanExprNodeTYPE(LessThanExprNodeTYPE);
 
 		if (SemanticStack.top().isSimpleExpressionNode())
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			LessThanExprNode.setBaseSimpleExprNode(&VectorOfASTNodes.back());
+			LessThanExprNodeTYPE.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Less Than Node, but didn't find (First) Simple Expression Node on stack");
@@ -246,14 +246,14 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			LessThanExprNode.setBaseSimpleExprNode(&VectorOfASTNodes.back());
+			LessThanExprNodeTYPE.setBaseSimpleExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Less Than Node, but didn't find (Second) Simple Expression Node on stack");
 		}
 
 		cout << "adding a Less than node!" << endl;
-		SemanticStack.push(LessThanExprNode);
+		SemanticStack.push(LessThanExprNodeTYPE);
 	}
 
 	virtual void visitEqualNode(SemanticStack& SemanticStack) {
@@ -261,7 +261,7 @@ public:
 		// pop off simple expression node and store it in equal than node.
 
 		// pushequal Node onto stack.
-		ASTNode EqualNode(EqualToExprNode);
+		ASTNode EqualNode(EqualToExprNodeTYPE);
 
 		if (SemanticStack.top().isSimpleExpressionNode())
 		{
@@ -318,7 +318,7 @@ public:
 		// pop off term node and store it in or node.
 
 		// push or Node onto stack.
-		ASTNode OrNode(OrSimpleExprNode);
+		ASTNode OrNode(OrSimpleExprNodeTYPE);
 
 		if (SemanticStack.top().isTermNode())
 		{
@@ -330,7 +330,7 @@ public:
 			throw runtime_error("ERROR: Attempted to build Or Simple Expr Node, but didn't find (first) Term Node on stack");
 		}
 		// -------------- What follows could be another Or node if it's a run on Or scenario ------------- //
-		if (SemanticStack.top().getAstNodeType() == OrSimpleExprNode)
+		if (SemanticStack.top().getAstNodeType() == OrSimpleExprNodeTYPE)
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
@@ -354,7 +354,7 @@ public:
 		// pop off term node and store it in addition node.
 		// pop off term node and store it in addition node.
 		// push addition Node onto stack.
-		ASTNode AdditionNode(AdditionSimpleExprNode);
+		ASTNode AdditionNode(AdditionSimpleExprNodeTYPE);
 
 		if (SemanticStack.top().isTermNode())
 		{
@@ -392,7 +392,7 @@ public:
 		// pop off term node and store it in subtraction node.
 
 		// push subtraction Node onto stack.
-		ASTNode SubtractionNode(SubtractorSimpleExprNode);
+		ASTNode SubtractionNode(SubtractorSimpleExprNodeTYPE);
 
 		if (SemanticStack.top().isTermNode())
 		{
@@ -459,7 +459,7 @@ public:
 		// pop off factor node and store it in and node.
 
 		// push and Node onto stack.
-		ASTNode AndNode(AndTermNode);
+		ASTNode AndNode(AndTermNodeType);
 
 		if (SemanticStack.top().isFactorNode())
 		{
@@ -472,7 +472,7 @@ public:
 		}
 
 		// -------------- What follows could be another and node if it's a run on and scenario ------------- //
-		if (SemanticStack.top().getAstNodeType() == AndTermNode)
+		if (SemanticStack.top().getAstNodeType() == AndTermNodeType)
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
@@ -498,7 +498,7 @@ public:
 		// pop off factor node and store it in multiplicator node.
 
 		// push multiplicator node onto stack.
-		ASTNode MultiplicatorNode(MultiplicatorTermNode);
+		ASTNode MultiplicatorNode(MultiplicatorTermNodeTYPE);
 
 		if (SemanticStack.top().isFactorNode())
 		{
@@ -542,7 +542,7 @@ public:
 		// pop off factor node and store it in Divider node.
 
 		// push Divider note onto stack.
-		ASTNode DividerNode(DividerTermNode);
+		ASTNode DividerNode(DividerTermNodeTYPE);
 
 		if (SemanticStack.top().isFactorNode())
 		{
@@ -589,7 +589,7 @@ public:
 		//Only want to happen if we're dealing with a term that hasn't already been built.
 		//This is because we account for run-on operators.
 
-		ASTNode BaseTermNode(BaseTermNodeType);
+		ASTNode BaseTermNode(BaseTermNodeTYPE);
 		if (SemanticStack.top().isTermNode())
 		{
 			//We don't need to handle this case, so just return.
@@ -615,12 +615,12 @@ public:
 		// pop off expr node and store it in if factor node.
 		// push if factor node onto stack.
 
-		ASTNode IfFactorNode(IfFactorNode);
+		ASTNode IfFactorNodeTYPE(IfFactorNodeTYPE);
 		if (SemanticStack.top().isExpressionNode())
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			IfFactorNode.setBaseExprNode(&VectorOfASTNodes.back());
+			IfFactorNodeTYPE.setBaseExprNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build If Statement Node, but didn't find (first) Expression Node on stack");
@@ -630,7 +630,7 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			IfFactorNode.setBaseExprNode2(&VectorOfASTNodes.back());
+			IfFactorNodeTYPE.setBaseExprNode2(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build If Statement Node, but didn't find (second) Expression Node on stack");
@@ -640,68 +640,68 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			IfFactorNode.setBaseExprNode3(&VectorOfASTNodes.back());
+			IfFactorNodeTYPE.setBaseExprNode3(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build If Statement Node, but didn't find (third) Expression Node on stack");
 		}
 
 		cout << "adding an If Statement node!" << endl;
-		SemanticStack.push(IfFactorNode);
+		SemanticStack.push(IfFactorNodeTYPE);
 	}
 
 	virtual void visitNotFactorNode(SemanticStack& SemanticStack) {
 		// pop off factor node and store it in not factor node
 		// push not factor node onto stack.
 
-		ASTNode NotFactorNode(NotFactorNode);
+		ASTNode NotFactorNodeTYPE(NotFactorNodeTYPE);
 		if (SemanticStack.top().isFactorNode())
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			NotFactorNode.setFactorNode(&VectorOfASTNodes.back());
+			NotFactorNodeTYPE.setFactorNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Not Factor Node, but didn't find Factor Node on stack");
 		}
 		cout << "adding a Not Factor node!" << endl;
-		SemanticStack.push(NotFactorNode);
+		SemanticStack.push(NotFactorNodeTYPE);
 	}
 
 	virtual void visitLiteralFactorNode(SemanticStack& SemanticStack) {
 		// pop off literal node and store it in literal factor node
 		// push literal factor node onto stack.
 
-		ASTNode LiteralFactorNode(LiteralFactorNode);
+		ASTNode LiteralFactorNodeTYPE(LiteralFactorNodeTYPE);
 		if (SemanticStack.top().isLiteralNode())
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			LiteralFactorNode.setLiteralNode(&VectorOfASTNodes.back());
+			LiteralFactorNodeTYPE.setLiteralNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Literal Factor Node, but didn't find Literal Node on stack");
 		}
 		cout << "adding a Literal Factor node!" << endl;
-		SemanticStack.push(LiteralFactorNode);
+		SemanticStack.push(LiteralFactorNodeTYPE);
 	}
 
 	virtual void visitSubtractionFactorNode(SemanticStack& SemanticStack) {
 		// pop off factor node and store it in subtraction factor node
 		// push subtraction factor node onto stack.
 
-		ASTNode SubtractionFactorNode(SubtractionFactorNode);
+		ASTNode SubtractionFactorNodeTYPE(SubtractionFactorNodeTYPE);
 		if (SemanticStack.top().isFactorNode())
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			SubtractionFactorNode.setFactorNode(&VectorOfASTNodes.back());
+			SubtractionFactorNodeTYPE.setFactorNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Subtraction Factor Node, but didn't find Factor Node on stack");
 		}
 		cout << "adding a Subtraction Factor node!" << endl;
-		SemanticStack.push(SubtractionFactorNode);
+		SemanticStack.push(SubtractionFactorNodeTYPE);
 
 	}
 
@@ -709,7 +709,7 @@ public:
 		// pop off expr node and store it in parenthesised expression node.
 
 		// push parenthesised expression node onto stack.
-		ASTNode ParenthesisedExpr(ParenExprFactorNode);
+		ASTNode ParenthesisedExpr(ParenExprFactorNodeTYPE);
 		if (SemanticStack.top().isExpressionNode())
 		{
 			ASTNode StackTop = SemanticStack.pop();
@@ -726,7 +726,7 @@ public:
 	virtual void visitIdentifierActualsNode(SemanticStack& SemanticStack) {
 		// pop off identifier node and store it in identifier actuals node.
 		// pop off actuals node and store it in identifier actuals node.
-		ASTNode IdentifierActualsNode(IdentifierFactorNode);
+		ASTNode IdentifierActualsNode(IdentifierFactorNodeTYPE);
 		
 		if (SemanticStack.top().isActualsNode())
 		{
@@ -738,7 +738,7 @@ public:
 			throw runtime_error("ERROR: Attempted to build Identifier Actuals Node, but didn't find Actuals Node on stack");
 		}
 
-		if (SemanticStack.top().getAstNodeType() == IdentifierNode)
+		if (SemanticStack.top().getAstNodeType() == IDENTIFIERNODETYPE)
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
@@ -755,8 +755,8 @@ public:
 		// pop off identifier node and store it in singleton identifier factor node.
 
 		// push singleton identifier factor node onto stack.
-		ASTNode SingletonIdentifierNode(SingletonIdentifierFactorNode);
-		if (SemanticStack.top().getAstNodeType() == IdentifierNode)
+		ASTNode SingletonIdentifierNode(SingletonIdentifierFactorNodeTYPE);
+		if (SemanticStack.top().getAstNodeType() == IDENTIFIERNODETYPE)
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
@@ -772,7 +772,7 @@ public:
 
 	virtual void visitBaseActualsNode(SemanticStack& SemanticStack) {
 		// represent epsilon case.
-		ASTNode BaseActualsNode(BaseActualsNodeType);
+		ASTNode BaseActualsNode(BaseActualsNodeTYPE);
 
 		cout << "adding a Base Actuals node!" << endl;
 		SemanticStack.push(BaseActualsNode);
@@ -782,20 +782,20 @@ public:
 		// pop non empty actuals node and store it in non base actuals node.
 
 		// push non base actuals node onto stack.
-		ASTNode NonBaseActualsNode(NonBaseActualsNode);
+		ASTNode NonBaseActualsNodeTYPE(NonBaseActualsNodeTYPE);
 
-		if (SemanticStack.top().getAstNodeType() == NonEmptyActualsNode)
+		if (SemanticStack.top().getAstNodeType() == NonEmptyActualsNodeTYPE)
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			NonBaseActualsNode.setBaseActualsNode(&VectorOfASTNodes.back());
+			NonBaseActualsNodeTYPE.setBaseActualsNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Non Base Actuals Node, but didn't find Non empty Actuals Node on stack");
 		}
 
 		cout << "adding a Non Base Actuals node!" << endl;
-		SemanticStack.push(NonBaseActualsNode);
+		SemanticStack.push(NonBaseActualsNodeTYPE);
 	}
 
 	virtual void visitNonEmptyActualsNode(SemanticStack& SemanticStack) {
@@ -804,13 +804,13 @@ public:
 
 		//Only want to happen if we're dealing with the case that non empty actuals hasn't already been built.
 		//This is because we account for run-on non empty actuals.
-		if (SemanticStack.top().getAstNodeType() == NonEmptyActualsNode)
+		if (SemanticStack.top().getAstNodeType() == NonEmptyActualsNodeTYPE)
 		{
 			//We don't need to handle this case, so just return.
 			return;
 		}
 
-		ASTNode NonEmptyActualsNodeVar(NonEmptyActualsNode);
+		ASTNode NonEmptyActualsNodeVar(NonEmptyActualsNodeTYPE);
 		while (!SemanticStack.isEmpty())
 		{
 			if (SemanticStack.top().isExpressionNode())
@@ -832,26 +832,26 @@ public:
 
 	virtual void visitIntegerLiteralNode(SemanticStack& SemanticStack, int IntData) {
 		// store IntData inside the integer literal node and push that integer literal node onto the stack
-		ASTNode IntegerLiteralNode(IntegerLiteralNode);
-		IntegerLiteralNode.setLiteralValue("test"); // convert int to string
+		ASTNode IntegerLiteralNodeTYPE(IntegerLiteralNodeTYPE);
+		IntegerLiteralNodeTYPE.setLiteralValue("test"); // convert int to string
 
 		cout << "adding a Identifier Literal node!" << endl;
-		SemanticStack.push(IntegerLiteralNode);
+		SemanticStack.push(IntegerLiteralNodeTYPE);
 	}
 
 	virtual void visitBooleanLiteralNode(SemanticStack& SemanticStack, string BooleanValue) {
 		// store BooleanValue inside the boolean literal node and push that boolean literal node onto the stack
-		ASTNode BooleanLiteralNode(BooleanLiteralNode);
-		BooleanLiteralNode.setLiteralValue(BooleanValue); // convert int to string
+		ASTNode BooleanLiteralNodeTYPE(BooleanLiteralNodeTYPE);
+		BooleanLiteralNodeTYPE.setLiteralValue(BooleanValue); // convert int to string
 
 		cout << "adding a Boolean Literal node!" << endl;
-		SemanticStack.push(BooleanLiteralNode);
+		SemanticStack.push(BooleanLiteralNodeTYPE);
 	}
 
 	virtual void visitPrintStatementNode(SemanticStack& SemanticStack) {
 		// pop off expr node from the stack and store it inside a print statment node.
 		// Then push that  print statment node back onto the stack.
-		ASTNode PrintStatementNode(PrintStatemetNode);
+		ASTNode PrintStatementNode(PrintStatemetNodeTYPE);
 
 		if (SemanticStack.top().isExpressionNode())
 		{
