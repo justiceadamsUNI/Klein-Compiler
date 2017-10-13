@@ -2,6 +2,7 @@
 #include "Scanner.h"
 #include "PStack.h"
 #include "Token.h"
+#include "NodeBuilderVisitor.h"
 #include <list>
 #include <map>
 #include <stdexcept>
@@ -23,6 +24,8 @@ private:
 	Scanner ScannerVar;
 
 	PStack Stack;
+
+	SemanticStack SemanticStackVar;
 
 	// All the stack values that are terminals
 	list<StackValues> TerminalValues = { 
@@ -165,8 +168,8 @@ private:
 			{ make_pair<StackValues, StackValues>(EXPR, BOOLEAN_LITERAL), list<StackValues>{SIMPLE_EXPR, EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(EXPR, MINUS_OPERATOR), list<StackValues>{SIMPLE_EXPR, EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(EXPR, LEFT_PAREN), list<StackValues>{SIMPLE_EXPR, EXPR_TAIL} },
-			{ make_pair<StackValues, StackValues>(EXPR_TAIL, LESS_THAN_OPERATOR), list<StackValues>{LESS_THAN_OPERATOR, SIMPLE_EXPR, EXPR_TAIL, BUILD_LESSTHAN_NODE} },
-			{ make_pair<StackValues, StackValues>(EXPR_TAIL, EQUAL_SIGN), list<StackValues>{EQUAL_SIGN, SIMPLE_EXPR, EXPR_TAIL, BUILD_EQUAL_NODE} },
+			{ make_pair<StackValues, StackValues>(EXPR_TAIL, LESS_THAN_OPERATOR), list<StackValues>{LESS_THAN_OPERATOR, SIMPLE_EXPR, BUILD_LESSTHAN_NODE, EXPR_TAIL} },
+			{ make_pair<StackValues, StackValues>(EXPR_TAIL, EQUAL_SIGN), list<StackValues>{EQUAL_SIGN, SIMPLE_EXPR, BUILD_EQUAL_NODE, EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(EXPR_TAIL, FUNCTION), list<StackValues>{BUILD_BASEEXPR_NODE} },
 			{ make_pair<StackValues, StackValues>(EXPR_TAIL, END_OF_STREAM), list<StackValues>{BUILD_BASEEXPR_NODE} },
 			{ make_pair<StackValues, StackValues>(EXPR_TAIL, RIGHT_PAREN), list<StackValues>{BUILD_BASEEXPR_NODE} },
@@ -186,9 +189,9 @@ private:
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR, BOOLEAN_LITERAL), list<StackValues>{TERM, SIMPLE_EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR, MINUS_OPERATOR), list<StackValues>{TERM, SIMPLE_EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR, LEFT_PAREN), list<StackValues>{TERM, SIMPLE_EXPR_TAIL} },
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, OR), list<StackValues>{OR, TERM, SIMPLE_EXPR_TAIL, BUILD_OR_NODE} },
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, PLUS_OPERATOR), list<StackValues>{PLUS_OPERATOR, TERM, SIMPLE_EXPR_TAIL, BUILD_ADDITION_NODE} },
-			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, MINUS_OPERATOR), list<StackValues>{MINUS_OPERATOR, TERM, SIMPLE_EXPR_TAIL, BUILD_SUBTRACTION_NODE} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, OR), list<StackValues>{OR, TERM, BUILD_OR_NODE, SIMPLE_EXPR_TAIL} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, PLUS_OPERATOR), list<StackValues>{PLUS_OPERATOR, TERM, BUILD_ADDITION_NODE, SIMPLE_EXPR_TAIL} },
+			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, MINUS_OPERATOR), list<StackValues>{MINUS_OPERATOR, TERM, BUILD_SUBTRACTION_NODE, SIMPLE_EXPR_TAIL} },
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, FUNCTION), list<StackValues>{BUILD_BASESIMPLEEXPR_NODE} },
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, END_OF_STREAM), list<StackValues>{BUILD_BASESIMPLEEXPR_NODE} },
 			{ make_pair<StackValues, StackValues>(SIMPLE_EXPR_TAIL, RIGHT_PAREN), list<StackValues>{BUILD_BASESIMPLEEXPR_NODE} },

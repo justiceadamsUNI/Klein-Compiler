@@ -1,3 +1,4 @@
+#pragma once
 #include "../header/Token.h"
 
 Token::Token(TokenType InTokenType, string InValue)

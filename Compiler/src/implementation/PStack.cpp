@@ -1,3 +1,4 @@
+#pragma once
 #include "../header/PStack.h"
 
 using namespace std;

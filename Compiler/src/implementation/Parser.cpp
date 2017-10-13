@@ -1,3 +1,4 @@
+#pragma once
 #include "../header/Parser.h"
 #include <algorithm>
 
@@ -12,12 +13,14 @@ void Parser::parseProgram()
 	Stack.push(PROGRAM);
 	StackValues StackTop = Stack.top();
 	StackValues PeekedTokenValue = mapFromScannerTokenToStackValue(ScannerVar.peek());
+	NodeBuilderVisitor BuilderVisitor;
 
 	while (StackTop != END_OF_STREAM) {
 		if (isSemanticAction(StackTop))
 		{
 			// If semantic action, just pop and ignore that shit for now. 
 			// We'll change this code to call factory methods.a
+			BuilderVisitor.accept(StackTop, SemanticStackVar, "test", 0);
 			Stack.pop();
 			StackTop = Stack.top();
 			continue;
@@ -192,5 +195,15 @@ void Parser::checkValidEndState(StackValues PeekedTokenValue)
 	{
 		string StackTopString = StackValuesPrintMap.find(Stack.top())->second;
 		throw runtime_error("ERROR: There are still values on the stack, but input stream has ended. Top of stack - " + StackTopString);
+	}
+
+	ASTNode FinalASTNode = SemanticStackVar.pop();
+	if (FinalASTNode.getAstNodeType() != ProgramNodeTYPE)
+	{
+		throw runtime_error("ERROR: The top of the semantic stack isn't a Program Node.");
+	}
+	if (!SemanticStackVar.isEmpty())
+	{
+		throw runtime_error("ERROR: There are still nodes left on the Semantic Stack!");
 	}
 }
