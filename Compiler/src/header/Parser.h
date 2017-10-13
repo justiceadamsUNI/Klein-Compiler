@@ -20,12 +20,18 @@ public:
 
 	bool isProgramValid();
 
+	ASTNode getFinalASTNode();
+
+	NodeBuilderVisitor BuilderVisitor;
+
 private:
 	Scanner ScannerVar;
 
 	PStack Stack;
 
 	SemanticStack SemanticStackVar;
+
+	ASTNode FinalASTNode = ASTNode(MultiplicatorTermNodeTYPE);
 
 	// All the stack values that are terminals
 	list<StackValues> TerminalValues = { 

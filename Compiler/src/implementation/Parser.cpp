@@ -14,9 +14,8 @@ void Parser::parseProgram()
 	StackValues StackTop = Stack.top();
 	Token PeekedToken = ScannerVar.peek();
 	StackValues PeekedTokenValue = mapFromScannerTokenToStackValue(PeekedToken);
-	NodeBuilderVisitor BuilderVisitor;
-	string StringDataForSemanticAction = "ERROR";
-	string IntDataForSemanticAction = "ERROR";
+	string StringDataForSemanticAction = "NULL";
+	string IntDataForSemanticAction = "NULL";
 
 	while (StackTop != END_OF_STREAM) {
 		if (isSemanticAction(StackTop))
@@ -33,7 +32,7 @@ void Parser::parseProgram()
 			if (StackTop == PeekedTokenValue)
 			{
 				// Update data to be stored in AST nodes.
-				if (StackTop = INTEGER_LITERAL)
+				if (StackTop == INTEGER_LITERAL)
 				{
 					IntDataForSemanticAction = PeekedToken.getValue();
 				}
@@ -47,7 +46,7 @@ void Parser::parseProgram()
 			else {
 				string StackTopString = StackValuesPrintMap.find(StackTop)->second;
 				string PeekedTokenSting = StackValuesPrintMap.find(PeekedTokenValue)->second;
-				throw runtime_error("ERROR: Problem matching terminal value. Token from input stream - " + PeekedTokenSting + ", Stack Top - " + StackTopString);
+				throw runtime_error("ERROR: Expected - " + PeekedTokenSting + ", Saw  - " + StackTopString);
 			}
 		}
 		else {
@@ -59,7 +58,7 @@ void Parser::parseProgram()
 			else {
 				string StackTopString = StackValuesPrintMap.find(StackTop)->second;
 				string PeekedTokenSting = StackValuesPrintMap.find(PeekedTokenValue)->second;
-				throw runtime_error("ERROR: No Rule exist in the Parse Table for (" + StackTopString + ", " + PeekedTokenSting + ")");
+				throw runtime_error("ERROR: No Rule exists in the Parse Table for (" + StackTopString + ", " + PeekedTokenSting + ")");
 			}
 		}
 
@@ -86,6 +85,11 @@ bool Parser::isProgramValid()
 	{
 		return false;
 	}
+}
+
+ASTNode Parser::getFinalASTNode()
+{
+	return FinalASTNode;
 }
 
 bool Parser::isTerminalValue(StackValues value)
@@ -210,7 +214,7 @@ void Parser::checkValidEndState(StackValues PeekedTokenValue)
 		throw runtime_error("ERROR: There are still values on the stack, but input stream has ended. Top of stack - " + StackTopString);
 	}
 
-	ASTNode FinalASTNode = SemanticStackVar.pop();
+	FinalASTNode = SemanticStackVar.pop();
 	if (FinalASTNode.getAstNodeType() != ProgramNodeTYPE)
 	{
 		throw runtime_error("ERROR: The top of the semantic stack isn't a Program Node.");
