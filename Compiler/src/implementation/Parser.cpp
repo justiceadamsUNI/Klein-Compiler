@@ -46,7 +46,7 @@ void Parser::parseProgram()
 			else {
 				string StackTopString = StackValuesPrintMap.find(StackTop)->second;
 				string PeekedTokenSting = StackValuesPrintMap.find(PeekedTokenValue)->second;
-				throw runtime_error("ERROR: Problem matching terminal value. Token from input stream - " + PeekedTokenSting + ", Stack Top - " + StackTopString);
+				throw runtime_error("ERROR: Expected - " + PeekedTokenSting + ", Saw  - " + StackTopString);
 			}
 		}
 		else {
@@ -58,7 +58,7 @@ void Parser::parseProgram()
 			else {
 				string StackTopString = StackValuesPrintMap.find(StackTop)->second;
 				string PeekedTokenSting = StackValuesPrintMap.find(PeekedTokenValue)->second;
-				throw runtime_error("ERROR: No Rule exist in the Parse Table for (" + StackTopString + ", " + PeekedTokenSting + ")");
+				throw runtime_error("ERROR: No Rule exists in the Parse Table for (" + StackTopString + ", " + PeekedTokenSting + ")");
 			}
 		}
 

@@ -58,12 +58,6 @@ void printValueIfExist(ASTNode ASTNodeVar) {
 	}
 }
 
-void printChildrenIfChildrenExist(ASTNode ASTNodeVar, int treelevel) {
-
-
-
-}
-
 void printASTNodeTree(ASTNode ASTNodeVar, int treelevel) {
 	//Print tabs
 	for (int tabs = 0; tabs < treelevel; tabs++)
@@ -75,7 +69,7 @@ void printASTNodeTree(ASTNode ASTNodeVar, int treelevel) {
 	cout << ASTNodePrintMap.find(ASTNodeVar.getAstNodeType())->second << ": ";
 	printValueIfExist(ASTNodeVar);
 
-	//Check Children
+	//Print any children nodes if needed (next level of tree)
 	if (ASTNodeVar.getFactorNode())
 	{
 		printASTNodeTree(*ASTNodeVar.getFactorNode(), treelevel + 1);
