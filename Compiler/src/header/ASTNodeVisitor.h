@@ -9,7 +9,7 @@ using namespace std;
 class ASTNodeVisitor {
 public:
 	// SemanticStack needs to be SemanticStack! Just here to compile for right now until harsha is done.
-	void accept(StackValues ParserStackValue, SemanticStack& SemanticStack, string StringData, int IntData) {
+	void accept(StackValues ParserStackValue, SemanticStack& SemanticStack, string StringData, string IntData) {
 		switch (ParserStackValue)
 		{
 		case BUILD_PROGRAM_NODE:
@@ -149,7 +149,7 @@ public:
 	virtual void visitBaseActualsNode(SemanticStack& SemanticStack) = 0;
 	virtual void visitNonBaseActualsNode(SemanticStack& SemanticStack) = 0;
 	virtual void visitNonEmptyActualsNode(SemanticStack& SemanticStack) = 0;
-	virtual void visitIntegerLiteralNode(SemanticStack& SemanticStack, int IntData) = 0;
+	virtual void visitIntegerLiteralNode(SemanticStack& SemanticStack, string IntData) = 0;
 	virtual void visitBooleanLiteralNode(SemanticStack& SemanticStack, string BooleanValue) = 0;
 	virtual void visitPrintStatementNode(SemanticStack& SemanticStack) = 0;
 };

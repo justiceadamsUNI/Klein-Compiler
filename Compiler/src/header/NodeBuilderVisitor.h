@@ -830,10 +830,10 @@ public:
 		SemanticStack.push(NonEmptyActualsNodeVar);
 	}
 
-	virtual void visitIntegerLiteralNode(SemanticStack& SemanticStack, int IntData) {
+	virtual void visitIntegerLiteralNode(SemanticStack& SemanticStack, string IntData) {
 		// store IntData inside the integer literal node and push that integer literal node onto the stack
 		ASTNode IntegerLiteralNode(IntegerLiteralNodeTYPE);
-		IntegerLiteralNode.setLiteralValue("test"); // convert int to string
+		IntegerLiteralNode.setLiteralValue(IntData);
 
 		cout << "adding a Identifier Literal node!" << endl;
 		SemanticStack.push(IntegerLiteralNode);
@@ -842,7 +842,7 @@ public:
 	virtual void visitBooleanLiteralNode(SemanticStack& SemanticStack, string BooleanValue) {
 		// store BooleanValue inside the boolean literal node and push that boolean literal node onto the stack
 		ASTNode BooleanLiteralNode(BooleanLiteralNodeTYPE);
-		BooleanLiteralNode.setLiteralValue(BooleanValue); // convert int to string
+		BooleanLiteralNode.setLiteralValue(BooleanValue);
 
 		cout << "adding a Boolean Literal node!" << endl;
 		SemanticStack.push(BooleanLiteralNode);

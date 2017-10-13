@@ -132,6 +132,8 @@ private:
 
 	void checkValidEndState(StackValues PeekedTokenValue);
 
+	void setSemanticBuildDataForTerminal();
+
 
 	// PARSE TABLE - Sparse 2D array representation.
 	// After struggling for a while, I think this is the best data structure to use here.

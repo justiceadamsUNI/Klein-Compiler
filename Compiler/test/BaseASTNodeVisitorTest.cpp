@@ -7,7 +7,7 @@ using namespace fakeit;
 void mockVisitorAccept(Mock <ASTNodeVisitor>& MockVisitor, StackValues SemanticAction) {
 	ASTNodeVisitor& AstNodeVisitorImpl = MockVisitor.get();
 	SemanticStack SemanticStack;
-	AstNodeVisitorImpl.accept(SemanticAction, SemanticStack, "", 0);
+	AstNodeVisitorImpl.accept(SemanticAction, SemanticStack, "test", "0");
 }
 
 TEST_CASE("Visitor calls visitProgramNode() when accept() called with BUILD_PROGRAM Stack Value", "[Base AST Node Visitor]") {
