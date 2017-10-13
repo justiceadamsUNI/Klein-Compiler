@@ -48,6 +48,9 @@
     <ClInclude Include="src\header\SemanticStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="test\fakeit.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test\RunAllTest.cpp">
@@ -71,13 +74,19 @@
     <ClCompile Include="src\implementation\PStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ProgramValidator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\implementation\SemanticStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="test\ParserTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\BaseASTNodeVisitorTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\PStackTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PrintASTNodeTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

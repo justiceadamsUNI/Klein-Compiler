@@ -154,11 +154,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\implementation\Parser.cpp" />
+    <ClCompile Include="src\PrintASTNodeTree.cpp" />
     <ClCompile Include="src\implementation\PStack.cpp" />
     <ClCompile Include="src\implementation\Scanner.cpp" />
     <ClCompile Include="src\implementation\SemanticStack.cpp" />
     <ClCompile Include="src\implementation\Token.cpp" />
-    <ClCompile Include="src\ProgramValidator.cpp" />
     <ClCompile Include="test\BaseASTNodeVisitorTest.cpp" />
     <ClCompile Include="test\ParserTest.cpp" />
     <ClCompile Include="test\PStackTest.cpp" />
