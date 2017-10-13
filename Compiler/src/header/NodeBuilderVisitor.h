@@ -8,7 +8,13 @@
 
 using namespace std;
 class NodeBuilderVisitor : public ASTNodeVisitor {
+
+	
 public:
+	NodeBuilderVisitor() {
+		VectorOfASTNodes.reserve(10000);
+	}
+	vector<ASTNode> VectorOfASTNodes;
 
 	virtual void visitProgramNode(SemanticStack& SemanticStack) {
 		// pop off every defenition node from the stack and store it inside a program node.
@@ -156,10 +162,13 @@ public:
 
 		// push Formal Node onto stack.
 		ASTNode FormalNodeVar(FormalNodeTYPE);
+		ASTNode Type(TypeNodeTYPE);
+		ASTNode Identifier(IDENTIFIERNODETYPE);
 		if (SemanticStack.top().getAstNodeType() == TypeNodeTYPE)
 		{
 			ASTNode StackTop = SemanticStack.pop();
-			VectorOfASTNodes.push_back(StackTop);
+			Type = StackTop;
+			VectorOfASTNodes.push_back(Type);
 			FormalNodeVar.setTypeNode(&VectorOfASTNodes.back());
 		}
 		else {
@@ -169,7 +178,8 @@ public:
 		if (SemanticStack.top().getAstNodeType() == IDENTIFIERNODETYPE)
 		{
 			ASTNode StackTop = SemanticStack.pop();
-			VectorOfASTNodes.push_back(StackTop);
+			Identifier = StackTop;
+			VectorOfASTNodes.push_back(Identifier);
 			FormalNodeVar.setIdentifierNode(&VectorOfASTNodes.back());
 		}
 		else {
@@ -867,7 +877,7 @@ public:
 		SemanticStack.push(PrintStatementNode);
 	}
 
-	private:
+	//private:
 		//This is to keep alive the objects which the pointers point to.
-		vector<ASTNode> VectorOfASTNodes;
+		
 };
