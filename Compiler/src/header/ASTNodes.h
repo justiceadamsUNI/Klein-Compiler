@@ -74,10 +74,10 @@ public:
 		return Expressions;
 	}
 	ASTNode* getNonEmptyActualsNode(){
-		return NonEmptyActualsNodeTYPE;
+		return NonEmptyActualsNode;
 	}
 	ASTNode* getLiteralNode(){
-		return LiteralNodeTYPE;
+		return LiteralNode;
 	}
 	ASTNode* getIdentifierNode(){
 		return IdentifierNodeVar;
@@ -107,7 +107,7 @@ public:
 		return IdentifierNode2;
 	}
 	ASTNode* getTypeNode(){
-		return TypeNodeTYPE;
+		return TypeNode;
 	}
 	vector<ASTNode*> getPrintStatements(){
 		return PrintStatements;
@@ -119,7 +119,7 @@ public:
 		return FormalsNode;
 	}
 	ASTNode* getBodyNode(){
-		return BodyNodeTYPE;
+		return BodyNode;
 	}
 	vector<ASTNode*> getDefNodes(){
 		return DefNodes;
@@ -207,10 +207,10 @@ public:
 		Expressions.push_back(inExpressions);
 	}
 	void setNonEmptyActualsNode(ASTNode* inNoneEmptyActualsNode) {
-		NonEmptyActualsNodeTYPE = inNoneEmptyActualsNode;
+		NonEmptyActualsNode = inNoneEmptyActualsNode;
 	}
 	void setLiteralNode(ASTNode* inLiteralNode) {
-		LiteralNodeTYPE = inLiteralNode;
+		LiteralNode = inLiteralNode;
 	}
 	void setIdentifierNode(ASTNode* inIdentifierNodeVar) {
 		IdentifierNodeVar = inIdentifierNodeVar;
@@ -240,7 +240,7 @@ public:
 		IdentifierNode2 = inIdentifierNode2;
 	}
 	void setTypeNode(ASTNode* inTypeNode) {
-		TypeNodeTYPE = inTypeNode;
+		TypeNode = inTypeNode;
 	}
 	void addPrintStatementToVector(ASTNode* inPrintStatement) {
 		PrintStatements.push_back(inPrintStatement);
@@ -252,7 +252,7 @@ public:
 		FormalsNode = inFormalsNode;
 	}
 	void setBodyNode(ASTNode* inBodyNode) {
-		BodyNodeTYPE = inBodyNode;
+		BodyNode = inBodyNode;
 	}
 	void addDefinitionToVector(ASTNode* Definition) {
 		Definitions.push_back(Definition);
@@ -270,8 +270,8 @@ private :
 	ASTNode* BaseExprNode = nullptr;
 	string LiteralValue = "test";
 	vector<ASTNode*> Expressions = {};
-	ASTNode* NonEmptyActualsNodeTYPE = nullptr;
-	ASTNode* LiteralNodeTYPE = nullptr;
+	ASTNode* NonEmptyActualsNode = nullptr;
+	ASTNode* LiteralNode = nullptr;
 	ASTNode* IdentifierNodeVar = nullptr;
 	ASTNode* BaseActualsNode = nullptr;
 	ASTNode* BaseExprNode2 = nullptr;
@@ -281,11 +281,11 @@ private :
 	ASTNode* BaseSimpleExprNode2 = nullptr;
 	string DataType = "test";
 	ASTNode* IdentifierNode2 = nullptr;
-	ASTNode* TypeNodeTYPE = nullptr;
+	ASTNode* TypeNode = nullptr;
 	vector<ASTNode*> PrintStatements = {};
 	vector<ASTNode*> FormalNodes = {};
 	ASTNode* FormalsNode = nullptr;
-	ASTNode* BodyNodeTYPE = nullptr;
+	ASTNode* BodyNode = nullptr;
 	vector<ASTNode*> DefNodes = {};
 	vector<ASTNode*>Definitions = {};
 };
