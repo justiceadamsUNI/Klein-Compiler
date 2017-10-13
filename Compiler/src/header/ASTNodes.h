@@ -261,7 +261,7 @@ public:
 		DefNodes.push_back(Def);
 	}
 private :
-	ASTNodeType NodeType;
+	ASTNodeType NodeType = ProgramNode;
 
 	string IdentifierName = "test";
 	ASTNode* FactorNode = nullptr;

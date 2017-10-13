@@ -14,14 +14,14 @@ public:
 		// pop off every defenition node from the stack and store it inside a program node.
 		// Then push that program node back onto the stack.
 		
-		ASTNode ProgramNode(ProgramNode);
+		ASTNode ProgramNodeVar(ProgramNode);
 		while (!SemanticStack.isEmpty())
 		{
 			if (SemanticStack.top().getAstNodeType() == DefinitionsNode)
 			{
 				ASTNode StackTop = SemanticStack.pop();
 				VectorOfASTNodes.push_back(StackTop);
-				ProgramNode.addDefinitionToVector(&VectorOfASTNodes.back());
+				ProgramNodeVar.addDefinitionToVector(&VectorOfASTNodes.back());
 				continue;
 			}
 			else {
@@ -31,21 +31,21 @@ public:
 		}
 
 		cout << "adding a Program node!" << endl;
-		SemanticStack.push(ProgramNode);
+		SemanticStack.push(ProgramNodeVar);
 	}
 
 	virtual void visitDefinitionsNode(SemanticStack& SemanticStack) {
 		// pop off every def node from the stack and store it inside a definitions node.
 		// Then push that definitions node back onto the stack.
 		
-		ASTNode DefinitionsNode(DefinitionsNode);
+		ASTNode DefinitionsNodeVar(DefinitionsNode);
 		while (!SemanticStack.isEmpty())
 		{
 			if (SemanticStack.top().getAstNodeType() == DefNode)
 			{
 				ASTNode StackTop = SemanticStack.pop();
 				VectorOfASTNodes.push_back(StackTop);
-				DefinitionsNode.addDefToVector(&VectorOfASTNodes.back());
+				DefinitionsNodeVar.addDefToVector(&VectorOfASTNodes.back());
 				continue;
 			}
 			else {
@@ -55,27 +55,27 @@ public:
 		}
 
 		cout << "adding a Definitions node!" << endl;
-		SemanticStack.push(DefinitionsNode);
+		SemanticStack.push(DefinitionsNodeVar);
 
 	}
 
 	virtual void visitIdentifierNode(SemanticStack& SemanticStack, string IdentifierName) {
 		// store the identifier name inside the identifier node, then push the identifier node onto the stack.
-		ASTNode IdentifierNode(IdentifierNode);
-		IdentifierNode.setIdentifierName(IdentifierName);
+		ASTNode IdentifierNodeVar(IdentifierNode);
+		IdentifierNodeVar.setIdentifierName(IdentifierName);
 
 		cout << "adding a Identifier node!" << endl;
 		SemanticStack.push(IdentifierNode);
 	}
 
 	virtual void visitDefNode(SemanticStack& SemanticStack) {
-		ASTNode DefNode(DefNode);
+		ASTNode DefNodeVar(DefNode);
 
 		if (SemanticStack.top().getAstNodeType() == BodyNode)
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			DefNode.setBodyNode(&VectorOfASTNodes.back());
+			DefNodeVar.setBodyNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Def Node, but didn't find Body Node on stack");
@@ -85,7 +85,7 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			DefNode.setTypeNode(&VectorOfASTNodes.back());
+			DefNodeVar.setTypeNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Def Node, but didn't find Type Node on stack");
@@ -95,7 +95,7 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			DefNode.setFormalsNode(&VectorOfASTNodes.back());
+			DefNodeVar.setFormalsNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Def Node, but didn't find Formals Node on stack");
@@ -105,7 +105,7 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			DefNode.setIdentifierNode(&VectorOfASTNodes.back());
+			DefNodeVar.setIdentifierNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Def Node, but didn't find Identifier Node on stack");
@@ -113,16 +113,16 @@ public:
 	
 
 		cout << "adding a Def node!" << endl;
-		SemanticStack.push(DefNode);
+		SemanticStack.push(DefNodeVar);
 
 	}
 
 	virtual void visitFormalsNode(SemanticStack& SemanticStack) {
 		//represents epsilon case. still a valid formals node.
-		ASTNode FormalsNode(FormalsNodeType);
+		ASTNode FormalsNodeVar(FormalsNodeType);
 
 		cout << "adding a Formals node!" << endl;
-		SemanticStack.push(FormalsNode);
+		SemanticStack.push(FormalsNodeVar);
 	}
 	
 
@@ -130,14 +130,14 @@ public:
 		// pop off every Formal node from the stack and store it inside a Non Empty Formals Node.
 		// Then push that Non Empty Formals Node node back onto the stack.
 
-		ASTNode NonEmptyFormalsNode(NonEmptyFormalsNode);
+		ASTNode NonEmptyFormalsNodeVar(NonEmptyFormalsNode);
 		while (!SemanticStack.isEmpty())
 		{
 			if (SemanticStack.top().getAstNodeType() == FormalNode)
 			{
 				ASTNode StackTop = SemanticStack.pop();
 				VectorOfASTNodes.push_back(StackTop);
-				NonEmptyFormalsNode.addFormalNodeToVector(&VectorOfASTNodes.back());
+				NonEmptyFormalsNodeVar.addFormalNodeToVector(&VectorOfASTNodes.back());
 				continue;
 			}
 			else {
@@ -147,7 +147,7 @@ public:
 		}
 
 		cout << "adding a Non Empty Formals node!" << endl;
-		SemanticStack.push(NonEmptyFormalsNode);
+		SemanticStack.push(NonEmptyFormalsNodeVar);
 	}
 
 	virtual void visitFormalNode(SemanticStack& SemanticStack) {
@@ -810,15 +810,14 @@ public:
 			return;
 		}
 
-
-		ASTNode NonEmptyActualsNode(NonEmptyActualsNode);
+		ASTNode NonEmptyActualsNodeVar(NonEmptyActualsNode);
 		while (!SemanticStack.isEmpty())
 		{
 			if (SemanticStack.top().isExpressionNode())
 			{
 				ASTNode StackTop = SemanticStack.pop();
 				VectorOfASTNodes.push_back(StackTop);
-				NonEmptyActualsNode.addExpressionToVector(&VectorOfASTNodes.back());
+				NonEmptyActualsNodeVar.addExpressionToVector(&VectorOfASTNodes.back());
 				continue;
 			}
 			else {
@@ -828,7 +827,7 @@ public:
 		}
 
 		cout << "adding a Non Empty Actuals node!" << endl;
-		SemanticStack.push(NonEmptyActualsNode);
+		SemanticStack.push(NonEmptyActualsNodeVar);
 	}
 
 	virtual void visitIntegerLiteralNode(SemanticStack& SemanticStack, int IntData) {
