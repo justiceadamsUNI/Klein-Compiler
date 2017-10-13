@@ -876,8 +876,4 @@ public:
 		cout << "adding a Print Statment node!" << endl;
 		SemanticStack.push(PrintStatementNode);
 	}
-
-	//private:
-		//This is to keep alive the objects which the pointers point to.
-		
 };
