@@ -166,5 +166,11 @@ practices this time around. Namely
 	frankly ugly
 - We had to abandon unit test to reach the deadline. So we will have to add more
 	exhaustive testing next week.
-- We have an outstanding error message cleanup we need to do around the case where
-	the parser doesn't find a rule in the parse table.
+- We have an outstanding error message cleanup we need to do around the case 
+	where the parser doesn't find a rule in the parse table.
+- The FAKEIT framework is not working on the student.cs server, but does work 
+	locally on our machines, and does pass the TravisCI testing. We believe there
+	is some conflict with the version of g++ compiler on the server and the FakeIt
+	version. (note this works on other g++ compilers, just not on the server)
+- G++ has a warning regarding the multiple uses of #pragma once.  This is needed 
+	for VisualStudio, but might need to be investigated further.
