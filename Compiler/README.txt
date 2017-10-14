@@ -24,7 +24,7 @@ implementing a Klein compiler that will translate .kln files into machine
 language. This compiler implementation is written in C++. Currently, we have a
 working Scanner which converts characters in a .kln file into tokens, and a 
 parser that validates Klein programs. We developed this using a feature-branch
-workflow utilizing GiHhub. View the repo here: 
+workflow utilizing Github. View the repo here: 
 (https://github.com/justiceadamsUNI/Klein-Compiler) You'll notice the repo has 
 an extra outer directory for various reasons including continuous integration 
 purposes.
@@ -85,7 +85,8 @@ lightweight. IDE-independent, and fully featured. Their repo describes it as
 'A modern, C++-native, header-only, test framework for unit-tests, TDD and 
 BDD'. Note that the catch.h is not ours, we're just using it to test! 
 It's a header-only framework. We also use FakeIt, a header-only C++ mocking
-framework that's fully compatible with Catch.
+framework that's fully compatible with Catch. 
+(Again, Fakeit.hpp is not our code!)
 
 To run our test you can compile  test/*.cpp and src/implementation/*.cpp into
 an executable and run it. All you need is a c++ compiler! For Example: Using 
@@ -117,9 +118,8 @@ valid token found.
 
 -f or --kleinf:  This will build an executable file named kleinf that will
 determine if a file parses to the grammar of Klein.  'kleinf' will let the user
-know if the file parses as a valid Klein file, or will return an error. kleinf'
-takes in 1 command line argument, a .kln file location relative to the current
-file.
+know if the file parses as a valid Klein file, or will return an error. 'kleinf'
+takes in 1 command line argument, a .kln file location.
 
 -p or --kleinp: This will build an executable file named kleinp that will
 print the AST structure of a valid Klein program.  'kleinp' will let the user
