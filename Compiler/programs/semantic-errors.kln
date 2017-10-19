@@ -5,7 +5,7 @@ Compiler Defilers
 
 *)
 function mane() : integer
-	ALG(true)
+	ALG2(true, 1, false)
 function ALG(x : integer) : integer
 	if true
 	then false
@@ -19,18 +19,19 @@ function UNUSED (ALG2 : integer) : boolean
 	true
 (*
 ERRORS
-Object doesn't exist: Line 12, identifier a hasn't been delcared
-Use of illegal name: Line 18, identifier 'ALG2' is already defined as a function
-Use of incorrect number of args: Line 15, ALG2  requires 3 arguments
-Use of incorrect type of args: Line 8, calls ALG with a boolean, not an integer
-Incorrect type to operator: Line 17, dividing by a false
-Invalid Return Type: Line 11, If/then/else can return a boolean, not integer
-2 functions with same name: Lines 9 & 13, both functions are ALG
-2 (or more) variables with the same name: Lines 16 & 17, both are variables delcared as 'x'
-Doesn't have main function: Line 7, this is our 'main' function
+*Object doesn't exist: Line 12, identifier 'a' hasn't been delcared
+*Use of illegal name: Line 18, identifier 'ALG2' is already defined as a function
+*Use of incorrect number of args: Line 15, ALG2  requires 3 arguments
+*Use of incorrect type of args: Line 8, calls ALG2 with a boolean integer boolean,
+	not an integer integer boolean
+*Incorrect type to operator: Line 17, dividing by a false
+*Invalid Return Type: Line 11, If/then/else can return a boolean, not integer
+*2 functions with same name: Lines 9 & 13, both functions are ALG
+*2 (or more) variables with the same name: Lines 16 & 17, both are variables delcared as 'x'
+*Doesn't have main function: Line 7, this is our 'main' function
 
 WARNINGS
-Unused Variables: Line 16, 'a' is never used
-Defining Function that doesn't get called: Line 18, 'UNUSED' is well, unused
-creating code path that cannot be executed: Line 12, you can never reach the function calls
+*Unused Variables: Line 16, 'a' is never used
+*Defining Function that doesn't get called: Line 18, 'UNUSED' is well, unused
+*Creating code path that cannot be executed: Line 12, you can never reach the function calls
 *)
