@@ -61,7 +61,8 @@ public:
 	ASTNode* getBaseTermNode() {
 		return BaseTermNode;
 	}
-		ASTNode* getBaseSimpleExprNode() {
+	
+	ASTNode* getBaseSimpleExprNode() {
 		return BaseSimpleExprNode;
 	}
 	ASTNode* getBaseExprNode(){
@@ -102,9 +103,6 @@ public:
 	}
 	string getDataType(){
 		return DataType;
-	}
-	ASTNode* getIdentifierNode2(){
-		return IdentifierNode2;
 	}
 	ASTNode* getTypeNode(){
 		return TypeNode;
@@ -185,7 +183,7 @@ public:
 	}
 	
 	//Setters
-		void setIdentifierName(string inIdentifierName) {
+	void setIdentifierName(string inIdentifierName) {
 		IdentifierName = inIdentifierName;
 	}
 	void setFactorNode(ASTNode* inFactorNode) {
@@ -236,9 +234,6 @@ public:
 	void setDataType(string inDataType) {
 		DataType = inDataType;
 	}
-	void setIdentifierNode2(ASTNode* inIdentifierNode2) {
-		IdentifierNode2 = inIdentifierNode2;
-	}
 	void setTypeNode(ASTNode* inTypeNode) {
 		TypeNode = inTypeNode;
 	}
@@ -280,7 +275,6 @@ private :
 	ASTNode* BaseTermNode2 = nullptr;
 	ASTNode* BaseSimpleExprNode2 = nullptr;
 	string DataType = "NULL";
-	ASTNode* IdentifierNode2 = nullptr;
 	ASTNode* TypeNode = nullptr;
 	vector<ASTNode*> PrintStatements = {};
 	vector<ASTNode*> FormalNodes = {};

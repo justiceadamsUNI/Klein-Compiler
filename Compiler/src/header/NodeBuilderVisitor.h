@@ -777,7 +777,7 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			NonBaseActualsNodeVar.setBaseActualsNode(&VectorOfASTNodes.back());
+			NonBaseActualsNodeVar.setNonEmptyActualsNode(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Non Base Actuals Node, but didn't find Non empty Actuals Node on stack");
