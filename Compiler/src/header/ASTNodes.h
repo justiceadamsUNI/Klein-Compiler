@@ -259,27 +259,29 @@ private :
 	ASTNodeType NodeType;
 
 	string IdentifierName = "NULL";
-	ASTNode* FactorNode = nullptr;
-	ASTNode* BaseTermNode = nullptr;
-	ASTNode* BaseSimpleExprNode = nullptr;
-	ASTNode* BaseExprNode = nullptr;
 	string LiteralValue = "NULL";
-	vector<ASTNode*> Expressions = {};
-	ASTNode* NonEmptyActualsNode = nullptr;
+	string DataType = "NULL";
+
+	ASTNode* FactorNode = nullptr;
+	ASTNode* FactorNode2 = nullptr;
+	ASTNode* BaseTermNode = nullptr;
+	ASTNode* BaseTermNode2 = nullptr;
+	ASTNode* BaseSimpleExprNode = nullptr;
+	ASTNode* BaseSimpleExprNode2 = nullptr;
+	ASTNode* BaseExprNode = nullptr;
+	ASTNode* BaseExprNode2 = nullptr;
+	ASTNode* BaseExprNode3 = nullptr;
 	ASTNode* LiteralNode = nullptr;
 	ASTNode* IdentifierNodeVar = nullptr;
 	ASTNode* BaseActualsNode = nullptr;
-	ASTNode* BaseExprNode2 = nullptr;
-	ASTNode* BaseExprNode3 = nullptr;
-	ASTNode* FactorNode2 = nullptr;
-	ASTNode* BaseTermNode2 = nullptr;
-	ASTNode* BaseSimpleExprNode2 = nullptr;
-	string DataType = "NULL";
+	ASTNode* NonEmptyActualsNode = nullptr;
 	ASTNode* TypeNode = nullptr;
-	vector<ASTNode*> PrintStatements = {};
-	vector<ASTNode*> FormalNodes = {};
 	ASTNode* FormalsNode = nullptr;
 	ASTNode* BodyNode = nullptr;
+	
+	vector<ASTNode*> Expressions = {};
+	vector<ASTNode*> PrintStatements = {};
+	vector<ASTNode*> FormalNodes = {};
 	vector<ASTNode*> DefNodes = {};
 	vector<ASTNode*>Definitions = {};
 };
