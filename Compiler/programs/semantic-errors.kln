@@ -1,0 +1,36 @@
+(*Program to enumerate a list of error cases for the semantic analyzer
+by Josh Hilliard, Harsha Varma, and Justice Adams
+CS 4550 Fall 2017
+Compiler Defilers
+
+*)
+function mane() : integer
+	ALG(true)
+function ALG(x : integer) : integer
+	if true
+	then false
+	else ALG(x-1) + ALG(a-1)
+function ALG(x : boolean) : integer
+	print(1)
+	ALG2(1)
+function ALG2(x : integer, x : integer, a : boolean ) : integer	
+	x + x / false
+function UNUSED (ALG2 : integer) : boolean
+	true
+(*
+ERRORS
+Object doesn't exist: Line 12, identifier a hasn't been delcared
+Use of illegal name: Line 18, identifier 'ALG2' is already defined as a function
+Use of incorrect number of args: Line 15, ALG2  requires 3 arguments
+Use of incorrect type of args: Line 8, calls ALG with a boolean, not an integer
+Incorrect type to operator: Line 17, dividing by a false
+Invalid Return Type: Line 11, If/then/else can return a boolean, not integer
+2 functions with same name: Lines 9 & 13, both functions are ALG
+2 (or more) variables with the same name: Lines 16 & 17, both are variables delcared as 'x'
+Doesn't have main function: Line 7, this is our 'main' function
+
+WARNINGS
+Unused Variables: Line 16, 'a' is never used
+Defining Function that doesn't get called: Line 18, 'UNUSED' is well, unused
+creating code path that cannot be executed: Line 12, you can never reach the function calls
+*)
