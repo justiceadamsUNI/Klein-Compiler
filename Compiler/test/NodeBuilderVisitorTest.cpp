@@ -256,16 +256,105 @@ TEST_CASE("visitFormalNode() throws error when identifier node not found", "[Nod
 	REQUIRE_THROWS_AS(Visitor.accept(BUILD_FORMAL_NODE, Stack, "NULL", "0"), runtime_error);
 }
 
-TEST_CASE("Visitor callzs visitBodyNode() when accept() called with BUILD_BODY_NODE Stack Value", "[Node Builder Visitor]") {
+TEST_CASE("visitBodyNode() sucessfully builds a body node out of expr and print nodes and updates the semantic stack", "[Node Builder Visitor]") {
+	NodeBuilderVisitor Visitor;
+	SemanticStack Stack;
 
+	ASTNode ExprNode(BaseExprNodeType);
+	ASTNode PrintStatement1(PrintStatemetNodeTYPE);
+	ASTNode PrintStatement2(PrintStatemetNodeTYPE);
+	ASTNode PrintStatement3(PrintStatemetNodeTYPE);
+	ExprNode.setLiteralValue("expression");
+	PrintStatement1.setLiteralValue("print 1");
+	PrintStatement2.setLiteralValue("print 2");
+	PrintStatement3.setLiteralValue("print 3");
+
+	Stack.push(PrintStatement1);
+	Stack.push(PrintStatement2);
+	Stack.push(PrintStatement3);
+	Stack.push(ExprNode);
+
+	Visitor.accept(BUILD_BODY_NODE, Stack, "NULL", "0");
+
+	ASTNode StackTop = Stack.pop();
+	REQUIRE(Stack.isEmpty());
+	REQUIRE(StackTop.getAstNodeType() == BodyNodeTYPE);
+	REQUIRE(StackTop.getPrintStatements().size() == 3);
+	REQUIRE(StackTop.getPrintStatements()[0]->getLiteralValue() == "print 3");
+	REQUIRE(StackTop.getPrintStatements()[1]->getLiteralValue() == "print 2");
+	REQUIRE(StackTop.getPrintStatements()[2]->getLiteralValue() == "print 1");
+	REQUIRE(StackTop.getBaseExprNode()->getLiteralValue() == "expression");
 }
 
-TEST_CASE("Visitor callzs visitTypeNode() when accept() called with BUILD_TYPE_NODE Stack Value", "[Node Builder Visitor]") {
+TEST_CASE("visitBodyNode() sucessfully builds a body node when no print statements are one the semantic stack", "[Node Builder Visitor]") {
+	NodeBuilderVisitor Visitor;
+	SemanticStack Stack;
 
+	ASTNode ExprNode(BaseExprNodeType);
+	ExprNode.setLiteralValue("expression");
+	Stack.push(ExprNode);
+
+	Visitor.accept(BUILD_BODY_NODE, Stack, "NULL", "0");
+
+	ASTNode StackTop = Stack.pop();
+	REQUIRE(Stack.isEmpty());
+	REQUIRE(StackTop.getAstNodeType() == BodyNodeTYPE);
+	REQUIRE(StackTop.getPrintStatements().empty() == true);
+	REQUIRE(StackTop.getBaseExprNode()->getLiteralValue() == "expression");
 }
 
-TEST_CASE("Visitor callzs visitLessThanNode() when accept() called with BUILD_LESSTHAN_NODE Stack Value", "[Node Builder Visitor]") {
+TEST_CASE("visitBodyNode() throws error when there isn't an expression node one the semantic stack", "[Node Builder Visitor]") {
+	NodeBuilderVisitor Visitor;
+	SemanticStack Stack;
 
+	ASTNode ErrorNode(ProgramNodeTYPE);
+	Stack.push(ErrorNode);
+
+	REQUIRE_THROWS_AS(Visitor.accept(BUILD_BODY_NODE, Stack, "NULL", "0"), runtime_error);
+}
+
+
+TEST_CASE("visitTypeNode() retains data type when pushed onto the sematntic stack", "[Node Builder Visitor]") {
+	NodeBuilderVisitor Visitor;
+	SemanticStack Stack;
+
+	Visitor.accept(BUILD_TYPE_NODE, Stack, "type", "0");
+
+	ASTNode StackTop = Stack.pop();
+	REQUIRE(Stack.isEmpty());
+	REQUIRE(StackTop.getAstNodeType() == TypeNodeTYPE);
+	REQUIRE(StackTop.getDataType() == "type");
+}
+
+TEST_CASE("visitLessThanNode() sucessfully builds a less than node out of two simpleexpr nodes and updates the semantic stack", "[Node Builder Visitor]") {
+	NodeBuilderVisitor Visitor;
+	SemanticStack Stack;
+
+	ASTNode SimpleExpr1(BaseSimpleExprNodeType);
+	ASTNode SimpleExpr2(BaseSimpleExprNodeType);
+	SimpleExpr1.setLiteralValue("simple expr 1");
+	SimpleExpr2.setLiteralValue("simple expr 2");
+
+	Stack.push(SimpleExpr1);
+	Stack.push(SimpleExpr2);
+
+	Visitor.accept(BUILD_LESSTHAN_NODE, Stack, "NULL", "0");
+
+	ASTNode StackTop = Stack.pop();
+	REQUIRE(Stack.isEmpty());
+	REQUIRE(StackTop.getAstNodeType() == LessThanExprNodeTYPE);
+	REQUIRE(StackTop.getBaseSimpleExprNode()->getLiteralValue()== "simple expr 2");
+	REQUIRE(StackTop.getBaseSimpleExprNode2()->getLiteralValue() == "simple expr 1");
+}
+
+TEST_CASE("visitLessThanNode() throws error when no spimple expr nodes are on the semantic stack", "[Node Builder Visitor]") {
+	NodeBuilderVisitor Visitor;
+	SemanticStack Stack;
+
+	ASTNode ErrorNode(ProgramNodeTYPE);
+	Stack.push(ErrorNode);
+
+	REQUIRE_THROWS_AS(Visitor.accept(BUILD_LESSTHAN_NODE, Stack, "NULL", "0"), runtime_error);
 }
 
 TEST_CASE("Visitor callzs visitEqualNode() when accept() called with BUILD_EQUAL_NODE Stack Value", "[Node Builder Visitor]") {

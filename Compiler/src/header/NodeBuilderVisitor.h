@@ -248,7 +248,7 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			LessThanExprNodeVar.setBaseSimpleExprNode(&VectorOfASTNodes.back());
+			LessThanExprNodeVar.setBaseSimpleExprNode2(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Less Than Node, but didn't find (Second) Simple Expression Node on stack");
