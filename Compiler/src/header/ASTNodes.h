@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "ReturnType.h"
 
 using namespace std;
 
@@ -124,6 +125,9 @@ public:
 	}
 	vector<ASTNode*> getDefinitions() {
 		return Definitions;
+	}
+	ReturnTypes getReturnType() {
+		return NodeReturnType;
 	}
 
 	//Validator methods
@@ -255,8 +259,12 @@ public:
 	void addDefToVector(ASTNode* Def) {
 		DefNodes.push_back(Def);
 	}
+	void setReturnType(ReturnTypes type) {
+		NodeReturnType = type;
+	}
 private :
 	ASTNodeType NodeType;
+	ReturnTypes NodeReturnType;
 
 	string IdentifierName = "NULL";
 	string LiteralValue = "NULL";
