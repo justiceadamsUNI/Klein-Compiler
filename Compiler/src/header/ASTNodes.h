@@ -61,7 +61,8 @@ public:
 	ASTNode* getBaseTermNode() {
 		return BaseTermNode;
 	}
-		ASTNode* getBaseSimpleExprNode() {
+	
+	ASTNode* getBaseSimpleExprNode() {
 		return BaseSimpleExprNode;
 	}
 	ASTNode* getBaseExprNode(){
@@ -102,9 +103,6 @@ public:
 	}
 	string getDataType(){
 		return DataType;
-	}
-	ASTNode* getIdentifierNode2(){
-		return IdentifierNode2;
 	}
 	ASTNode* getTypeNode(){
 		return TypeNode;
@@ -185,7 +183,7 @@ public:
 	}
 	
 	//Setters
-		void setIdentifierName(string inIdentifierName) {
+	void setIdentifierName(string inIdentifierName) {
 		IdentifierName = inIdentifierName;
 	}
 	void setFactorNode(ASTNode* inFactorNode) {
@@ -236,9 +234,6 @@ public:
 	void setDataType(string inDataType) {
 		DataType = inDataType;
 	}
-	void setIdentifierNode2(ASTNode* inIdentifierNode2) {
-		IdentifierNode2 = inIdentifierNode2;
-	}
 	void setTypeNode(ASTNode* inTypeNode) {
 		TypeNode = inTypeNode;
 	}
@@ -264,28 +259,29 @@ private :
 	ASTNodeType NodeType;
 
 	string IdentifierName = "NULL";
-	ASTNode* FactorNode = nullptr;
-	ASTNode* BaseTermNode = nullptr;
-	ASTNode* BaseSimpleExprNode = nullptr;
-	ASTNode* BaseExprNode = nullptr;
 	string LiteralValue = "NULL";
-	vector<ASTNode*> Expressions = {};
-	ASTNode* NonEmptyActualsNode = nullptr;
+	string DataType = "NULL";
+
+	ASTNode* FactorNode = nullptr;
+	ASTNode* FactorNode2 = nullptr;
+	ASTNode* BaseTermNode = nullptr;
+	ASTNode* BaseTermNode2 = nullptr;
+	ASTNode* BaseSimpleExprNode = nullptr;
+	ASTNode* BaseSimpleExprNode2 = nullptr;
+	ASTNode* BaseExprNode = nullptr;
+	ASTNode* BaseExprNode2 = nullptr;
+	ASTNode* BaseExprNode3 = nullptr;
 	ASTNode* LiteralNode = nullptr;
 	ASTNode* IdentifierNodeVar = nullptr;
 	ASTNode* BaseActualsNode = nullptr;
-	ASTNode* BaseExprNode2 = nullptr;
-	ASTNode* BaseExprNode3 = nullptr;
-	ASTNode* FactorNode2 = nullptr;
-	ASTNode* BaseTermNode2 = nullptr;
-	ASTNode* BaseSimpleExprNode2 = nullptr;
-	string DataType = "NULL";
-	ASTNode* IdentifierNode2 = nullptr;
+	ASTNode* NonEmptyActualsNode = nullptr;
 	ASTNode* TypeNode = nullptr;
-	vector<ASTNode*> PrintStatements = {};
-	vector<ASTNode*> FormalNodes = {};
 	ASTNode* FormalsNode = nullptr;
 	ASTNode* BodyNode = nullptr;
+	
+	vector<ASTNode*> Expressions = {};
+	vector<ASTNode*> PrintStatements = {};
+	vector<ASTNode*> FormalNodes = {};
 	vector<ASTNode*> DefNodes = {};
 	vector<ASTNode*>Definitions = {};
 };

@@ -135,11 +135,6 @@ void printASTNodeTree(ASTNode ASTNodeVar, int treelevel) {
 		printASTNodeTree(*ASTNodeVar.getIdentifierNode(), treelevel + 1);
 	}
 
-	if (ASTNodeVar.getIdentifierNode2())
-	{
-		printASTNodeTree(*ASTNodeVar.getIdentifierNode2(), treelevel + 1);
-	}
-
 	if (ASTNodeVar.getBaseActualsNode())
 	{
 		printASTNodeTree(*ASTNodeVar.getBaseActualsNode(), treelevel + 1);
