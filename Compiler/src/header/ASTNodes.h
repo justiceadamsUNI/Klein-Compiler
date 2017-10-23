@@ -123,7 +123,7 @@ public:
 	vector<ASTNode*> getDefNodes(){
 		return DefNodes;
 	}
-	vector<ASTNode*> getDefinitions() {
+	ASTNode* getDefinitions() {
 		return Definitions;
 	}
 	ReturnTypes getReturnType() {
@@ -253,8 +253,8 @@ public:
 	void setBodyNode(ASTNode* inBodyNode) {
 		BodyNode = inBodyNode;
 	}
-	void addDefinitionToVector(ASTNode* Definition) {
-		Definitions.push_back(Definition);
+	void setDefinitionsNode(ASTNode* InDefinitions) {
+		Definitions = InDefinitions;
 	}
 	void addDefToVector(ASTNode* Def) {
 		DefNodes.push_back(Def);
@@ -286,10 +286,10 @@ private :
 	ASTNode* TypeNode = nullptr;
 	ASTNode* FormalsNode = nullptr;
 	ASTNode* BodyNode = nullptr;
+	ASTNode* Definitions = nullptr;
 	
 	vector<ASTNode*> Expressions = {};
 	vector<ASTNode*> PrintStatements = {};
 	vector<ASTNode*> FormalNodes = {};
 	vector<ASTNode*> DefNodes = {};
-	vector<ASTNode*>Definitions = {};
 };

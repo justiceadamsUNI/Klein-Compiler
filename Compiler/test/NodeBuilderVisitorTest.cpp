@@ -7,37 +7,25 @@ TEST_CASE("visitProgramNode() sucessfully builds a program node out of definitio
 	SemanticStack Stack;
 
 	ASTNode Definition1(DefinitionsNodeTYPE);
-	ASTNode Definition2(DefinitionsNodeTYPE);
-	ASTNode Definition3(DefinitionsNodeTYPE);
 	Definition1.setLiteralValue("def 1");
-	Definition2.setLiteralValue("def 2");
-	Definition3.setLiteralValue("def 3");
 
 	Stack.push(Definition1);
-	Stack.push(Definition2);
-	Stack.push(Definition3);
 
 	Visitor.accept(BUILD_PROGRAM_NODE, Stack, "NULL", "0");
 
 	ASTNode StackTop = Stack.pop();
 	REQUIRE(Stack.isEmpty());
 	REQUIRE(StackTop.getAstNodeType() == ProgramNodeTYPE);
-	REQUIRE(StackTop.getDefinitions().size() == 3);
-	REQUIRE(StackTop.getDefinitions()[0]->getLiteralValue() == "def 3");
-	REQUIRE(StackTop.getDefinitions()[1]->getLiteralValue() == "def 2");
-	REQUIRE(StackTop.getDefinitions()[2]->getLiteralValue() == "def 1");
+	REQUIRE(StackTop.getDefinitions()->getLiteralValue() == "def 1");
 }
 
-TEST_CASE("visitProgramNode() sucessfully builds a program node when no definitions are on the stack", "[Node Builder Visitor]") {
+TEST_CASE("visitProgramNode() throws error when defininitions node isn't on the stack", "[Node Builder Visitor]") {
 	NodeBuilderVisitor Visitor;
 	SemanticStack Stack;
+	ASTNode ErrorNode(MultiplicatorTermNodeTYPE);
+	Stack.push(ErrorNode);
 
-	Visitor.accept(BUILD_PROGRAM_NODE, Stack, "NULL", "0");
-
-	ASTNode StackTop = Stack.pop();
-	REQUIRE(Stack.isEmpty());
-	REQUIRE(StackTop.getAstNodeType() == ProgramNodeTYPE);
-	REQUIRE(StackTop.getDefinitions().empty());
+	REQUIRE_THROWS_AS(Visitor.accept(BUILD_PROGRAM_NODE, Stack, "NULL", "0"), runtime_error);
 }
 
 TEST_CASE("visitDefinitionsNode() sucessfully builds a definitions node out of def nodes and updates the semantic stack", "[Node Builder Visitor]") {
@@ -75,7 +63,7 @@ TEST_CASE("visitDefinitionsNode() sucessfully builds a program node when no def 
 	ASTNode StackTop = Stack.pop();
 	REQUIRE(Stack.isEmpty());
 	REQUIRE(StackTop.getAstNodeType() == DefinitionsNodeTYPE);
-	REQUIRE(StackTop.getDefinitions().empty());
+	REQUIRE(StackTop.getDefNodes().empty());
 }
 
 TEST_CASE("visitIdentifierNode() retains it's identifier name on the semantic stack", "[Node Builder Visitor]") {

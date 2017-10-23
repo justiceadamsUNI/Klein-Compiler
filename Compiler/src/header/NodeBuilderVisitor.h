@@ -19,23 +19,18 @@ public:
 	vector<ASTNode> VectorOfASTNodes;
 
 	virtual void visitProgramNode(SemanticStack& SemanticStack) {
-		// pop off every defenition node from the stack and store it inside a program node.
+		// pop off definitions node from the stack and store it inside a program node.
 		// Then push that program node back onto the stack.
-		
+
 		ASTNode ProgramNodeVar(ProgramNodeTYPE);
-		while (!SemanticStack.isEmpty())
+		if (SemanticStack.top().getAstNodeType() == DefinitionsNodeTYPE)
 		{
-			if (SemanticStack.top().getAstNodeType() == DefinitionsNodeTYPE)
-			{
-				ASTNode StackTop = SemanticStack.pop();
-				VectorOfASTNodes.push_back(StackTop);
-				ProgramNodeVar.addDefinitionToVector(&VectorOfASTNodes.back());
-				continue;
-			}
-			else {
-				//Exit while loop
-				break;
-			}
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			ProgramNodeVar.setDefinitionsNode(&VectorOfASTNodes.back());
+		}
+		else {
+			throw runtime_error("ERROR: Attempted to build Program Node, but didn't find Definitions Node on stack");
 		}
 
 		SemanticStack.push(ProgramNodeVar);

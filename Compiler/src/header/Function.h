@@ -25,10 +25,10 @@ private:
 	ReturnTypes convertToReturnType(ASTNode returnType) {
 		//This is assuming that returnType is a Def Node
 		if (returnType.getAstNodeType() == DefNodeTYPE) {
-			 if (returnType.getTypeNode.getDataType == "integer") {
+			 if (returnType.getTypeNode()->getDataType() == "integer") {
 				 return INTEGER_TYPE;
 			 }
-			 if (returnType.getTypeNode.getDataType == "boolean") {
+			 if (returnType.getTypeNode()->getDataType() == "boolean") {
 				 return BOOLEAN_TYPE;
 			 }
 		}
@@ -40,18 +40,21 @@ private:
 		}
 	};
 	void setParameters(ASTNode inputParameters) {
-		ReturnTypes dataType;
+		ReturnTypes dataType = NO_RETURN_TYPE;
 		//Assuming we are getting a Def Node
+		//NOTE: The formals are in reverse order by the way we build that vector.
 		if (inputParameters.getAstNodeType() == DefNodeTYPE) {
 			temp = inputParameters.getFormalsNode()->getFormalNodes();
-			for (int i = 0; i < temp.size; i++) {
+			for (int i = temp.size() - 1; i >= 0; i--) {
 				if (temp.at(i)->getTypeNode()->getDataType() == "integer") {
 					dataType = INTEGER_TYPE;
 				}
 				if (temp.at(i)->getTypeNode()->getDataType() == "boolean") {
 					dataType = BOOLEAN_TYPE;
 				}
-				parameters.push_back(make_tuple((temp.at(i)->getIdentifierNode.getIdentifierName()), dataType));
+
+				//Need to chek if datatype still equals NO_RETURN_TYPE, then add an error to the list
+				parameters.push_back(make_tuple((temp.at(i)->getIdentifierNode()->getIdentifierName()), dataType));
 			}
 		}
 	}

@@ -23,11 +23,11 @@ TEST_CASE("ASTNode default values represent empty state correctly", "[ASTNodes]"
 	REQUIRE(Node.getTypeNode() == nullptr);
 	REQUIRE(Node.getFormalsNode() == nullptr);
 	REQUIRE(Node.getBodyNode() == nullptr);
+	REQUIRE(Node.getDefinitions() == nullptr);
 	REQUIRE(Node.getExpressions().empty() == true);
 	REQUIRE(Node.getPrintStatements().empty() == true);
 	REQUIRE(Node.getFormalNodes().empty() == true);
 	REQUIRE(Node.getDefNodes().empty() == true);
-	REQUIRE(Node.getDefinitions().empty() == true);
 }
 
 TEST_CASE("ASTNode getAstNodeType() returns Type correctly", "[ASTNodes]") {
@@ -223,14 +223,13 @@ TEST_CASE("ASTNode getDefNodes() and addDefToVector() updates/represents interna
 	REQUIRE(TestNode.getDefNodes()[0]->getLiteralValue() == "test");
 }
 
-TEST_CASE("ASTNode getDefinitions() and addDefinitionToVector() updates/represents internal node state correctly", "[ASTNodes]") {
+TEST_CASE("ASTNode getDefinitions() and setDefinitions() updates/represents internal node state correctly", "[ASTNodes]") {
 	ASTNode TestNode(ProgramNodeTYPE);
 	ASTNode Definition(DefinitionsNodeTYPE);
 	Definition.setLiteralValue("test");
-	TestNode.addDefinitionToVector(&Definition);
+	TestNode.setDefinitionsNode(&Definition);
 
-	REQUIRE(TestNode.getDefinitions().size() == 1);
-	REQUIRE(TestNode.getDefinitions()[0]->getLiteralValue() == "test");
+	REQUIRE(TestNode.getDefinitions()->getLiteralValue() == "test");
 }
 
 TEST_CASE("ASTNode setFormalsNode() and getFormalsNode() updates/represents internal node state correctly", "[ASTNodes]") {

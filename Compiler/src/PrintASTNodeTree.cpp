@@ -165,14 +165,14 @@ void printASTNodeTree(ASTNode ASTNodeVar, int treelevel) {
 		printASTNodeTree(*ASTNodeVar.getBodyNode(), treelevel + 1);
 	}
 
+	if (ASTNodeVar.getDefinitions())
+	{
+		printASTNodeTree(*ASTNodeVar.getDefinitions(), treelevel + 1);
+	}
+
 	for (int i = 0; i < ASTNodeVar.getDefNodes().size(); i++)
 	{
 		printASTNodeTree(*ASTNodeVar.getDefNodes()[i], treelevel + 1);
-	}
-
-	for (int i = 0; i < ASTNodeVar.getDefinitions().size(); i++)
-	{
-		printASTNodeTree(*ASTNodeVar.getDefinitions()[i], treelevel + 1);
 	}
 }
 
