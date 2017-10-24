@@ -264,7 +264,7 @@ public:
 	}
 private :
 	ASTNodeType NodeType;
-	ReturnTypes NodeReturnType;
+	ReturnTypes NodeReturnType = NO_RETURN_TYPE;
 
 	string IdentifierName = "NULL";
 	string LiteralValue = "NULL";
