@@ -14,11 +14,14 @@ public:
 
 		for (int i = 0; i <list.size(); i++)
 		{
-			Function(*list.at(i));
 			//add function and it's name to the map. {"function1" --->  FuntionObj}
+			//Check if string exists in the map here
+			SymbolTable.insert(std::pair<string, Function>(list.at(i)->getIdentifierNode()->getIdentifierName(), Function(*list.at(i))));
+			
 		}
 	}
 
 private:
 	ASTNode tree = ASTNode(BodyNodeTYPE);
+	map<string, Function> SymbolTable{ };
 };
