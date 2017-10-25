@@ -31,6 +31,7 @@ private:
 	ASTNode tree = ASTNode(BodyNodeTYPE);
 	map<string, Function> SymbolTable{ };
 	vector<string> errors = {};
+	string CurrentFunction;
 
 	void assignTypeForIdentifierNode(ASTNode Node);
 	void assignTypeForDefNode(ASTNode Node);
@@ -55,7 +56,7 @@ private:
 	void assignTypeForLiteralFactorNode(ASTNode Node);
 	void assignTypeForSubtractionFactorNode(ASTNode Node);
 	void assignTypeForParenthesisedExpressionNode(ASTNode Node);
-	void assignTypeForIdentifierActualsNode(ASTNode Node);
+	void assignTypeForFunctionCallNode(ASTNode Node);
 	void assignTypeForSingletonIdentifierFactorNode(ASTNode Node);
 	void assignTypeForBaseActualsNode(ASTNode Node);
 	void assignTypeForNonBaseActualsNode(ASTNode Node);
@@ -67,4 +68,8 @@ private:
 
 	//helper methods
 	ReturnTypes assignTypeForExpressionNode(ASTNode Node);
+	ReturnTypes assignTypeForSimpleExpressionNode(ASTNode Node);
+	ReturnTypes assignTypeForTermNode(ASTNode Node);
+	ReturnTypes assignTypeForFactorNode(ASTNode Node);
+	ReturnTypes assignTypeForLiteralNode(ASTNode Node);
 };

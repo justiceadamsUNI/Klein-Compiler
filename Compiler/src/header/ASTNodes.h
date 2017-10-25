@@ -22,7 +22,7 @@ enum ASTNodeType {
 	ParenExprFactorNodeTYPE,
 	SubtractionFactorNodeTYPE,
 	LiteralFactorNodeTYPE,
-	IdentifierFactorNodeTYPE,
+	FunctionCallType,
 	SingletonIdentifierFactorNodeTYPE,
 	NotFactorNodeTYPE,
 	IfFactorNodeTYPE,
@@ -155,12 +155,13 @@ public:
 			NodeType == AndTermNodeType;
 	}
 
+	//check if we need FactorNodeTYPE.
 	bool isFactorNode() {
 		return NodeType == FactorNodeTYPE ||
 			NodeType == ParenExprFactorNodeTYPE ||
 			NodeType == SubtractionFactorNodeTYPE ||
 			NodeType == LiteralFactorNodeTYPE ||
-			NodeType == IdentifierFactorNodeTYPE ||
+			NodeType == FunctionCallType ||
 			NodeType == SingletonIdentifierFactorNodeTYPE ||
 			NodeType == NotFactorNodeTYPE ||
 			NodeType == IfFactorNodeTYPE;

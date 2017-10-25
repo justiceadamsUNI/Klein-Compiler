@@ -19,7 +19,7 @@ const map<ASTNodeType, string> ASTNodePrintMap{
 	{ ParenExprFactorNodeTYPE, "Parenthesised Expr Node" },
 	{ SubtractionFactorNodeTYPE, "Subtraction Factor Node" },
 	{ LiteralFactorNodeTYPE, "Literal Factor Node" },
-	{ IdentifierFactorNodeTYPE, "Identifier Factor Node" },
+	{ FunctionCallType, "Identifier Factor Node" },
 	{ SingletonIdentifierFactorNodeTYPE, "Singleton Identifier Factor Node" },
 	{ NotFactorNodeTYPE, "Not Factor Node" },
 	{ IfFactorNodeTYPE, "If Factor Node" },

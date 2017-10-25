@@ -16,9 +16,14 @@ public:
 	ReturnTypes getReturnType();
 	bool compareFunctionParams(ASTNode actuals);
 	vector<string> getFunctionCallers();
+
+	vector<tuple<string, ReturnTypes>> getParameters() {
+		return parameters;
+	}
+
 private:
 	ReturnTypes type;
-	vector<tuple<string, ReturnTypes>> parameters;
+	vector<tuple<string, ReturnTypes>> parameters = {};
 	vector<string> functionCallers;
 	vector<ASTNode*> temp;
 
