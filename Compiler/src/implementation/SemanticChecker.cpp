@@ -195,7 +195,7 @@ void SemanticChecker::assignTypeForMultiplicatorNode(ASTNode Node)
 		errors.push_back("ERROR: Left side of the * operator is not an integer. found within -  " + CurrentFunction + "()");
 	}
 
-	Node.setReturnType(INTEGER_TYPE);
+Node.setReturnType(INTEGER_TYPE);
 }
 
 void SemanticChecker::assignTypeForDividerNode(ASTNode Node)
@@ -273,7 +273,7 @@ void SemanticChecker::assignTypeForSubtractionFactorNode(ASTNode Node)
 void SemanticChecker::assignTypeForLiteralFactorNode(ASTNode Node)
 {
 	ReturnTypes Type = assignTypeForLiteralNode(*Node.getLiteralNode());
-	
+
 	Node.setReturnType(Type);
 }
 
@@ -291,7 +291,26 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode Node)
 			}
 		}
 		//There are paramaters in the funciton call
-		else {
+		else{
+			vector<ASTNode*> functionParams = Node.getNonEmptyActualsNode()->getExpressions();
+			vector<tuple<string, ReturnTypes>> symbolTableParams = SymbolTable.find(FunctionName)->second.getParameters();
+			ReturnTypes type = NO_RETURN_TYPE;
+			if (functionParams.size() == symbolTableParams.size()) {
+				for (int i = functionParams.size() - 1, int j = 0; i <= 0; i--, j++){
+					type = assignTypeForExpressionNode(*Node.getBaseExprNode());
+
+					if (type == get<1>(symbolTableParams.at(j)) {
+						continue;
+					}
+					else {
+						errors.push_back("ERROR: There was a type mismatch when calling function " + FunctionName);
+						break;
+					}
+				}
+			}
+			else {
+				errors.push_back("ERROR: The number of operands called for function " + FunctionName + " is not equal to " + functionParams.size());
+			}
 			//this is a non empty actuals. It has variable many expression nodes.
 			//loop over every expression node, call assignTypeForExpressionNode() and compare
 			//its return value to that of the corresponding paramater (which are in the correct order).
