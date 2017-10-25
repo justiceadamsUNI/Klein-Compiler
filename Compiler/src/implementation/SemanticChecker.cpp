@@ -1,6 +1,6 @@
-#include "..\header\SemanticChecker.h"
-#include "..\header\SemanticChecker.h"
-#include"../header/SemanticChecker.h"
+#include "../header/SemanticChecker.h"
+#include <string>
+#include <tuple>
 
 
 void SemanticChecker::assignTypeForDefNode(ASTNode Node) {
@@ -285,62 +285,107 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode Node)
 
 	if (SymbolTable.find(FunctionName) != SymbolTable.end())
 	{
-		if (Node.getBaseActualsNode()->getAstNodeType() == BaseActualsNodeTYPE)
-		{
-			if (!(SymbolTable.find(FunctionName)->second.getParameters().empty()))
-			{
+		if (Node.getBaseActualsNode()->getAstNodeType() == BaseActualsNodeTYPE) {
+			if (!SymbolTable.find(FunctionName)->second.getParameters().empty()) {
 				errors.push_back("ERROR: you attempted to call " + FunctionName + " with no paramaters.");
 			}
 		}
-		//There are paramaters in the funciton call
+		//There are parameters in the function call
 		else {
 			vector<ASTNode*> functionParams = Node.getBaseActualsNode()->getExpressions();
 			vector<tuple<string, ReturnTypes>> symbolTableParams = SymbolTable.find(FunctionName)->second.getParameters();
 			ReturnTypes type = NO_RETURN_TYPE;
 			if (functionParams.size() == symbolTableParams.size()) {
-				for (int i = functionParams.size() - 1, int j = 0; i <= 0; i--, j++) {
+				for (int i = functionParams.size() - 1, j = 0; i >= 0, j < symbolTableParams.size(); i--, j++) {
 					type = assignTypeForExpressionNode(*Node.getBaseExprNode());
-
-					if (type == get<1>(symbolTableParams.at(j)) {
+					if (type == get<1>(symbolTableParams.at(j))) {
 						continue;
 					}
-					else {
+					else
+					{
 						errors.push_back("ERROR: There was a type mismatch when calling function " + FunctionName);
 						break;
 					}
 				}
 			}
-			else {
-				errors.push_back("ERROR: The number of operands called for function " + FunctionName + " is not equal to " + functionParams.size());
+			else
+			{
+				errors.push_back("ERROR: The number of operands called for function " + FunctionName + " is not equal to " + to_string(functionParams.size()));
 			}
-			//this is a non empty actuals. It has variable many expression nodes.
-			//loop over every expression node, call assignTypeForExpressionNode() and compare
-			//its return value to that of the corresponding paramater (which are in the correct order).
-			//i *think* you have to loop through the expression nodes in reverse order. Call 
-			// Node.getBaseActualsNode() -> getExpressions() to get the expressions.
-
 		}
-
+	}
 	else {
 		errors.push_back("ERROR: Call to function " + FunctionName + ": Function does not exist.");
-	}
 	}
 }
 
 
 void SemanticChecker::assignTypeForSingletonIdentifierFactorNode(ASTNode Node)
 {
-	ReturnTypes Type = assignTypeForIdentifierNode(*Node.getIdentifierNode());
-	Node.setReturnType(Type);
+	assignTypeForIdentifierNode(*Node.getIdentifierNode());
+	Node.setReturnType(Node.getIdentifierNode()->getReturnType());
 }
 
 void SemanticChecker::assignTypeForNotFactorNode(ASTNode Node)
 {
-	ReturnTypes Type = assignTypeForIdentifierNode(*Node.getIdentifierNode());
+	ReturnTypes Type = assignTypeForFactorNode(*Node.getFactorNode());
+	if (Type != BOOLEAN_TYPE)
+	{
+		errors.push_back("ERROR: you can't negate an integer data value. found within -  " + CurrentFunction + "()");
+	}
 	Node.setReturnType(BOOLEAN_TYPE);
 }
 
+void SemanticChecker::assignTypeForIfFactorNode(ASTNode Node)
+{
+	ReturnTypes IfType = assignTypeForExpressionNode(*Node.getBaseExprNode());
+	if (IfType != BOOLEAN_TYPE)
+	{
+		errors.push_back("ERROR: Right side of the 'and' operator is not a boolean. found within -  " + CurrentFunction + "()");
+	}
+	ReturnTypes ThenType = assignTypeForExpressionNode(*Node.getBaseExprNode2());
+	ReturnTypes ElseType = assignTypeForExpressionNode(*Node.getBaseExprNode3());
+	
+	if (ThenType == ElseType)
+	{
+		Node.setReturnType(ThenType);
+	}
+	else
+		Node.setReturnType(OR_TYPE);
 
+}
+
+void SemanticChecker::assignTypeForIdentifierNode(ASTNode Node)
+{
+	vector<tuple<string, ReturnTypes>> symbolTableParams = SymbolTable.find(CurrentFunction)->second.getParameters();
+	ReturnTypes type = NO_RETURN_TYPE;
+	for (int i = 0; i < symbolTableParams.size(); i++) {
+		if (Node.getIdentifierName() == get<0>(symbolTableParams.at(i))) {
+			type = get<1>(symbolTableParams.at(i));
+			break;
+		}
+	}
+	if (type == NO_RETURN_TYPE)
+	{
+		errors.push_back("ERROR: variable " + Node.getIdentifierName() + " has not been instantiated.");
+	}
+	Node.setReturnType(type);
+}
+
+void SemanticChecker::assignTypeForIntegerLiteralNode(ASTNode Node)
+{
+	Node.setReturnType(INTEGER_TYPE);
+}
+
+void SemanticChecker::assignTypeForBooleanLiteralNode(ASTNode Node)
+{
+	Node.setReturnType(BOOLEAN_TYPE);
+}
+
+void SemanticChecker::assignTypeForPrintStatementNode(ASTNode Node)
+{
+	Node.setReturnType(NO_RETURN_TYPE);
+}
 
 
 
@@ -480,5 +525,18 @@ ReturnTypes SemanticChecker::assignTypeForFactorNode(ASTNode Node)
 		assignTypeForIfFactorNode(Node);
 		// not a boolean because it could be an OR type
 		return Node.getReturnType();
+	}
+}
+
+ReturnTypes SemanticChecker::assignTypeForLiteralNode(ASTNode Node)
+{
+	if (Node.getAstNodeType() == IntegerLiteralNodeTYPE)
+	{
+		assignTypeForIntegerLiteralNode(Node);
+		return INTEGER_TYPE;
+	}
+	else {
+		assignTypeForBooleanLiteralNode(Node);
+		return BOOLEAN_TYPE;
 	}
 }

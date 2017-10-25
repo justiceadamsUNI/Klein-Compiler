@@ -25,7 +25,7 @@ public:
 		//After loop, make sure there isn't a print function
 		//Add generic print function
 	}
-	void checkValidTypesOnTree();
+	//void checkValidTypesOnTree();
 
 private:
 	ASTNode tree = ASTNode(BodyNodeTYPE);
@@ -35,9 +35,9 @@ private:
 
 	void assignTypeForIdentifierNode(ASTNode Node);
 	void assignTypeForDefNode(ASTNode Node);
-	void assignTypeForFormalsNode(ASTNode Node);
-	void assignTypeForNonEmptyFormalsNode(ASTNode Node);
-	void assignTypeForFormalNode(ASTNode Node);
+	//void assignTypeForFormalsNode(ASTNode Node); // not needed *i think*
+	//void assignTypeForNonEmptyFormalsNode(ASTNode Node); // not needed *i think*
+	//void assignTypeForFormalNode(ASTNode Node); // not needed because not called by anything
 	void assignTypeForBodyNode(ASTNode Node);
 	void assignTypeForTypeNode(ASTNode Node);
 	void assignTypeForLessThanNode(ASTNode Node);
@@ -58,12 +58,12 @@ private:
 	void assignTypeForParenthesisedExpressionNode(ASTNode Node);
 	void assignTypeForFunctionCallNode(ASTNode Node);
 	void assignTypeForSingletonIdentifierFactorNode(ASTNode Node);
-	void assignTypeForBaseActualsNode(ASTNode Node); // not needed *i think*
-	void assignTypeForNonBaseActualsNode(ASTNode Node);
-	void assignTypeForNonEmptyActualsNode(ASTNode Node); // not needed *i think*
+	//void assignTypeForBaseActualsNode(ASTNode Node); // not needed *i think*
+	//void assignTypeForNonBaseActualsNode(ASTNode Node); //we need nonemptyactuals implemented before doing this fucker
+	//void assignTypeForNonEmptyActualsNode(ASTNode Node); // not needed *i think*
 	void assignTypeForIntegerLiteralNode(ASTNode Node);
 	void assignTypeForBooleanLiteralNode(ASTNode Node);
-	void assignTypeForPrintStatementNode(ASTNode Node);
+	void assignTypeForPrintStatementNode(ASTNode Node); // not needed *i think*
 
 
 	//helper methods
