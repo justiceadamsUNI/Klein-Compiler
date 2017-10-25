@@ -3,20 +3,21 @@
 #include <tuple>
 
 
-void SemanticChecker::assignTypeForDefNode(ASTNode Node) {
+void SemanticChecker::assignTypeForDefNode(ASTNode& Node) {
 	assignTypeForBodyNode(*Node.getBodyNode());
 	assignTypeForTypeNode(*Node.getTypeNode());
 
 	if (Node.getTypeNode()->getReturnType() == Node.getBodyNode()->getReturnType())
 	{
-		//happy
+		return;
 	}
 	else {
 		//ERROR: The return type for {function name} does not match it's definition
+		errors.push_back("ERROR:  The return type found for " + CurrentFunction + "() does not match it's definition");
 	}
 }
 
-void SemanticChecker::assignTypeForTypeNode(ASTNode Node) {
+void SemanticChecker::assignTypeForTypeNode(ASTNode& Node) {
 	if (Node.getDataType() == "integer")
 	{
 		Node.setReturnType(INTEGER_TYPE);
@@ -26,7 +27,7 @@ void SemanticChecker::assignTypeForTypeNode(ASTNode Node) {
 	}
 }
 
-void SemanticChecker::assignTypeForLessThanNode(ASTNode Node)
+void SemanticChecker::assignTypeForLessThanNode(ASTNode& Node)
 {
 	ReturnTypes RightSideType = assignTypeForSimpleExpressionNode(*Node.getBaseSimpleExprNode());
 	ReturnTypes LeftSideType  =	assignTypeForSimpleExpressionNode(*Node.getBaseSimpleExprNode2());
@@ -43,7 +44,7 @@ void SemanticChecker::assignTypeForLessThanNode(ASTNode Node)
 	Node.setReturnType(BOOLEAN_TYPE);
 }
 
-void SemanticChecker::assignTypeForEqualNode(ASTNode Node)
+void SemanticChecker::assignTypeForEqualNode(ASTNode& Node)
 {
 	ReturnTypes RightSideType = assignTypeForSimpleExpressionNode(*Node.getBaseSimpleExprNode());
 	ReturnTypes LeftSideType = assignTypeForSimpleExpressionNode(*Node.getBaseSimpleExprNode2());
@@ -65,13 +66,13 @@ void SemanticChecker::assignTypeForEqualNode(ASTNode Node)
 	Node.setReturnType(BOOLEAN_TYPE);
 }
 
-void SemanticChecker::assignTypeForBaseExpressionNode(ASTNode Node)
+void SemanticChecker::assignTypeForBaseExpressionNode(ASTNode& Node)
 {
 	ReturnTypes Type = assignTypeForSimpleExpressionNode(*Node.getBaseSimpleExprNode());
 	Node.setReturnType(Type);
 }
 
-void SemanticChecker::assignTypeForBodyNode(ASTNode Node) {
+void SemanticChecker::assignTypeForBodyNode(ASTNode& Node) {
 	vector<ASTNode*> PrintStatements = Node.getPrintStatements();
 
 	// Assign types to print statments
@@ -84,13 +85,13 @@ void SemanticChecker::assignTypeForBodyNode(ASTNode Node) {
 	Node.setReturnType(Type);
 }
 
-void SemanticChecker::assignTypeForBaseSimpleExpressionNode(ASTNode Node)
+void SemanticChecker::assignTypeForBaseSimpleExpressionNode(ASTNode& Node)
 {
 	ReturnTypes Type = assignTypeForTermNode(*Node.getBaseTermNode());
 	Node.setReturnType(Type);
 }
 
-void SemanticChecker::assignTypeForAdditionNode(ASTNode Node)
+void SemanticChecker::assignTypeForAdditionNode(ASTNode& Node)
 {
 	ReturnTypes RightSideType = assignTypeForTermNode(*Node.getBaseTermNode());
 	if (RightSideType != INTEGER_TYPE)
@@ -115,7 +116,7 @@ void SemanticChecker::assignTypeForAdditionNode(ASTNode Node)
 	Node.setReturnType(INTEGER_TYPE);
 }
 
-void SemanticChecker::assignTypeForSubtractionNode(ASTNode Node)
+void SemanticChecker::assignTypeForSubtractionNode(ASTNode& Node)
 {
 	ReturnTypes RightSideType = assignTypeForTermNode(*Node.getBaseTermNode());
 	if (RightSideType != INTEGER_TYPE)
@@ -140,7 +141,7 @@ void SemanticChecker::assignTypeForSubtractionNode(ASTNode Node)
 	Node.setReturnType(INTEGER_TYPE);
 }
 
-void SemanticChecker::assignTypeForOrNode(ASTNode Node)
+void SemanticChecker::assignTypeForOrNode(ASTNode& Node)
 {
 	ReturnTypes RightSideType = assignTypeForTermNode(*Node.getBaseTermNode());
 	if (RightSideType != BOOLEAN_TYPE)
@@ -165,13 +166,13 @@ void SemanticChecker::assignTypeForOrNode(ASTNode Node)
 	Node.setReturnType(BOOLEAN_TYPE);
 }
 
-void SemanticChecker::assignTypeForBaseTermNode(ASTNode Node)
+void SemanticChecker::assignTypeForBaseTermNode(ASTNode& Node)
 {
 	ReturnTypes Type = assignTypeForFactorNode(*Node.getFactorNode());
 	Node.setReturnType(Type);
 }
 
-void SemanticChecker::assignTypeForMultiplicatorNode(ASTNode Node)
+void SemanticChecker::assignTypeForMultiplicatorNode(ASTNode& Node)
 {
 	ReturnTypes RightSideType = assignTypeForFactorNode(*Node.getFactorNode());
 	if (RightSideType != INTEGER_TYPE)
@@ -200,7 +201,7 @@ void SemanticChecker::assignTypeForMultiplicatorNode(ASTNode Node)
 Node.setReturnType(INTEGER_TYPE);
 }
 
-void SemanticChecker::assignTypeForDividerNode(ASTNode Node)
+void SemanticChecker::assignTypeForDividerNode(ASTNode& Node)
 {
 	ReturnTypes RightSideType = assignTypeForFactorNode(*Node.getFactorNode());
 	if (RightSideType != INTEGER_TYPE)
@@ -229,7 +230,7 @@ void SemanticChecker::assignTypeForDividerNode(ASTNode Node)
 	Node.setReturnType(INTEGER_TYPE);
 }
 
-void SemanticChecker::assignTypeForAndNode(ASTNode Node)
+void SemanticChecker::assignTypeForAndNode(ASTNode& Node)
 {
 	ReturnTypes RightSideType = assignTypeForFactorNode(*Node.getFactorNode());
 	if (RightSideType != BOOLEAN_TYPE)
@@ -254,13 +255,13 @@ void SemanticChecker::assignTypeForAndNode(ASTNode Node)
 	Node.setReturnType(BOOLEAN_TYPE);
 }
 
-void SemanticChecker::assignTypeForParenthesisedExpressionNode(ASTNode Node)
+void SemanticChecker::assignTypeForParenthesisedExpressionNode(ASTNode& Node)
 {
 	ReturnTypes Type = assignTypeForExpressionNode(*Node.getBaseExprNode());
 	Node.setReturnType(Type);
 }
 
-void SemanticChecker::assignTypeForSubtractionFactorNode(ASTNode Node)
+void SemanticChecker::assignTypeForSubtractionFactorNode(ASTNode& Node)
 {
 	ReturnTypes Type = assignTypeForFactorNode(*Node.getFactorNode());
 
@@ -272,14 +273,14 @@ void SemanticChecker::assignTypeForSubtractionFactorNode(ASTNode Node)
 	Node.setReturnType(INTEGER_TYPE);
 }
 
-void SemanticChecker::assignTypeForLiteralFactorNode(ASTNode Node)
+void SemanticChecker::assignTypeForLiteralFactorNode(ASTNode& Node)
 {
 	ReturnTypes Type = assignTypeForLiteralNode(*Node.getLiteralNode());
 
 	Node.setReturnType(Type);
 }
 
-void SemanticChecker::assignTypeForFunctionCallNode(ASTNode Node)
+void SemanticChecker::assignTypeForFunctionCallNode(ASTNode& Node)
 {
 	string FunctionName = Node.getIdentifierNode()->getIdentifierName();
 
@@ -287,12 +288,12 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode Node)
 	{
 		if (Node.getBaseActualsNode()->getAstNodeType() == BaseActualsNodeTYPE) {
 			if (!SymbolTable.find(FunctionName)->second.getParameters().empty()) {
-				errors.push_back("ERROR: you attempted to call " + FunctionName + " with no paramaters.");
+				errors.push_back("ERROR: you attempted to call " + FunctionName + " with no paramaters. found within -  " + CurrentFunction + "()");
 			}
 		}
 		//There are parameters in the function call
 		else {
-			vector<ASTNode*> functionParams = Node.getBaseActualsNode()->getExpressions();
+			vector<ASTNode*> functionParams = Node.getBaseActualsNode()->getNonEmptyActualsNode()->getExpressions();
 			vector<tuple<string, ReturnTypes>> symbolTableParams = SymbolTable.find(FunctionName)->second.getParameters();
 			ReturnTypes type = NO_RETURN_TYPE;
 			if (functionParams.size() == symbolTableParams.size()) {
@@ -303,16 +304,19 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode Node)
 					}
 					else
 					{
-						errors.push_back("ERROR: There was a type mismatch when calling function " + FunctionName);
+						errors.push_back("ERROR: There was a type mismatch when calling function " + FunctionName + ".found within - " + CurrentFunction + "()");
 						break;
 					}
 				}
 			}
 			else
 			{
-				errors.push_back("ERROR: The number of operands called for function " + FunctionName + " is not equal to " + to_string(functionParams.size()));
+				errors.push_back("ERROR: You attempted to call " + FunctionName + "() with a mismatching number of arguments. This function expects " + to_string(functionParams.size())+  " parameters. found within - " + CurrentFunction + "()");
 			}
 		}
+
+		//set this expression node type to that of the function call
+		Node.setReturnType(SymbolTable.find(FunctionName)->second.getReturnType());
 	}
 	else {
 		errors.push_back("ERROR: Call to function " + FunctionName + ": Function does not exist.");
@@ -320,42 +324,44 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode Node)
 }
 
 
-void SemanticChecker::assignTypeForSingletonIdentifierFactorNode(ASTNode Node)
+void SemanticChecker::assignTypeForSingletonIdentifierFactorNode(ASTNode& Node)
 {
 	assignTypeForIdentifierNode(*Node.getIdentifierNode());
 	Node.setReturnType(Node.getIdentifierNode()->getReturnType());
 }
 
-void SemanticChecker::assignTypeForNotFactorNode(ASTNode Node)
+void SemanticChecker::assignTypeForNotFactorNode(ASTNode& Node)
 {
 	ReturnTypes Type = assignTypeForFactorNode(*Node.getFactorNode());
 	if (Type != BOOLEAN_TYPE)
 	{
-		errors.push_back("ERROR: you can't negate an integer data value. found within -  " + CurrentFunction + "()");
+		errors.push_back("ERROR: you can't negate a non integer data value. found within -  " + CurrentFunction + "()");
 	}
 	Node.setReturnType(BOOLEAN_TYPE);
 }
 
-void SemanticChecker::assignTypeForIfFactorNode(ASTNode Node)
+void SemanticChecker::assignTypeForIfFactorNode(ASTNode& Node)
 {
-	ReturnTypes IfType = assignTypeForExpressionNode(*Node.getBaseExprNode());
-	if (IfType != BOOLEAN_TYPE)
+	ReturnTypes ElseType = assignTypeForExpressionNode(*Node.getBaseExprNode());
+	ReturnTypes ThenType = assignTypeForExpressionNode(*Node.getBaseExprNode2());
+	ReturnTypes IfCheck = assignTypeForExpressionNode(*Node.getBaseExprNode3());
+	
+	if (IfCheck != BOOLEAN_TYPE)
 	{
 		errors.push_back("ERROR: Right side of the 'and' operator is not a boolean. found within -  " + CurrentFunction + "()");
 	}
-	ReturnTypes ThenType = assignTypeForExpressionNode(*Node.getBaseExprNode2());
-	ReturnTypes ElseType = assignTypeForExpressionNode(*Node.getBaseExprNode3());
-	
+
 	if (ThenType == ElseType)
 	{
 		Node.setReturnType(ThenType);
 	}
-	else
+	else {
 		Node.setReturnType(OR_TYPE);
+	}
 
 }
 
-void SemanticChecker::assignTypeForIdentifierNode(ASTNode Node)
+void SemanticChecker::assignTypeForIdentifierNode(ASTNode& Node)
 {
 	vector<tuple<string, ReturnTypes>> symbolTableParams = SymbolTable.find(CurrentFunction)->second.getParameters();
 	ReturnTypes type = NO_RETURN_TYPE;
@@ -367,23 +373,25 @@ void SemanticChecker::assignTypeForIdentifierNode(ASTNode Node)
 	}
 	if (type == NO_RETURN_TYPE)
 	{
-		errors.push_back("ERROR: variable " + Node.getIdentifierName() + " has not been instantiated.");
+		errors.push_back("ERROR: variable " + Node.getIdentifierName() + " has not been declared.");
 	}
 	Node.setReturnType(type);
 }
 
-void SemanticChecker::assignTypeForIntegerLiteralNode(ASTNode Node)
+void SemanticChecker::assignTypeForIntegerLiteralNode(ASTNode& Node)
 {
 	Node.setReturnType(INTEGER_TYPE);
 }
 
-void SemanticChecker::assignTypeForBooleanLiteralNode(ASTNode Node)
+void SemanticChecker::assignTypeForBooleanLiteralNode(ASTNode& Node)
 {
 	Node.setReturnType(BOOLEAN_TYPE);
 }
 
-void SemanticChecker::assignTypeForPrintStatementNode(ASTNode Node)
+void SemanticChecker::assignTypeForPrintStatementNode(ASTNode& Node)
 {
+	assignTypeForExpressionNode(*Node.getBaseExprNode());
+
 	Node.setReturnType(NO_RETURN_TYPE);
 }
 
@@ -421,7 +429,7 @@ void SemanticChecker::assignTypeForPrintStatementNode(ASTNode Node)
 
 
 //helper methods ------------------------------------------------------------------------
-ReturnTypes SemanticChecker::assignTypeForExpressionNode(ASTNode Node) {
+ReturnTypes SemanticChecker::assignTypeForExpressionNode(ASTNode& Node) {
 	if (Node.getAstNodeType() == BaseExprNodeType)
 	{
 		assignTypeForBaseExpressionNode(Node);
@@ -438,7 +446,7 @@ ReturnTypes SemanticChecker::assignTypeForExpressionNode(ASTNode Node) {
 	}
 }
 
-ReturnTypes SemanticChecker::assignTypeForSimpleExpressionNode(ASTNode Node) {
+ReturnTypes SemanticChecker::assignTypeForSimpleExpressionNode(ASTNode& Node) {
 	if (Node.getAstNodeType() == BaseSimpleExprNodeType)
 	{
 		assignTypeForBaseSimpleExpressionNode(Node);
@@ -463,7 +471,7 @@ ReturnTypes SemanticChecker::assignTypeForSimpleExpressionNode(ASTNode Node) {
 
 }
 
-ReturnTypes SemanticChecker::assignTypeForTermNode(ASTNode Node)
+ReturnTypes SemanticChecker::assignTypeForTermNode(ASTNode& Node)
 {
 	if (Node.getAstNodeType() == BaseTermNodeTYPE)
 	{
@@ -488,7 +496,7 @@ ReturnTypes SemanticChecker::assignTypeForTermNode(ASTNode Node)
 	}
 }
 
-ReturnTypes SemanticChecker::assignTypeForFactorNode(ASTNode Node)
+ReturnTypes SemanticChecker::assignTypeForFactorNode(ASTNode& Node)
 {
 	if (Node.getAstNodeType() == ParenExprFactorNodeTYPE)
 	{
@@ -528,7 +536,7 @@ ReturnTypes SemanticChecker::assignTypeForFactorNode(ASTNode Node)
 	}
 }
 
-ReturnTypes SemanticChecker::assignTypeForLiteralNode(ASTNode Node)
+ReturnTypes SemanticChecker::assignTypeForLiteralNode(ASTNode& Node)
 {
 	if (Node.getAstNodeType() == IntegerLiteralNodeTYPE)
 	{

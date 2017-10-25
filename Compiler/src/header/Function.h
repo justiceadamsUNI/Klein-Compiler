@@ -13,7 +13,9 @@ public:
 		setParameters(functionDefinition);
 	}
 	
-	ReturnTypes getReturnType();
+	ReturnTypes getReturnType() {
+		return type;
+	}
 	bool compareFunctionParams(ASTNode actuals);
 	vector<string> getFunctionCallers();
 
@@ -35,6 +37,9 @@ private:
 			 }
 			 if (returnType.getTypeNode()->getDataType() == "boolean") {
 				 return BOOLEAN_TYPE;
+			 }
+			 else {
+				 return NO_RETURN_TYPE;
 			 }
 		}
 		else
