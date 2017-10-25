@@ -1,3 +1,5 @@
+#include "..\header\SemanticChecker.h"
+#include "..\header\SemanticChecker.h"
 #include"../header/SemanticChecker.h"
 
 
@@ -291,12 +293,12 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode Node)
 			}
 		}
 		//There are paramaters in the funciton call
-		else{
-			vector<ASTNode*> functionParams = Node.getNonEmptyActualsNode()->getExpressions();
+		else {
+			vector<ASTNode*> functionParams = Node.getBaseActualsNode()->getExpressions();
 			vector<tuple<string, ReturnTypes>> symbolTableParams = SymbolTable.find(FunctionName)->second.getParameters();
 			ReturnTypes type = NO_RETURN_TYPE;
 			if (functionParams.size() == symbolTableParams.size()) {
-				for (int i = functionParams.size() - 1, int j = 0; i <= 0; i--, j++){
+				for (int i = functionParams.size() - 1, int j = 0; i <= 0; i--, j++) {
 					type = assignTypeForExpressionNode(*Node.getBaseExprNode());
 
 					if (type == get<1>(symbolTableParams.at(j)) {
@@ -318,7 +320,24 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode Node)
 			// Node.getBaseActualsNode() -> getExpressions() to get the expressions.
 
 		}
+
+	else {
+		errors.push_back("ERROR: Call to function " + FunctionName + ": Function does not exist.");
 	}
+	}
+}
+
+
+void SemanticChecker::assignTypeForSingletonIdentifierFactorNode(ASTNode Node)
+{
+	ReturnTypes Type = assignTypeForIdentifierNode(*Node.getIdentifierNode());
+	Node.setReturnType(Type);
+}
+
+void SemanticChecker::assignTypeForNotFactorNode(ASTNode Node)
+{
+	ReturnTypes Type = assignTypeForIdentifierNode(*Node.getIdentifierNode());
+	Node.setReturnType(BOOLEAN_TYPE);
 }
 
 
