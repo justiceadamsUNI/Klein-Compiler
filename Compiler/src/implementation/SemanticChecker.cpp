@@ -292,6 +292,11 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode Node)
 		}
 		//There are paramaters in the funciton call
 		else {
+			//this is a non empty actuals. It has variable many expression nodes.
+			//loop over every expression node, call assignTypeForExpressionNode() and compare
+			//its return value to that of the corresponding paramater (which are in the correct order).
+			//i *think* you have to loop through the expression nodes in reverse order. Call 
+			// Node.getBaseActualsNode() -> getExpressions() to get the expressions.
 
 		}
 	}
