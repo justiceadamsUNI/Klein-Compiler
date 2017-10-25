@@ -125,7 +125,7 @@ TEST_CASE("ASTNode setLiteralNode() and getLiteralNode() updates/represents inte
 
 TEST_CASE("ASTNode setIdentifierNode() and getIdentifierNode() updates/represents internal node state correctly", "[ASTNodes]") {
 	ASTNode TestNode(DefNodeTYPE);
-	ASTNode IdentifierFactor(IdentifierFactorNodeTYPE);
+	ASTNode IdentifierFactor(FunctionCallType);
 	IdentifierFactor.setLiteralValue("test");
 	TestNode.setIdentifierNode(&IdentifierFactor);
 
@@ -133,7 +133,7 @@ TEST_CASE("ASTNode setIdentifierNode() and getIdentifierNode() updates/represent
 }
 
 TEST_CASE("ASTNode setBaseActualsNode() and getBaseActualsNode() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(IdentifierFactorNodeTYPE);
+	ASTNode TestNode(FunctionCallType);
 	ASTNode BaseActuals(BaseActualsNodeTYPE);
 	BaseActuals.setLiteralValue("test");
 	TestNode.setBaseActualsNode(&BaseActuals);
