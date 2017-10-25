@@ -13,7 +13,7 @@ void SemanticChecker::assignTypeForDefNode(ASTNode& Node) {
 	}
 	else {
 		//ERROR: The return type for {function name} does not match it's definition
-		errors.push_back("ERROR:  The return type found for " + CurrentFunction + "() does not match it's definition");
+		errors.push_back("ERROR: The return type found for " + CurrentFunction + "() does not match it's definition");
 	}
 }
 
@@ -298,7 +298,7 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode& Node)
 			ReturnTypes type = NO_RETURN_TYPE;
 			if (functionParams.size() == symbolTableParams.size()) {
 				for (int i = functionParams.size() - 1, j = 0; i >= 0, j < symbolTableParams.size(); i--, j++) {
-					type = assignTypeForExpressionNode(*Node.getBaseExprNode());
+					type = assignTypeForExpressionNode(*functionParams.at(i));
 					if (type == get<1>(symbolTableParams.at(j))) {
 						continue;
 					}
@@ -348,7 +348,7 @@ void SemanticChecker::assignTypeForIfFactorNode(ASTNode& Node)
 	
 	if (IfCheck != BOOLEAN_TYPE)
 	{
-		errors.push_back("ERROR: Right side of the 'and' operator is not a boolean. found within -  " + CurrentFunction + "()");
+		errors.push_back("ERROR: If statement condition needs to be of type boolean. found within -  " + CurrentFunction + "()");
 	}
 
 	if (ThenType == ElseType)
@@ -395,40 +395,7 @@ void SemanticChecker::assignTypeForPrintStatementNode(ASTNode& Node)
 	Node.setReturnType(NO_RETURN_TYPE);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//helper methods ------------------------------------------------------------------------
+// helper methods -------------------------------------------------------
 ReturnTypes SemanticChecker::assignTypeForExpressionNode(ASTNode& Node) {
 	if (Node.getAstNodeType() == BaseExprNodeType)
 	{
