@@ -57,6 +57,9 @@
     <ClInclude Include="src\header\SemanticChecker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="test\fakeit.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test\RunAllTest.cpp">
@@ -92,10 +95,26 @@
     <ClCompile Include="src\SemanticValidator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test\ASTNodeTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\BaseASTNodeVisitorTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\NodeBuilderVisitorTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\PStackTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\SemanticCheckerTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="test\test_klein_program_1.kln" />
     <None Include="test\test_klein_program_2_long_identifiers.kln" />
     <None Include="test\test_klein_program_3_int_range.kln" />
+    <None Include="test\test_divide_program.kln" />
   </ItemGroup>
 </Project>

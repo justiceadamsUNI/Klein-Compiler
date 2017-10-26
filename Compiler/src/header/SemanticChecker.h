@@ -22,6 +22,10 @@ public:
 		return warings;
 	}
 
+	map<string, Function> getSymbolTable() {
+		return SymbolTable;
+	}
+
 private:
 	ASTNode tree = ASTNode(BodyNodeTYPE);
 	string CurrentFunction;
