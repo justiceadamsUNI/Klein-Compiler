@@ -18,6 +18,11 @@ int main(int argv, char* argc[])
 		ASTNode AST = Parser.getFinalASTNode();
 		SemanticChecker SCheck = SemanticChecker(AST);
 
+		for (int i = 0; i < SCheck.getWarnings().size(); i++)
+		{
+			cout << SCheck.getWarnings().at(i) << endl;
+		}
+
 		for (int i = 0; i < SCheck.getErrors().size(); i++)
 		{
 			cout << SCheck.getErrors().at(i) << endl;

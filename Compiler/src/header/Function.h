@@ -23,8 +23,19 @@ public:
 	//bool compareFunctionParams(ASTNode actuals);
 	//This shouldn't be needed as the comparison happens outside of the Function class via the getParameters() call
 
-	vector<string> getFunctionCallers();
+	vector<string> getFunctionCallers() {
+		return functionCallers;
+	}
 
+	vector<string> getUsedVariables() {
+		return UsedVariables;
+	}
+
+	void variableUsed(string variable) {
+		if (find(UsedVariables.begin(), UsedVariables.end(), variable) == UsedVariables.end()) {
+			UsedVariables.push_back(variable);
+		}
+	}
 
 	void addFunctionCallers(string in) {
 		if (in != "" && !(find(functionCallers.begin(), functionCallers.end(), in) != functionCallers.end())) {
@@ -40,6 +51,7 @@ private:
 	ReturnTypes type;
 	vector<tuple<string, ReturnTypes>> parameters = {};
 	vector<string> functionCallers;
+	vector<string> UsedVariables;
 	vector<ASTNode*> temp;
 
 

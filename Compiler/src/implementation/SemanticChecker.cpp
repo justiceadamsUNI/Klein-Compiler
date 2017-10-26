@@ -367,6 +367,8 @@ void SemanticChecker::assignTypeForIdentifierNode(ASTNode& Node)
 	ReturnTypes type = NO_RETURN_TYPE;
 	for (int i = 0; i < symbolTableParams.size(); i++) {
 		if (Node.getIdentifierName() == get<0>(symbolTableParams.at(i))) {
+			//add variable to used variable list and assign type to it
+			SymbolTable.find(CurrentFunction)->second.variableUsed(Node.getIdentifierName());
 			type = get<1>(symbolTableParams.at(i));
 			break;
 		}
