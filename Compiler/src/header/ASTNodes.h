@@ -130,7 +130,7 @@ public:
 		return NodeReturnType;
 	}
 
-	//Validator methods
+	// Validator methods
 	bool isFormalsNode() {
 		return NodeType == FORMALS_NODE_TYPE || NodeType == NON_EMPTY_FORMALS_NODE_TYPE;
 	}
@@ -155,7 +155,7 @@ public:
 			NodeType == AND_TERM_NODE_TYPE;
 	}
 
-	//check if we need FACTOR_NODE_TYPE.
+	// check if we need FACTOR_NODE_TYPE.
 	bool isFactorNode() {
 		return NodeType == FACTOR_NODE_TYPE ||
 			NodeType == PARENTHESISED_EXPR_FACTOR_NODE_TYPE ||
@@ -187,74 +187,74 @@ public:
 			NodeType == SUBTRACTOR_SIMPLE_EXPR_NODE_TYPE;
 	}
 	
-	//Setters
-	void setIdentifierName(string inIdentifierName) {
-		IdentifierName = inIdentifierName;
+	// Setters
+	void setIdentifierName(string InIdentifierName) {
+		IdentifierName = InIdentifierName;
 	}
-	void setFactorNode(ASTNode* inFactorNode) {
-		FactorNode = inFactorNode;
+	void setFactorNode(ASTNode* InFactorNode) {
+		FactorNode = InFactorNode;
 	}
-	void setBaseTermNode(ASTNode* inBaseTermNode) {
-		BaseTermNode = inBaseTermNode;
+	void setBaseTermNode(ASTNode* InBaseTermNode) {
+		BaseTermNode = InBaseTermNode;
 	}
-	void setBaseSimpleExprNode(ASTNode* inBaseSimpleExprNode) {
-		BaseSimpleExprNode = inBaseSimpleExprNode;
+	void setBaseSimpleExprNode(ASTNode* InBaseSimpleExprNode) {
+		BaseSimpleExprNode = InBaseSimpleExprNode;
 	}
-	void setBaseExprNode(ASTNode* inBaseExprNode) {
-		BaseExprNode = inBaseExprNode;
+	void setBaseExprNode(ASTNode* InBaseExprNode) {
+		BaseExprNode = InBaseExprNode;
 	}
-	void setLiteralValue(string inLiteralValue) {
-		LiteralValue = inLiteralValue;
+	void setLiteralValue(string InLiteralValue) {
+		LiteralValue = InLiteralValue;
 	}
-	void addExpressionToVector(ASTNode* inExpressions) {
-		Expressions.push_back(inExpressions);
+	void addExpressionToVector(ASTNode* InExpressions) {
+		Expressions.push_back(InExpressions);
 	}
-	void setNonEmptyActualsNode(ASTNode* inNoneEmptyActualsNode) {
-		NonEmptyActualsNode = inNoneEmptyActualsNode;
+	void setNonEmptyActualsNode(ASTNode* InNoneEmptyActualsNode) {
+		NonEmptyActualsNode = InNoneEmptyActualsNode;
 	}
-	void setLiteralNode(ASTNode* inLiteralNode) {
-		LiteralNode = inLiteralNode;
+	void setLiteralNode(ASTNode* InLiteralNode) {
+		LiteralNode = InLiteralNode;
 	}
-	void setIdentifierNode(ASTNode* inIdentifierNodeVar) {
-		IdentifierNodeVar = inIdentifierNodeVar;
+	void setIdentifierNode(ASTNode* InIdentifierNodeVar) {
+		IdentifierNodeVar = InIdentifierNodeVar;
 	}
-	void setBaseActualsNode(ASTNode* inBaseActualsNode) {
-		BaseActualsNode = inBaseActualsNode;
+	void setBaseActualsNode(ASTNode* InBaseActualsNode) {
+		BaseActualsNode = InBaseActualsNode;
 	}
-	void setBaseExprNode2(ASTNode* inBaseExprNode2) {
-		BaseExprNode2 = inBaseExprNode2;
+	void setBaseExprNode2(ASTNode* InBaseExprNode2) {
+		BaseExprNode2 = InBaseExprNode2;
 	}
-	void setBaseExprNode3(ASTNode* inBaseExprNode3) {
-		BaseExprNode3 = inBaseExprNode3;
+	void setBaseExprNode3(ASTNode* InBaseExprNode3) {
+		BaseExprNode3 = InBaseExprNode3;
 	}
-	void setFactorNode2(ASTNode* inFactorNode2) {
-		FactorNode2 = inFactorNode2;
+	void setFactorNode2(ASTNode* InFactorNode2) {
+		FactorNode2 = InFactorNode2;
 	}
-	void setBaseTermNode2(ASTNode* inBaseTermNode2) {
-		BaseTermNode2 = inBaseTermNode2;
+	void setBaseTermNode2(ASTNode* InBaseTermNode2) {
+		BaseTermNode2 = InBaseTermNode2;
 	}
-	void setBaseSimpleExprNode2(ASTNode* inBaseSimpleExprNode2) {
-		BaseSimpleExprNode2 = inBaseSimpleExprNode2;
+	void setBaseSimpleExprNode2(ASTNode* InBaseSimpleExprNode2) {
+		BaseSimpleExprNode2 = InBaseSimpleExprNode2;
 	}
-	void setDataType(string inDataType) {
-		DataType = inDataType;
+	void setDataType(string InDataType) {
+		DataType = InDataType;
 	}
-	void setTypeNode(ASTNode* inTypeNode) {
-		TypeNode = inTypeNode;
+	void setTypeNode(ASTNode* InTypeNode) {
+		TypeNode = InTypeNode;
 	}
-	void addPrintStatementToVector(ASTNode* inPrintStatement) {
-		PrintStatements.push_back(inPrintStatement);
+	void addPrIntStatementToVector(ASTNode* InPrintStatement) {
+		PrintStatements.push_back(InPrintStatement);
 	}
 	void addFormalNodeToVector(ASTNode* Formal) {
 		FormalNodes.push_back(Formal);
 	}
-	void setFormalsNode(ASTNode* inFormalsNode) {
-		FormalsNode = inFormalsNode;
+	void setFormalsNode(ASTNode* InFormalsNode) {
+		FormalsNode = InFormalsNode;
 	}
-	void setBodyNode(ASTNode* inBodyNode) {
-		BodyNode = inBodyNode;
+	void setBodyNode(ASTNode* InBodyNode) {
+		BodyNode = InBodyNode;
 	}
-	void setDefinitionsNode(ASTNode* InDefinitions) {
+	void setDefInitionsNode(ASTNode* InDefinitions) {
 		Definitions = InDefinitions;
 	}
 	void addDefToVector(ASTNode* Def) {
@@ -264,6 +264,7 @@ public:
 		NodeReturnType = type;
 	}
 private :
+	// everything initialized to null to represent there is no child node there in the tree.
 	ASTNodeType NodeType;
 	ReturnTypes NodeReturnType = NO_RETURN_TYPE;
 
