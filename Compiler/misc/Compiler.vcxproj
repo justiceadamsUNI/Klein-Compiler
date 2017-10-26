@@ -141,10 +141,13 @@
   <ItemGroup>
     <ClInclude Include="src\header\ASTNodes.h" />
     <ClInclude Include="src\header\ASTNodeVisitor.h" />
+    <ClInclude Include="src\header\Function.h" />
     <ClInclude Include="src\header\NodeBuilderVisitor.h" />
     <ClInclude Include="src\header\Parser.h" />
     <ClInclude Include="src\header\PStack.h" />
+    <ClInclude Include="src\header\ReturnType.h" />
     <ClInclude Include="src\header\Scanner.h" />
+    <ClInclude Include="src\header\SemanticChecker.h" />
     <ClInclude Include="src\header\SemanticStack.h" />
     <ClInclude Include="src\header\StackValues.h" />
     <ClInclude Include="src\header\Token.h" />
@@ -155,9 +158,10 @@
     <ClCompile Include="src\implementation\Parser.cpp" />
     <ClCompile Include="src\implementation\PStack.cpp" />
     <ClCompile Include="src\implementation\Scanner.cpp" />
+    <ClCompile Include="src\implementation\SemanticChecker.cpp" />
     <ClCompile Include="src\implementation\SemanticStack.cpp" />
     <ClCompile Include="src\implementation\Token.cpp" />
-    <ClCompile Include="src\ProgramValidator.cpp" />
+    <ClCompile Include="src\SemanticValidator.cpp" />
     <ClCompile Include="test\ParserTest.cpp" />
     <ClCompile Include="test\RunAllTest.cpp" />
     <ClCompile Include="test\ScannerTest.cpp" />

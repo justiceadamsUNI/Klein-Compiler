@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "ReturnType.h"
 
 using namespace std;
 
@@ -21,7 +22,7 @@ enum ASTNodeType {
 	ParenExprFactorNodeTYPE,
 	SubtractionFactorNodeTYPE,
 	LiteralFactorNodeTYPE,
-	IdentifierFactorNodeTYPE,
+	FunctionCallType,
 	SingletonIdentifierFactorNodeTYPE,
 	NotFactorNodeTYPE,
 	IfFactorNodeTYPE,
@@ -122,8 +123,11 @@ public:
 	vector<ASTNode*> getDefNodes(){
 		return DefNodes;
 	}
-	vector<ASTNode*> getDefinitions() {
+	ASTNode* getDefinitions() {
 		return Definitions;
+	}
+	ReturnTypes getReturnType() {
+		return NodeReturnType;
 	}
 
 	//Validator methods
@@ -151,12 +155,13 @@ public:
 			NodeType == AndTermNodeType;
 	}
 
+	//check if we need FactorNodeTYPE.
 	bool isFactorNode() {
 		return NodeType == FactorNodeTYPE ||
 			NodeType == ParenExprFactorNodeTYPE ||
 			NodeType == SubtractionFactorNodeTYPE ||
 			NodeType == LiteralFactorNodeTYPE ||
-			NodeType == IdentifierFactorNodeTYPE ||
+			NodeType == FunctionCallType ||
 			NodeType == SingletonIdentifierFactorNodeTYPE ||
 			NodeType == NotFactorNodeTYPE ||
 			NodeType == IfFactorNodeTYPE;
@@ -249,14 +254,18 @@ public:
 	void setBodyNode(ASTNode* inBodyNode) {
 		BodyNode = inBodyNode;
 	}
-	void addDefinitionToVector(ASTNode* Definition) {
-		Definitions.push_back(Definition);
+	void setDefinitionsNode(ASTNode* InDefinitions) {
+		Definitions = InDefinitions;
 	}
 	void addDefToVector(ASTNode* Def) {
 		DefNodes.push_back(Def);
 	}
+	void setReturnType(ReturnTypes type) {
+		NodeReturnType = type;
+	}
 private :
 	ASTNodeType NodeType;
+	ReturnTypes NodeReturnType = NO_RETURN_TYPE;
 
 	string IdentifierName = "NULL";
 	string LiteralValue = "NULL";
@@ -278,10 +287,10 @@ private :
 	ASTNode* TypeNode = nullptr;
 	ASTNode* FormalsNode = nullptr;
 	ASTNode* BodyNode = nullptr;
+	ASTNode* Definitions = nullptr;
 	
 	vector<ASTNode*> Expressions = {};
 	vector<ASTNode*> PrintStatements = {};
 	vector<ASTNode*> FormalNodes = {};
 	vector<ASTNode*> DefNodes = {};
-	vector<ASTNode*>Definitions = {};
 };

@@ -19,23 +19,18 @@ public:
 	vector<ASTNode> VectorOfASTNodes;
 
 	virtual void visitProgramNode(SemanticStack& SemanticStack) {
-		// pop off every defenition node from the stack and store it inside a program node.
+		// pop off definitions node from the stack and store it inside a program node.
 		// Then push that program node back onto the stack.
-		
+
 		ASTNode ProgramNodeVar(ProgramNodeTYPE);
-		while (!SemanticStack.isEmpty())
+		if (SemanticStack.top().getAstNodeType() == DefinitionsNodeTYPE)
 		{
-			if (SemanticStack.top().getAstNodeType() == DefinitionsNodeTYPE)
-			{
-				ASTNode StackTop = SemanticStack.pop();
-				VectorOfASTNodes.push_back(StackTop);
-				ProgramNodeVar.addDefinitionToVector(&VectorOfASTNodes.back());
-				continue;
-			}
-			else {
-				//Exit while loop
-				break;
-			}
+			ASTNode StackTop = SemanticStack.pop();
+			VectorOfASTNodes.push_back(StackTop);
+			ProgramNodeVar.setDefinitionsNode(&VectorOfASTNodes.back());
+		}
+		else {
+			throw runtime_error("ERROR: Attempted to build Program Node, but didn't find Definitions Node on stack");
 		}
 
 		SemanticStack.push(ProgramNodeVar);
@@ -277,7 +272,7 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			EqualNode.setBaseSimpleExprNode(&VectorOfASTNodes.back());
+			EqualNode.setBaseSimpleExprNode2(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build Equal Node, but didn't find (Second) Simple Expression Node on stack");
@@ -477,7 +472,7 @@ public:
 		{
 			ASTNode StackTop = SemanticStack.pop();
 			VectorOfASTNodes.push_back(StackTop);
-			AndNode.setFactorNode(&VectorOfASTNodes.back());
+			AndNode.setFactorNode2(&VectorOfASTNodes.back());
 		}
 		else {
 			throw runtime_error("ERROR: Attempted to build And Node, but didn't find (Second) Factor/ And Node on stack");
@@ -717,7 +712,7 @@ public:
 	virtual void visitIdentifierActualsNode(SemanticStack& SemanticStack) {
 		// pop off identifier node and store it in identifier actuals node.
 		// pop off actuals node and store it in identifier actuals node.
-		ASTNode IdentifierActualsNode(IdentifierFactorNodeTYPE);
+		ASTNode IdentifierActualsNode(FunctionCallType);
 		
 		if (SemanticStack.top().isActualsNode())
 		{
