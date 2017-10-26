@@ -1,6 +1,7 @@
 #pragma once
 #include "Function.h"
 #include <map>
+#include <algorithm>
 
 class SemanticChecker {
 public:
@@ -19,12 +20,40 @@ public:
 			if (SymbolTable.find(list.at(i)->getIdentifierNode()->getIdentifierName()) != SymbolTable.end()) {
 				errors.push_back("ERROR: Function " + list.at(i)->getIdentifierNode()->getIdentifierName() + " already defined.");
 			}
-			SymbolTable.insert(std::pair<string, Function>(list.at(i)->getIdentifierNode()->getIdentifierName(), Function(*list.at(i))));
-			
+			Function temp = Function(*list.at(i));
+			SymbolTable.insert(std::pair<string, Function>(list.at(i)->getIdentifierNode()->getIdentifierName(), temp));
+			vector<string> dupVars = {};
+			for (int k = 0; k < temp.getParameters("").size()-1; k++)
+			{
+				if (find(dupVars.begin(), dupVars.end(), get<0>(temp.getParameters("").at(k))) != dupVars.end()) {
+					continue;
+				}
+				vector<tuple<string, ReturnTypes>>::iterator start = std::next(temp.getParameters("").begin(),0);
+									
+				for (int j = k + 1; j < temp.getParameters("").size(); j++) {
+					if (get<0>(temp.getParameters("").at(j)) == get<0>(temp.getParameters("").at(k))) {
+						errors.push_back("ERROR: Duplicate Variable " + get<0>(temp.getParameters("").at(k)) + " found in function " + list.at(i)->getIdentifierNode()->getIdentifierName() + " definition.");
+						dupVars.push_back(get<0>(temp.getParameters("").at(k)));
+						break;
+					}
+				}
+
+			}
 		}
 		//After loop, ensure there is a main
+		if (SymbolTable.find("main") == SymbolTable.end()){
+			errors.push_back("ERROR: Program does not have a function named main");
+		}
 		//After loop, make sure there isn't a print function
+		if (SymbolTable.find("print") != SymbolTable.end()) {
+			errors.push_back("ERROR: print function cannot be overloaded");
+		}
 		//Add generic print function
+		else {
+			SymbolTable.insert(std::pair<string, Function>("print", Function()));
+		}
+		
+		
 	}
 
 	void checkValidTypesOnTree(ASTNode ASTNodeTree) {

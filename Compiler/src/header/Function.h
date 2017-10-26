@@ -3,6 +3,7 @@
 #include "ASTNodes.h"
 #include <tuple>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -12,14 +13,26 @@ public:
 		type = convertToReturnType(functionDefinition);
 		setParameters(functionDefinition);
 	}
+	Function() {
+		type = NO_RETURN_TYPE;
+	}
 	
 	ReturnTypes getReturnType() {
 		return type;
 	}
-	bool compareFunctionParams(ASTNode actuals);
+	//bool compareFunctionParams(ASTNode actuals);
+	//This shouldn't be needed as the comparison happens outside of the Function class via the getParameters() call
+
 	vector<string> getFunctionCallers();
 
-	vector<tuple<string, ReturnTypes>> getParameters() {
+
+	void addFunctionCallers(string in) {
+		if (in != "" && !(find(functionCallers.begin(), functionCallers.end(), in) != functionCallers.end())) {
+			functionCallers.push_back(in);
+		}
+	}
+	vector<tuple<string, ReturnTypes>> getParameters(string input) {
+		addFunctionCallers(input);
 		return parameters;
 	}
 
@@ -28,6 +41,7 @@ private:
 	vector<tuple<string, ReturnTypes>> parameters = {};
 	vector<string> functionCallers;
 	vector<ASTNode*> temp;
+
 
 	ReturnTypes convertToReturnType(ASTNode returnType) {
 		//This is assuming that returnType is a Def Node
