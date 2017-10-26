@@ -10,19 +10,21 @@ using namespace std;
 class Function {
 public:
 	Function(ASTNode functionDefinition) {
-		type = convertToReturnType(functionDefinition);
+		Type = convertToReturnType(functionDefinition);
 		setParameters(functionDefinition);
 	}
+
+	// below constructor is only used for print statements
 	Function() {
-		type = NO_RETURN_TYPE;
+		Type = NO_RETURN_TYPE;
 	}
 	
 	ReturnTypes getReturnType() {
-		return type;
+		return Type;
 	}
 
 	vector<string> getFunctionCallers() {
-		return functionCallers;
+		return FunctionCallers;
 	}
 
 	vector<string> getUsedVariables() {
@@ -36,20 +38,20 @@ public:
 	}
 
 	void addFunctionCallers(string in) {
-		if (in != "" && !(find(functionCallers.begin(), functionCallers.end(), in) != functionCallers.end())) {
-			functionCallers.push_back(in);
+		if (in != "" && !(find(FunctionCallers.begin(), FunctionCallers.end(), in) != FunctionCallers.end())) {
+			FunctionCallers.push_back(in);
 		}
 	}
+
 	vector<tuple<string, ReturnTypes>> getParameters() {
-		return parameters;
+		return Parameters;
 	}
 
 private:
-	ReturnTypes type;
-	vector<tuple<string, ReturnTypes>> parameters = {};
-	vector<string> functionCallers;
+	ReturnTypes Type;
+	vector<tuple<string, ReturnTypes>> Parameters = {};
+	vector<string> FunctionCallers;
 	vector<string> UsedVariables;
-	vector<ASTNode*> temp;
 
 
 	ReturnTypes convertToReturnType(ASTNode returnType) {
@@ -67,27 +69,27 @@ private:
 		}
 		else
 		{
-			//Need to change implementation to add error messages into a list and then output
-			//cout << "The node given was not a Def Node!!" << endl;
-			return NO_RETURN_TYPE;
+			throw runtime_error("ERROR: attempted to call ConvertToReturnType on a node that isn't a Def Node!");
 		}
 	};
-	void setParameters(ASTNode inputParameters) {
-		ReturnTypes dataType = NO_RETURN_TYPE;
-		//Assuming we are getting a Def Node
-		//NOTE: The formals are in reverse order by the way we build that vector.
-		if (inputParameters.getAstNodeType() == DEF_NODE_TYPE) {
-			temp = inputParameters.getFormalsNode()->getFormalNodes();
-			for (int i = temp.size() - 1; i >= 0; i--) {
-				if (temp.at(i)->getTypeNode()->getDataType() == "integer") {
-					dataType = INTEGER_TYPE;
-				}
-				if (temp.at(i)->getTypeNode()->getDataType() == "boolean") {
-					dataType = BOOLEAN_TYPE;
-				}
 
-				//Need to chek if datatype still equals NO_RETURN_TYPE, then add an error to the list
-				parameters.push_back(make_tuple((temp.at(i)->getIdentifierNode()->getIdentifierName()), dataType));
+	void setParameters(ASTNode inputParameters) {
+		// Assuming we are getting a Def Node
+		ReturnTypes DataType = NO_RETURN_TYPE;
+		vector<ASTNode*> Temp;
+		
+		// NOTE: The formals are in reverse order by the way we build that vector.
+		if (inputParameters.getAstNodeType() == DEF_NODE_TYPE) {
+			Temp = inputParameters.getFormalsNode()->getFormalNodes();
+			for (int i = Temp.size() - 1; i >= 0; i--) {
+				if (Temp.at(i)->getTypeNode()->getDataType() == "integer") {
+					DataType = INTEGER_TYPE;
+				}
+				if (Temp.at(i)->getTypeNode()->getDataType() == "boolean") {
+					DataType = BOOLEAN_TYPE;
+				}
+				// creates a list of tuples representing the function paramaters
+				Parameters.push_back(make_tuple((Temp.at(i)->getIdentifierNode()->getIdentifierName()), DataType));
 			}
 		}
 	}
