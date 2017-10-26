@@ -287,14 +287,14 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode& Node)
 	if (SymbolTable.find(FunctionName) != SymbolTable.end())
 	{
 		if (Node.getBaseActualsNode()->getAstNodeType() == BASE_ACTUALS_NODE_TYPE) {
-			if (!SymbolTable.find(FunctionName)->second.getParameters(CurrentFunction).empty()) {
+			if (!SymbolTable.find(FunctionName)->second.getParameters().empty()) {
 				errors.push_back("ERROR: you attempted to call " + FunctionName + " with no paramaters. found within -  " + CurrentFunction + "()");
 			}
 		}
 		//There are parameters in the function call
 		else {
 			vector<ASTNode*> functionParams = Node.getBaseActualsNode()->getNonEmptyActualsNode()->getExpressions();
-			vector<tuple<string, ReturnTypes>> symbolTableParams = SymbolTable.find(FunctionName)->second.getParameters(CurrentFunction);
+			vector<tuple<string, ReturnTypes>> symbolTableParams = SymbolTable.find(FunctionName)->second.getParameters();
 			ReturnTypes type = NO_RETURN_TYPE;
 			if (functionParams.size() == symbolTableParams.size()) {
 				for (int i = functionParams.size() - 1, j = 0; i >= 0, j < symbolTableParams.size(); i--, j++) {
@@ -315,7 +315,8 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode& Node)
 			}
 		}
 
-		//set this expression node type to that of the function call
+		//set this expression node type to that of the function call. Also put the CurrentFunction into the called functions list.
+		SymbolTable.find(FunctionName)->second.addFunctionCallers(CurrentFunction);
 		Node.setReturnType(SymbolTable.find(FunctionName)->second.getReturnType());
 	}
 	else {
@@ -363,7 +364,7 @@ void SemanticChecker::assignTypeForIfFactorNode(ASTNode& Node)
 
 void SemanticChecker::assignTypeForIdentifierNode(ASTNode& Node)
 {
-	vector<tuple<string, ReturnTypes>> symbolTableParams = SymbolTable.find(CurrentFunction)->second.getParameters("");
+	vector<tuple<string, ReturnTypes>> symbolTableParams = SymbolTable.find(CurrentFunction)->second.getParameters();
 	ReturnTypes type = NO_RETURN_TYPE;
 	for (int i = 0; i < symbolTableParams.size(); i++) {
 		if (Node.getIdentifierName() == get<0>(symbolTableParams.at(i))) {

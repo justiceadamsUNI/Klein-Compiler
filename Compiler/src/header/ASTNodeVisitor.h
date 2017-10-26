@@ -8,7 +8,6 @@ using namespace std;
 
 class ASTNodeVisitor {
 public:
-	// SemanticStack needs to be SemanticStack! Just here to compile for right now until harsha is done.
 	void accept(StackValues ParserStackValue, SemanticStack& SemanticStack, string StringData, string IntData) {
 		switch (ParserStackValue)
 		{

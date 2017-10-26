@@ -20,8 +20,6 @@ public:
 	ReturnTypes getReturnType() {
 		return type;
 	}
-	//bool compareFunctionParams(ASTNode actuals);
-	//This shouldn't be needed as the comparison happens outside of the Function class via the getParameters() call
 
 	vector<string> getFunctionCallers() {
 		return functionCallers;
@@ -42,8 +40,7 @@ public:
 			functionCallers.push_back(in);
 		}
 	}
-	vector<tuple<string, ReturnTypes>> getParameters(string input) {
-		addFunctionCallers(input);
+	vector<tuple<string, ReturnTypes>> getParameters() {
 		return parameters;
 	}
 

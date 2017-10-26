@@ -242,7 +242,7 @@ public:
 	void setTypeNode(ASTNode* InTypeNode) {
 		TypeNode = InTypeNode;
 	}
-	void addPrIntStatementToVector(ASTNode* InPrintStatement) {
+	void addPrintStatementToVector(ASTNode* InPrintStatement) {
 		PrintStatements.push_back(InPrintStatement);
 	}
 	void addFormalNodeToVector(ASTNode* Formal) {
@@ -254,7 +254,7 @@ public:
 	void setBodyNode(ASTNode* InBodyNode) {
 		BodyNode = InBodyNode;
 	}
-	void setDefInitionsNode(ASTNode* InDefinitions) {
+	void setDefinitionsNode(ASTNode* InDefinitions) {
 		Definitions = InDefinitions;
 	}
 	void addDefToVector(ASTNode* Def) {

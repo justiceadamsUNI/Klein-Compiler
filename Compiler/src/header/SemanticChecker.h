@@ -54,12 +54,12 @@ private:
 				continue;
 			}
 
-			if (Iterator->second.getUsedVariables().size() != Iterator->second.getParameters("").size())
+			if (Iterator->second.getUsedVariables().size() != Iterator->second.getParameters().size())
 			{
-				for (int i = 0; i < Iterator->second.getParameters("").size(); i++)
+				for (int i = 0; i < Iterator->second.getParameters().size(); i++)
 				{
 					vector<string> usedVariables = Iterator->second.getUsedVariables();
-					string ParamToSearchFor = get<0>(Iterator->second.getParameters("").at(i));
+					string ParamToSearchFor = get<0>(Iterator->second.getParameters().at(i));
 					if (find(usedVariables.begin(), usedVariables.end(), ParamToSearchFor) == usedVariables.end())
 					{
 						warings.push_back("WARNING: Unused variable '" + ParamToSearchFor
@@ -76,7 +76,6 @@ private:
 
 		for (int i = 0; i <list.size(); i++)
 		{
-			//add function and it's name to the map. {"function1" --->  FuntionObj}
 			if (SymbolTable.find(list.at(i)->getIdentifierNode()->getIdentifierName()) != SymbolTable.end()) {
 				errors.push_back("ERROR: Function " + list.at(i)->getIdentifierNode()->getIdentifierName() + " already defined.");
 			}
@@ -84,20 +83,20 @@ private:
 			SymbolTable.insert(std::pair<string, Function>(list.at(i)->getIdentifierNode()->getIdentifierName(), temp));
 
 			vector<string> dupVars = {};
-			int functionParamssize = temp.getParameters("").empty() ? 0 : temp.getParameters("").size() - 1;
+			int functionParamssize = temp.getParameters().empty() ? 0 : temp.getParameters().size() - 1;
 			for (int k = 0; k < functionParamssize; k++)
 			{
-				if (find(dupVars.begin(), dupVars.end(), get<0>(temp.getParameters("").at(k))) != dupVars.end()) {
+				if (find(dupVars.begin(), dupVars.end(), get<0>(temp.getParameters().at(k))) != dupVars.end()) {
 					continue;
 				}
 
-				for (int j = k + 1; j < temp.getParameters("").size(); j++) {
-					if (get<0>(temp.getParameters("").at(j)) == get<0>(temp.getParameters("").at(k))) {
-						errors.push_back("ERROR: Duplicate Variable " + get<0>(temp.getParameters("").at(k)) 
+				for (int j = k + 1; j < temp.getParameters().size(); j++) {
+					if (get<0>(temp.getParameters().at(j)) == get<0>(temp.getParameters().at(k))) {
+						errors.push_back("ERROR: Duplicate Variable " + get<0>(temp.getParameters().at(k)) 
 							+ " found in function "
 							+ list.at(i)->getIdentifierNode()->getIdentifierName() + " definition.");
 
-						dupVars.push_back(get<0>(temp.getParameters("").at(k)));
+						dupVars.push_back(get<0>(temp.getParameters().at(k)));
 						break;
 					}
 				}
