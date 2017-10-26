@@ -286,7 +286,7 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode& Node)
 
 	if (SymbolTable.find(FunctionName) != SymbolTable.end())
 	{
-		if (Node.getBaseActualsNode()->getAstNodeType() == BaseActualsNodeTYPE) {
+		if (Node.getBaseActualsNode()->getAstNodeType() == BASE_ACTUALS_NODE_TYPE) {
 			if (!SymbolTable.find(FunctionName)->second.getParameters(CurrentFunction).empty()) {
 				errors.push_back("ERROR: you attempted to call " + FunctionName + " with no paramaters. found within -  " + CurrentFunction + "()");
 			}
@@ -399,12 +399,12 @@ void SemanticChecker::assignTypeForPrintStatementNode(ASTNode& Node)
 
 // helper methods -------------------------------------------------------
 ReturnTypes SemanticChecker::assignTypeForExpressionNode(ASTNode& Node) {
-	if (Node.getAstNodeType() == BaseExprNodeType)
+	if (Node.getAstNodeType() == BASE_EXPR_NODE_TYPE)
 	{
 		assignTypeForBaseExpressionNode(Node);
 		return Node.getReturnType();
 	}
-	else if (Node.getAstNodeType() == LessThanExprNodeTYPE)
+	else if (Node.getAstNodeType() == LESS_THAN_EXPR_NODE_TYPE)
 	{
 		assignTypeForLessThanNode(Node);
 		return BOOLEAN_TYPE;
@@ -416,18 +416,18 @@ ReturnTypes SemanticChecker::assignTypeForExpressionNode(ASTNode& Node) {
 }
 
 ReturnTypes SemanticChecker::assignTypeForSimpleExpressionNode(ASTNode& Node) {
-	if (Node.getAstNodeType() == BaseSimpleExprNodeType)
+	if (Node.getAstNodeType() == BASE_SIMPLE_EXPR_NODE_TYPE)
 	{
 		assignTypeForBaseSimpleExpressionNode(Node);
 		return Node.getReturnType();
 	}
-	else if (Node.getAstNodeType() == AdditionSimpleExprNodeTYPE)
+	else if (Node.getAstNodeType() == ADDITION_SIMPLE_EXPR_NODE_TYPE)
 	{
 		assignTypeForAdditionNode(Node);
 		return INTEGER_TYPE;
 
 	}
-	else if (Node.getAstNodeType() == SubtractorSimpleExprNodeTYPE)
+	else if (Node.getAstNodeType() == SUBTRACTOR_SIMPLE_EXPR_NODE_TYPE)
 	{
 		assignTypeForSubtractionNode(Node);
 		return INTEGER_TYPE;
@@ -442,19 +442,19 @@ ReturnTypes SemanticChecker::assignTypeForSimpleExpressionNode(ASTNode& Node) {
 
 ReturnTypes SemanticChecker::assignTypeForTermNode(ASTNode& Node)
 {
-	if (Node.getAstNodeType() == BaseTermNodeTYPE)
+	if (Node.getAstNodeType() == BASE_TERM_NODE_TYPE)
 	{
 		assignTypeForBaseTermNode(Node);
 		return Node.getReturnType();
 
 	}
-	else if (Node.getAstNodeType() == MultiplicatorTermNodeTYPE)
+	else if (Node.getAstNodeType() == MULTIPLICATOR_TERM_NODE_TYPE)
 	{
 		assignTypeForMultiplicatorNode(Node);
 		return INTEGER_TYPE;
 
 	}
-	else if (Node.getAstNodeType() == DividerTermNodeTYPE)
+	else if (Node.getAstNodeType() == DIVIDER_TERM_NODE_TYPE)
 	{
 		assignTypeForDividerNode(Node);
 		return INTEGER_TYPE;
@@ -467,33 +467,33 @@ ReturnTypes SemanticChecker::assignTypeForTermNode(ASTNode& Node)
 
 ReturnTypes SemanticChecker::assignTypeForFactorNode(ASTNode& Node)
 {
-	if (Node.getAstNodeType() == ParenExprFactorNodeTYPE)
+	if (Node.getAstNodeType() == PARENTHESISED_EXPR_FACTOR_NODE_TYPE)
 	{
 		assignTypeForParenthesisedExpressionNode(Node);
 		return Node.getReturnType();
 
 	}
-	else if (Node.getAstNodeType() == SubtractionFactorNodeTYPE)
+	else if (Node.getAstNodeType() == SUBTRACTION_FACTOR_NODE_TYPE)
 	{
 		assignTypeForSubtractionFactorNode(Node);
 		return INTEGER_TYPE;
 	}
-	else if (Node.getAstNodeType() == LiteralFactorNodeTYPE)
+	else if (Node.getAstNodeType() == LITERAL_FACTOR_NODE_TYPE)
 	{
 		assignTypeForLiteralFactorNode(Node);
 		return Node.getReturnType();
 	}
-	else if (Node.getAstNodeType() == FunctionCallType)
+	else if (Node.getAstNodeType() == FUNCTION_CALL_TYPE)
 	{
 		assignTypeForFunctionCallNode(Node);
 		return Node.getReturnType();
 	}
-	else if (Node.getAstNodeType() == SingletonIdentifierFactorNodeTYPE)
+	else if (Node.getAstNodeType() == SINGLETON_IDENTIFIER_FACTOR_NODE_TYPE)
 	{
 		assignTypeForSingletonIdentifierFactorNode(Node);
 		return Node.getReturnType();
 	}
-	else if (Node.getAstNodeType() == NotFactorNodeTYPE)
+	else if (Node.getAstNodeType() == NOT_FACTOR_NODE_TYPE)
 	{
 		assignTypeForNotFactorNode(Node);
 		return BOOLEAN_TYPE;
@@ -507,7 +507,7 @@ ReturnTypes SemanticChecker::assignTypeForFactorNode(ASTNode& Node)
 
 ReturnTypes SemanticChecker::assignTypeForLiteralNode(ASTNode& Node)
 {
-	if (Node.getAstNodeType() == IntegerLiteralNodeTYPE)
+	if (Node.getAstNodeType() == INTEGER_LITERAL_NODE_TYPE)
 	{
 		assignTypeForIntegerLiteralNode(Node);
 		return INTEGER_TYPE;

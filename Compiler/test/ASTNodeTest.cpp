@@ -2,7 +2,7 @@
 #include "../src/header/ASTNodes.h"
 
 TEST_CASE("ASTNode default values represent empty state correctly", "[ASTNodes]") {
-	ASTNode Node(ProgramNodeTYPE);
+	ASTNode Node(PROGRAM_NODE_TYPE);
 
 	REQUIRE(Node.getIdentifierName() == "NULL");
 	REQUIRE(Node.getLiteralValue() == "NULL");
@@ -31,21 +31,21 @@ TEST_CASE("ASTNode default values represent empty state correctly", "[ASTNodes]"
 }
 
 TEST_CASE("ASTNode getAstNodeType() returns Type correctly", "[ASTNodes]") {
-	ASTNode Node(ProgramNodeTYPE);
+	ASTNode Node(PROGRAM_NODE_TYPE);
 
-	REQUIRE(Node.getAstNodeType() == ProgramNodeTYPE);
+	REQUIRE(Node.getAstNodeType() == PROGRAM_NODE_TYPE);
 }
 
 TEST_CASE("ASTNode setIdentifierName() and getIdentifierName() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode Node(ProgramNodeTYPE);
+	ASTNode Node(PROGRAM_NODE_TYPE);
 	Node.setIdentifierName("test");
 
 	REQUIRE(Node.getIdentifierName() == "test");
 }
 
 TEST_CASE("ASTNode setFactorNode() and getFactorNode() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(AndTermNodeType);
-	ASTNode FactorNode(FactorNodeTYPE);
+	ASTNode TestNode(AND_TERM_NODE_TYPE);
+	ASTNode FactorNode(FACTOR_NODE_TYPE);
 	FactorNode.setIdentifierName("test");
 	TestNode.setFactorNode(&FactorNode);
 
@@ -53,8 +53,8 @@ TEST_CASE("ASTNode setFactorNode() and getFactorNode() updates/represents intern
 }
 
 TEST_CASE("ASTNode setFactorNode2() and getFactorNode2() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(AndTermNodeType);
-	ASTNode FactorNode(FactorNodeTYPE);
+	ASTNode TestNode(AND_TERM_NODE_TYPE);
+	ASTNode FactorNode(FACTOR_NODE_TYPE);
 	FactorNode.setIdentifierName("test");
 	TestNode.setFactorNode2(&FactorNode);
 
@@ -62,8 +62,8 @@ TEST_CASE("ASTNode setFactorNode2() and getFactorNode2() updates/represents inte
 }
 
 TEST_CASE("ASTNode setBaseTermNode() and getBaseTermNode() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(MultiplicatorTermNodeTYPE);
-	ASTNode TermNode(BaseTermNodeTYPE);
+	ASTNode TestNode(MULTIPLICATOR_TERM_NODE_TYPE);
+	ASTNode TermNode(BASE_TERM_NODE_TYPE);
 	TermNode.setIdentifierName("test");
 	TestNode.setBaseTermNode(&TermNode);
 
@@ -71,8 +71,8 @@ TEST_CASE("ASTNode setBaseTermNode() and getBaseTermNode() updates/represents in
 }
 
 TEST_CASE("ASTNode setBaseSimpleExprNode() and getBaseSimpleExprNode() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(LessThanExprNodeTYPE);
-	ASTNode SimpleExprNode(BaseSimpleExprNodeType);
+	ASTNode TestNode(LESS_THAN_EXPR_NODE_TYPE);
+	ASTNode SimpleExprNode(BASE_SIMPLE_EXPR_NODE_TYPE);
 	SimpleExprNode.setIdentifierName("test");
 	TestNode.setBaseSimpleExprNode(&SimpleExprNode);
 
@@ -80,8 +80,8 @@ TEST_CASE("ASTNode setBaseSimpleExprNode() and getBaseSimpleExprNode() updates/r
 }
 
 TEST_CASE("ASTNode setBaseExprNode() and getBaseExprNode() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(IfFactorNodeTYPE);
-	ASTNode BaseExprNode(BaseExprNodeType);
+	ASTNode TestNode(IF_FACTOR_NODE_TYPE);
+	ASTNode BaseExprNode(BASE_EXPR_NODE_TYPE);
 	BaseExprNode.setIdentifierName("test");
 	TestNode.setBaseExprNode(&BaseExprNode);
 
@@ -89,15 +89,15 @@ TEST_CASE("ASTNode setBaseExprNode() and getBaseExprNode() updates/represents in
 }
 
 TEST_CASE("ASTNode setLiteralVale() and getLiteralValue() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(LiteralNodeTYPE);
+	ASTNode TestNode(LITERAL_NODE_TYPE);
 	TestNode.setLiteralValue("test");
 
 	REQUIRE(TestNode.getLiteralValue() == "test");
 }
 
 TEST_CASE("ASTNode addExpressionToVector() and getExpressions() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(NonEmptyActualsNodeTYPE);
-	ASTNode BaseExprNode(BaseExprNodeType);
+	ASTNode TestNode(NON_EMPTY_ACTUALS_NODE_TYPE);
+	ASTNode BaseExprNode(BASE_EXPR_NODE_TYPE);
 	BaseExprNode.setLiteralValue("test");
 	TestNode.addExpressionToVector(&BaseExprNode);
 
@@ -106,8 +106,8 @@ TEST_CASE("ASTNode addExpressionToVector() and getExpressions() updates/represen
 }
 
 TEST_CASE("ASTNode setNonEmptyActualsNode() and getNonEmptyActualsNode() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(NonBaseActualsNodeTYPE);
-	ASTNode NonEmptyActuals(NonEmptyActualsNodeTYPE);
+	ASTNode TestNode(NON_BASE_ACTUALS_NODE_TYPE);
+	ASTNode NonEmptyActuals(NON_EMPTY_ACTUALS_NODE_TYPE);
 	NonEmptyActuals.setLiteralValue("test");
 	TestNode.setNonEmptyActualsNode(&NonEmptyActuals);
 
@@ -115,8 +115,8 @@ TEST_CASE("ASTNode setNonEmptyActualsNode() and getNonEmptyActualsNode() updates
 }
 
 TEST_CASE("ASTNode setLiteralNode() and getLiteralNode() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(LiteralFactorNodeTYPE);
-	ASTNode LiteralNode(LiteralNodeTYPE);
+	ASTNode TestNode(LITERAL_FACTOR_NODE_TYPE);
+	ASTNode LiteralNode(LITERAL_NODE_TYPE);
 	LiteralNode.setLiteralValue("test");
 	TestNode.setLiteralNode(&LiteralNode);
 
@@ -124,8 +124,8 @@ TEST_CASE("ASTNode setLiteralNode() and getLiteralNode() updates/represents inte
 }
 
 TEST_CASE("ASTNode setIdentifierNode() and getIdentifierNode() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(DefNodeTYPE);
-	ASTNode IdentifierFactor(FunctionCallType);
+	ASTNode TestNode(DEF_NODE_TYPE);
+	ASTNode IdentifierFactor(FUNCTION_CALL_TYPE);
 	IdentifierFactor.setLiteralValue("test");
 	TestNode.setIdentifierNode(&IdentifierFactor);
 
@@ -133,8 +133,8 @@ TEST_CASE("ASTNode setIdentifierNode() and getIdentifierNode() updates/represent
 }
 
 TEST_CASE("ASTNode setBaseActualsNode() and getBaseActualsNode() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(FunctionCallType);
-	ASTNode BaseActuals(BaseActualsNodeTYPE);
+	ASTNode TestNode(FUNCTION_CALL_TYPE);
+	ASTNode BaseActuals(BASE_ACTUALS_NODE_TYPE);
 	BaseActuals.setLiteralValue("test");
 	TestNode.setBaseActualsNode(&BaseActuals);
 
@@ -142,8 +142,8 @@ TEST_CASE("ASTNode setBaseActualsNode() and getBaseActualsNode() updates/represe
 }
 
 TEST_CASE("ASTNode setBaseExprNode2() and getBaseExprNode2() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(IfFactorNodeTYPE);
-	ASTNode BaseExpr(BaseExprNodeType);
+	ASTNode TestNode(IF_FACTOR_NODE_TYPE);
+	ASTNode BaseExpr(BASE_EXPR_NODE_TYPE);
 	BaseExpr.setLiteralValue("test");
 	TestNode.setBaseExprNode2(&BaseExpr);
 
@@ -151,8 +151,8 @@ TEST_CASE("ASTNode setBaseExprNode2() and getBaseExprNode2() updates/represents 
 }
 
 TEST_CASE("ASTNode setBaseExprNode3() and getBaseExprNode3() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(IfFactorNodeTYPE);
-	ASTNode BaseExpr(BaseExprNodeType);
+	ASTNode TestNode(IF_FACTOR_NODE_TYPE);
+	ASTNode BaseExpr(BASE_EXPR_NODE_TYPE);
 	BaseExpr.setLiteralValue("test");
 	TestNode.setBaseExprNode3(&BaseExpr);
 
@@ -160,8 +160,8 @@ TEST_CASE("ASTNode setBaseExprNode3() and getBaseExprNode3() updates/represents 
 }
 
 TEST_CASE("ASTNode setBaseTermNode2() and getBaseTermNode2() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(MultiplicatorTermNodeTYPE);
-	ASTNode TermNode(BaseTermNodeTYPE);
+	ASTNode TestNode(MULTIPLICATOR_TERM_NODE_TYPE);
+	ASTNode TermNode(BASE_TERM_NODE_TYPE);
 	TermNode.setIdentifierName("test");
 	TestNode.setBaseTermNode2(&TermNode);
 
@@ -169,8 +169,8 @@ TEST_CASE("ASTNode setBaseTermNode2() and getBaseTermNode2() updates/represents 
 }
 
 TEST_CASE("ASTNode setBaseSimpleExprNode2() and getBaseSimpleExprNode2() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(LessThanExprNodeTYPE);
-	ASTNode SimpleExprNode(BaseSimpleExprNodeType);
+	ASTNode TestNode(LESS_THAN_EXPR_NODE_TYPE);
+	ASTNode SimpleExprNode(BASE_SIMPLE_EXPR_NODE_TYPE);
 	SimpleExprNode.setIdentifierName("test");
 	TestNode.setBaseSimpleExprNode2(&SimpleExprNode);
 
@@ -178,15 +178,15 @@ TEST_CASE("ASTNode setBaseSimpleExprNode2() and getBaseSimpleExprNode2() updates
 }
 
 TEST_CASE("ASTNode setDataType() and getDataType() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode Node(TypeNodeTYPE);
+	ASTNode Node(TYPE_NODE_TYPE);
 	Node.setDataType("test");
 
 	REQUIRE(Node.getDataType() == "test");
 }
 
 TEST_CASE("ASTNode setTypeNode() and geTypeNode() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(DefNodeTYPE);
-	ASTNode TypeNode(TypeNodeTYPE);
+	ASTNode TestNode(DEF_NODE_TYPE);
+	ASTNode TypeNode(TYPE_NODE_TYPE);
 	TypeNode.setIdentifierName("test");
 	TestNode.setTypeNode(&TypeNode);
 
@@ -194,8 +194,8 @@ TEST_CASE("ASTNode setTypeNode() and geTypeNode() updates/represents internal no
 }
 
 TEST_CASE("ASTNode getPrintStatements() and addPrintStatementToVector() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(BodyNodeTYPE);
-	ASTNode PrintStatement(PrintStatemetNodeTYPE);
+	ASTNode TestNode(BODY_NODE_TYPE);
+	ASTNode PrintStatement(PRINT_STATEMENT_NODE_TYPE);
 	PrintStatement.setLiteralValue("test");
 	TestNode.addPrintStatementToVector(&PrintStatement);
 
@@ -204,8 +204,8 @@ TEST_CASE("ASTNode getPrintStatements() and addPrintStatementToVector() updates/
 }
 
 TEST_CASE("ASTNode getFormalNodes() and addFormalNodeToVector() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(DefNodeTYPE);
-	ASTNode Formal(FormalNodeTYPE);
+	ASTNode TestNode(DEF_NODE_TYPE);
+	ASTNode Formal(FORMAL_NODE_TYPE);
 	Formal.setLiteralValue("test");
 	TestNode.addFormalNodeToVector(&Formal);
 
@@ -214,8 +214,8 @@ TEST_CASE("ASTNode getFormalNodes() and addFormalNodeToVector() updates/represen
 }
 
 TEST_CASE("ASTNode getDefNodes() and addDefToVector() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(DefinitionsNodeTYPE);
-	ASTNode DefNode(DefNodeTYPE);
+	ASTNode TestNode(DEFINITIONS_NODE_TYPE);
+	ASTNode DefNode(DEF_NODE_TYPE);
 	DefNode.setLiteralValue("test");
 	TestNode.addDefToVector(&DefNode);
 
@@ -224,8 +224,8 @@ TEST_CASE("ASTNode getDefNodes() and addDefToVector() updates/represents interna
 }
 
 TEST_CASE("ASTNode getDefinitions() and setDefinitions() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(ProgramNodeTYPE);
-	ASTNode Definition(DefinitionsNodeTYPE);
+	ASTNode TestNode(PROGRAM_NODE_TYPE);
+	ASTNode Definition(DEFINITIONS_NODE_TYPE);
 	Definition.setLiteralValue("test");
 	TestNode.setDefinitionsNode(&Definition);
 
@@ -233,8 +233,8 @@ TEST_CASE("ASTNode getDefinitions() and setDefinitions() updates/represents inte
 }
 
 TEST_CASE("ASTNode setFormalsNode() and getFormalsNode() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(DefNodeTYPE);
-	ASTNode Formals(FormalsNodeType);
+	ASTNode TestNode(DEF_NODE_TYPE);
+	ASTNode Formals(FORMALS_NODE_TYPE);
 	Formals.setLiteralValue("test");
 	TestNode.setFormalsNode(&Formals);
 
@@ -242,8 +242,8 @@ TEST_CASE("ASTNode setFormalsNode() and getFormalsNode() updates/represents inte
 }
 
 TEST_CASE("ASTNode setBodyNode() and getBodyNode() updates/represents internal node state correctly", "[ASTNodes]") {
-	ASTNode TestNode(DefNodeTYPE);
-	ASTNode Body(BodyNodeTYPE);
+	ASTNode TestNode(DEF_NODE_TYPE);
+	ASTNode Body(BODY_NODE_TYPE);
 	Body.setLiteralValue("test");
 	TestNode.setBodyNode(&Body);
 

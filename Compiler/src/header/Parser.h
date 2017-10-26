@@ -31,7 +31,7 @@ private:
 
 	SemanticStack SemanticStackVar;
 
-	ASTNode FinalASTNode = ASTNode(MultiplicatorTermNodeTYPE);
+	ASTNode FinalASTNode = ASTNode(MULTIPLICATOR_TERM_NODE_TYPE);
 
 	// All the stack values that are terminals
 	list<StackValues> TerminalValues = { 

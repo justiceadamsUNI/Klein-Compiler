@@ -57,7 +57,7 @@ private:
 
 	ReturnTypes convertToReturnType(ASTNode returnType) {
 		//This is assuming that returnType is a Def Node
-		if (returnType.getAstNodeType() == DefNodeTYPE) {
+		if (returnType.getAstNodeType() == DEF_NODE_TYPE) {
 			 if (returnType.getTypeNode()->getDataType() == "integer") {
 				 return INTEGER_TYPE;
 			 }
@@ -79,7 +79,7 @@ private:
 		ReturnTypes dataType = NO_RETURN_TYPE;
 		//Assuming we are getting a Def Node
 		//NOTE: The formals are in reverse order by the way we build that vector.
-		if (inputParameters.getAstNodeType() == DefNodeTYPE) {
+		if (inputParameters.getAstNodeType() == DEF_NODE_TYPE) {
 			temp = inputParameters.getFormalsNode()->getFormalNodes();
 			for (int i = temp.size() - 1; i >= 0; i--) {
 				if (temp.at(i)->getTypeNode()->getDataType() == "integer") {

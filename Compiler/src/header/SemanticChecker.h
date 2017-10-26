@@ -23,7 +23,7 @@ public:
 	}
 
 private:
-	ASTNode tree = ASTNode(BodyNodeTYPE);
+	ASTNode tree = ASTNode(BODY_NODE_TYPE);
 	string CurrentFunction;
 	map<string, Function> SymbolTable{ };
 	vector<string> errors = {};

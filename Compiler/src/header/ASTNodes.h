@@ -6,41 +6,41 @@
 using namespace std;
 
 enum ASTNodeType {
-	IDENTIFIERNODETYPE,
-	FactorNodeTYPE,
-	BaseActualsNodeTYPE,
-	BaseTermNodeTYPE,
-	BaseSimpleExprNodeType,
-	BaseExprNodeType,
-	FormalsNodeType,
-	PrintStatemetNodeTYPE,
-	LiteralNodeTYPE,
-	IntegerLiteralNodeTYPE,
-	BooleanLiteralNodeTYPE,
-	NonEmptyActualsNodeTYPE,
-	NonBaseActualsNodeTYPE,
-	ParenExprFactorNodeTYPE,
-	SubtractionFactorNodeTYPE,
-	LiteralFactorNodeTYPE,
-	FunctionCallType,
-	SingletonIdentifierFactorNodeTYPE,
-	NotFactorNodeTYPE,
-	IfFactorNodeTYPE,
-	MultiplicatorTermNodeTYPE,
-	DividerTermNodeTYPE,
-	AndTermNodeType,
-	SubtractorSimpleExprNodeTYPE,
-	OrSimpleExprNodeTYPE,
-	AdditionSimpleExprNodeTYPE,
-	EqualToExprNodeTYPE,
-	LessThanExprNodeTYPE,
-	TypeNodeTYPE,
-	BodyNodeTYPE,
-	FormalNodeTYPE,
-	NonEmptyFormalsNodeTYPE,
-	DefNodeTYPE,
-	DefinitionsNodeTYPE,
-	ProgramNodeTYPE
+	IDENTIFIER_NODE_TYPE,
+	FACTOR_NODE_TYPE,
+	BASE_ACTUALS_NODE_TYPE,
+	BASE_TERM_NODE_TYPE,
+	BASE_SIMPLE_EXPR_NODE_TYPE,
+	BASE_EXPR_NODE_TYPE,
+	FORMALS_NODE_TYPE,
+	PRINT_STATEMENT_NODE_TYPE,
+	LITERAL_NODE_TYPE,
+	INTEGER_LITERAL_NODE_TYPE,
+	BOOLEAN_LITERAL_NODE_TYPE,
+	NON_EMPTY_ACTUALS_NODE_TYPE,
+	NON_BASE_ACTUALS_NODE_TYPE,
+	PARENTHESISED_EXPR_FACTOR_NODE_TYPE,
+	SUBTRACTION_FACTOR_NODE_TYPE,
+	LITERAL_FACTOR_NODE_TYPE,
+	FUNCTION_CALL_TYPE,
+	SINGLETON_IDENTIFIER_FACTOR_NODE_TYPE,
+	NOT_FACTOR_NODE_TYPE,
+	IF_FACTOR_NODE_TYPE,
+	MULTIPLICATOR_TERM_NODE_TYPE,
+	DIVIDER_TERM_NODE_TYPE,
+	AND_TERM_NODE_TYPE,
+	SUBTRACTOR_SIMPLE_EXPR_NODE_TYPE,
+	OR_SIMPLE_EXPR_NODE_TYPE,
+	ADDITION_SIMPLE_EXPR_NODE_TYPE,
+	EQUAL_TO_EXPR_NODE_TYPE,
+	LESS_THAN_EXPR_NODE_TYPE,
+	TYPE_NODE_TYPE,
+	BODY_NODE_TYPE,
+	FORMAL_NODE_TYPE,
+	NON_EMPTY_FORMALS_NODE_TYPE,
+	DEF_NODE_TYPE,
+	DEFINITIONS_NODE_TYPE,
+	PROGRAM_NODE_TYPE
 };
 
 class ASTNode {
@@ -132,59 +132,59 @@ public:
 
 	//Validator methods
 	bool isFormalsNode() {
-		return NodeType == FormalsNodeType || NodeType == NonEmptyFormalsNodeTYPE;
+		return NodeType == FORMALS_NODE_TYPE || NodeType == NON_EMPTY_FORMALS_NODE_TYPE;
 	}
 
 	bool isExpressionNode() {
-		return NodeType == BaseExprNodeType ||
-			NodeType == LessThanExprNodeTYPE ||
-			NodeType == EqualToExprNodeTYPE;
+		return NodeType == BASE_EXPR_NODE_TYPE ||
+			NodeType == LESS_THAN_EXPR_NODE_TYPE ||
+			NodeType == EQUAL_TO_EXPR_NODE_TYPE;
 	}
 
 	bool isSimpleExpressionNode() {
-		return NodeType == BaseSimpleExprNodeType ||
-			NodeType == AdditionSimpleExprNodeTYPE ||
-			NodeType == SubtractorSimpleExprNodeTYPE ||
-			NodeType == OrSimpleExprNodeTYPE;
+		return NodeType == BASE_SIMPLE_EXPR_NODE_TYPE ||
+			NodeType == ADDITION_SIMPLE_EXPR_NODE_TYPE ||
+			NodeType == SUBTRACTOR_SIMPLE_EXPR_NODE_TYPE ||
+			NodeType == OR_SIMPLE_EXPR_NODE_TYPE;
 	}
 
 	bool isTermNode() {
-		return NodeType == BaseTermNodeTYPE ||
-			NodeType == MultiplicatorTermNodeTYPE ||
-			NodeType == DividerTermNodeTYPE ||
-			NodeType == AndTermNodeType;
+		return NodeType == BASE_TERM_NODE_TYPE ||
+			NodeType == MULTIPLICATOR_TERM_NODE_TYPE ||
+			NodeType == DIVIDER_TERM_NODE_TYPE ||
+			NodeType == AND_TERM_NODE_TYPE;
 	}
 
-	//check if we need FactorNodeTYPE.
+	//check if we need FACTOR_NODE_TYPE.
 	bool isFactorNode() {
-		return NodeType == FactorNodeTYPE ||
-			NodeType == ParenExprFactorNodeTYPE ||
-			NodeType == SubtractionFactorNodeTYPE ||
-			NodeType == LiteralFactorNodeTYPE ||
-			NodeType == FunctionCallType ||
-			NodeType == SingletonIdentifierFactorNodeTYPE ||
-			NodeType == NotFactorNodeTYPE ||
-			NodeType == IfFactorNodeTYPE;
+		return NodeType == FACTOR_NODE_TYPE ||
+			NodeType == PARENTHESISED_EXPR_FACTOR_NODE_TYPE ||
+			NodeType == SUBTRACTION_FACTOR_NODE_TYPE ||
+			NodeType == LITERAL_FACTOR_NODE_TYPE ||
+			NodeType == FUNCTION_CALL_TYPE ||
+			NodeType == SINGLETON_IDENTIFIER_FACTOR_NODE_TYPE ||
+			NodeType == NOT_FACTOR_NODE_TYPE ||
+			NodeType == IF_FACTOR_NODE_TYPE;
 	}
 
 	bool isLiteralNode() {
-		return NodeType == BooleanLiteralNodeTYPE ||
-			NodeType == IntegerLiteralNodeTYPE;
+		return NodeType == BOOLEAN_LITERAL_NODE_TYPE ||
+			NodeType == INTEGER_LITERAL_NODE_TYPE;
 	}
 
 	bool isActualsNode() {
-		return NodeType == BaseActualsNodeTYPE ||
-			NodeType == NonBaseActualsNodeTYPE;
+		return NodeType == BASE_ACTUALS_NODE_TYPE ||
+			NodeType == NON_BASE_ACTUALS_NODE_TYPE;
 	}
 
 	bool isArithmeticTerm() {
-		return NodeType == DividerTermNodeTYPE ||
-			NodeType == MultiplicatorTermNodeTYPE;
+		return NodeType == DIVIDER_TERM_NODE_TYPE ||
+			NodeType == MULTIPLICATOR_TERM_NODE_TYPE;
 	}
 
 	bool isArithmeticSimpleExpression() {
-		return NodeType == AdditionSimpleExprNodeTYPE ||
-			NodeType == SubtractorSimpleExprNodeTYPE;
+		return NodeType == ADDITION_SIMPLE_EXPR_NODE_TYPE ||
+			NodeType == SUBTRACTOR_SIMPLE_EXPR_NODE_TYPE;
 	}
 	
 	//Setters
