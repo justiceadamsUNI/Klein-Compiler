@@ -156,6 +156,6 @@ locally on our machines, and does pass the TravisCI testing. We believe there
 is some conflict with the version of g++ compiler on the server and the FakeIt
 version. (note this works on other g++ compilers, just not on the server)
 - We need to clean the NodeBuilderVisitor code file (it's quite large).
-PrettyPrinter Node structure needs to be cleaned/collapsed for easier
+- PrettyPrinter Node structure needs to be cleaned/collapsed for easier
 reading
 
