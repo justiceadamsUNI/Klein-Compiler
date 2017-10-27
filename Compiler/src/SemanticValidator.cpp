@@ -40,7 +40,7 @@ int main(int argv, char* argc[])
 			printSymbolTable(SemanticCheckerVar);
 		}
 		else {
-			for (int i = 0; i < SemanticCheckerVar.getErrors().size(); i++)
+			for (int i = SemanticCheckerVar.getErrors().size() - 1; i  >= 0; i--)
 			{
 				cout << SemanticCheckerVar.getErrors().at(i) << endl;
 			}
