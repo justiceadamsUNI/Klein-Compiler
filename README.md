@@ -114,7 +114,7 @@ print the AST structure of a valid Klein program.  'kleinp' will let the user
 know if an exception occurs while parsing. 'kleinp' takes in 1 command line 
 argument, a .kln file location!
 
--v or --kleinv: This will build an executable file named fleinv that will
+-v or --kleinv: This will build an executable file named kleinv that will
 print the Symbol Table of a valid Klein program. 'kleinv' will let the user
 know of all errors and warnings to fix with the Klein program. 'kleinv' takes 
 in 1 command line argument, a .kln file!
