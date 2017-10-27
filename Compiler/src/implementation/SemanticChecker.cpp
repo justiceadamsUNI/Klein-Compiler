@@ -314,7 +314,7 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode& Node)
 						// param doesn't match the expected Type
 						Errors.push_back("ERROR: There was a type mismatch when calling function " 
 							+ FunctionName 
-							+ ". Found within - " 
+							+ "(). Found within - " 
 							+ CurrentFunction + "()");
 						break;
 					}
@@ -324,8 +324,8 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode& Node)
 			{
 				Errors.push_back("ERROR: You attempted to call " 
 					+ FunctionName + "() with a mismatching number of arguments. This function expects " 
-					+ to_string(FunctionCallParams.size())
-					+  " parameters. Found within - " + CurrentFunction + "()");
+					+ to_string(SymbolTableParams.size())
+					+  " parameter(s). Found within - " + CurrentFunction + "()");
 			}
 		}
 
@@ -394,9 +394,9 @@ void SemanticChecker::assignTypeForIdentifierNode(ASTNode& Node)
 	}
 	if (Type == NO_RETURN_TYPE)
 	{
-		Errors.push_back("ERROR: variable " 
+		Errors.push_back("ERROR: Variable '" 
 			+ Node.getIdentifierName() 
-			+ " has not been declared.  Found within -  " 
+			+ "' has not been declared.  Found within -  " 
 			+ CurrentFunction + "()");
 	}
 	Node.setReturnType(Type);

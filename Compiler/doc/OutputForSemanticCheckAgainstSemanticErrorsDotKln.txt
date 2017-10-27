@@ -1,0 +1,18 @@
+WARNING: Unused function ALG() found. Did you mean to call this function somewhere?
+WARNING: Unused function ALG2() found. Did you mean to call this function somewhere?
+WARNING: Unused function UNUSED() found. Did you mean to call this function somewhere?
+WARNING: Unused function mane() found. Did you mean to call this function somewhere?
+WARNING: Unused variable 'a' found in function ALG2(). Did you mean to use this variable somewhere?
+WARNING: Unused variable 'ALG2' found in function UNUSED(). Did you mean to use this variable somewhere?
+ERROR: Duplicate variable 'x' found in function ALG2 definition.
+ERROR: Function ALG already defined.
+ERROR: Program does not have a function named main
+ERROR: Right side of the / operator is not an integer. Found within -  ALG2()
+ERROR: You attempted to call ALG2() with a mismatching number of arguments. This function expects 3 parameter(s). Found within - ALG()
+ERROR: Variable 'a' has not been declared.  Found within -  ALG()
+ERROR: Left side of the - operator is not an integer. Found within -  ALG()
+ERROR: There was a type mismatch when calling function ALG(). Found within - ALG()
+ERROR: Left side of the - operator is not an integer. Found within -  ALG()
+ERROR: There was a type mismatch when calling function ALG(). Found within - ALG()
+ERROR: The return type found for ALG() does not match it's definition
+ERROR: There was a type mismatch when calling function ALG2(). Found within - mane()

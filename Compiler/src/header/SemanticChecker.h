@@ -104,8 +104,8 @@ private:
 
 				for (int j = k + 1; j < Temp.getParameters().size(); j++) {
 					if (get<0>(Temp.getParameters().at(j)) == get<0>(Temp.getParameters().at(k))) {
-						Errors.push_back("ERROR: Duplicate Variable " + get<0>(Temp.getParameters().at(k))
-							+ " found in function "
+						Errors.push_back("ERROR: Duplicate variable '" + get<0>(Temp.getParameters().at(k))
+							+ "' found in function "
 							+ List.at(i)->getIdentifierNode()->getIdentifierName() + " definition.");
 
 						DupVars.push_back(get<0>(Temp.getParameters().at(k)));
