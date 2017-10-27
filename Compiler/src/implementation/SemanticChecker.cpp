@@ -14,7 +14,7 @@ void SemanticChecker::assignTypeForDefNode(ASTNode& Node) {
 		return;
 	}
 	else {
-		Errors.push_back("ERROR: The return type found for " + CurrentFunction + "() does not match it's definition");
+		Errors.push_back("ERROR: The return type found for " + CurrentFunction + "() does not match its definition");
 	}
 }
 
