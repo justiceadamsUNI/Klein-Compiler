@@ -61,14 +61,21 @@ void printSymbolTable(SemanticChecker SemanticChecker) {
 
 	// Loop through every function in the symbol table
 	for (Iterator = SymbolTable.begin(); Iterator != SymbolTable.end(); Iterator++) {
-		cout << "function name: " << Iterator->first << endl;
+		cout << "FUNCTION NAME: " << Iterator->first << endl;
 
 		// Print return type
 		cout << "   RETURN TYPE: " << endl;
 		cout << "       " << ReturnTypePrintMap.find(Iterator->second.getReturnType())->second << endl;
 
 		// Print varaibles
-		cout << "   VARIABLES: " << endl;
+		cout << "   VARIABLES: ";
+		if (Iterator->second.getParameters().empty()) {
+			cout << "no variables..." << endl;
+		}
+		else {
+			cout << endl;
+		}
+
 		for (int i = 0; i < Iterator->second.getParameters().size(); i++)
 		{
 			cout << "       name: " 
@@ -78,7 +85,14 @@ void printSymbolTable(SemanticChecker SemanticChecker) {
 		}
 
 		// Print every function that calls this function
-		cout << "   FUNCTION CALLERS: " << endl;
+		cout << "   FUNCTION CALLERS: ";
+		if (Iterator->second.getFunctionCallers().empty()) {
+			cout << "no function callers..." << endl;
+		}
+		else {
+			cout << endl;
+		}
+
 		for (int i = 0; i < Iterator->second.getFunctionCallers().size(); i++)
 		{
 			cout << "      function name: " << Iterator->second.getFunctionCallers().at(i) << endl;
