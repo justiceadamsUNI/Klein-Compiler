@@ -9,8 +9,8 @@ public:
 		// Order is very important here.
 		Tree = astTree;
 		SetupInitialSymbolTable(Tree);
-		checkForUnncalledFunctions(SymbolTable);
 		checkValidTypesOnTree(Tree);
+		checkForUnncalledFunctions(SymbolTable);
 		checkForUnusedVariables(SymbolTable);
 	}
 
