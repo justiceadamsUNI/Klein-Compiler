@@ -29,10 +29,12 @@ Hello, we are the compiler defilers. Our Group Consist of:
 This is the code repository for the Klein Compiler we are writing. We are 
 implementing a Klein compiler that will translate .kln files into machine 
 language. This compiler implementation is written in C++. Currently, we have a
-working Scanner which converts characters in a .kln file into tokens, and a 
-parser that validates Klein programs. We developed this using a feature-branch
-workflow utilizing Github. You'll notice the repo has an extra outer directory 
-for various reasons including continuous integration purposes.
+working Scanner which converts characters in a .kln file into tokens, a 
+parser that validates Klein programs and produces an AST tree, and a Semantic 
+analyzer for static code analysis on a given AST tree. We developed this 
+using a feature-branch workflow utilizing Github. You'll notice the repo 
+has an extra outer directory for various reasons including continuous 
+integration purposes.
 
 **A quick note about Visual Studio.** If you don't intend to edit this using 
 visual studio, ignore the Compiler.sln, Compiler.vcxproj, 
@@ -147,8 +149,13 @@ We have verified that this works on STUDENT.CS.UNI.EDU server.
 -----------------------------------------------------------------------------------------
 We don't have any known bugs but we did fall behind in some development 
 practices this time around. Namely
-- We didn't do a clean PR so most of the code is still heavily commented and frankly ugly
-- We had to abandon unit test to reach the deadline. So we will have to add more 
-exhaustive testing next week.
-- We have an outstanding error message cleanup we need to do around the case where 
-the parser doesn't find a rule in the parse table.
+- We still need to add some more unit test. Our test suite isn't fully
+exhaustive right now, but we're hoping it will be.
+- The FAKEIT framework is not working on the student.cs server, but does work 
+locally on our machines, and does pass the TravisCI testing. We believe there
+is some conflict with the version of g++ compiler on the server and the FakeIt
+version. (note this works on other g++ compilers, just not on the server)
+- We need to clean the NodeBuilderVisitor code file (it's quite large).
+PrettyPrinter Node structure needs to be cleaned/collapsed for easier
+reading
+
