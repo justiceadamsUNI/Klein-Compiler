@@ -6,20 +6,20 @@
 class SemanticChecker {
 public:
 	SemanticChecker(ASTNode astTree) {
-		//Order is very important here.
-		tree = astTree;
-		SetupInitialSymbolTable(tree);
+		// Order is very important here.
+		Tree = astTree;
+		SetupInitialSymbolTable(Tree);
 		checkForUnncalledFunctions(SymbolTable);
-		checkValidTypesOnTree(tree);
+		checkValidTypesOnTree(Tree);
 		checkForUnusedVariables(SymbolTable);
 	}
 
 	vector<string> getErrors() {
-		return errors;
+		return Errors;
 	}
 
 	vector<string> getWarnings() {
-		return warings;
+		return Warings;
 	}
 
 	map<string, Function> getSymbolTable() {
@@ -28,14 +28,13 @@ public:
 	}
 
 private:
-	ASTNode tree = ASTNode(BODY_NODE_TYPE);
+	ASTNode Tree = ASTNode(BODY_NODE_TYPE);
 	string CurrentFunction;
 	map<string, Function> SymbolTable{ };
-	vector<string> errors = {};
-	vector<string> warings = {};
+	vector<string> Errors = {};
+	vector<string> Warings = {};
 
 	void checkForUnncalledFunctions(map<string, Function> SymbolTable) {
-		//Assumes a def node type is passsed in.
 		map<string, Function>::iterator Iterator;
 		for (Iterator = SymbolTable.begin(); Iterator != SymbolTable.end(); Iterator++) {
 			if (Iterator->first == "main" || Iterator->first == "print")
@@ -45,14 +44,15 @@ private:
 
 			if (Iterator->second.getFunctionCallers().empty())
 			{
-				warings.push_back("WARNING: Unused function " + Iterator->first + "() found. Did you mean to call this function somewhere?");
+				Warings.push_back("WARNING: Unused function " + Iterator->first + "() found. Did you mean to call this function somewhere?");
 			}
 		}
 	}
 
 	void checkForUnusedVariables(map<string, Function> SymbolTable) {
-		//Assumes a def node type is passsed in.
 		map<string, Function>::iterator Iterator;
+
+		// loop through variables
 		for (Iterator = SymbolTable.begin(); Iterator != SymbolTable.end(); Iterator++) {
 			if (Iterator->first == "print")
 			{
@@ -61,13 +61,14 @@ private:
 
 			if (Iterator->second.getUsedVariables().size() != Iterator->second.getParameters().size())
 			{
+				// if mismatch in variables/params sizes, an element is not used, find which one.
 				for (int i = 0; i < Iterator->second.getParameters().size(); i++)
 				{
-					vector<string> usedVariables = Iterator->second.getUsedVariables();
+					vector<string> UsedVariables = Iterator->second.getUsedVariables();
 					string ParamToSearchFor = get<0>(Iterator->second.getParameters().at(i));
-					if (find(usedVariables.begin(), usedVariables.end(), ParamToSearchFor) == usedVariables.end())
+					if (find(UsedVariables.begin(), UsedVariables.end(), ParamToSearchFor) == UsedVariables.end())
 					{
-						warings.push_back("WARNING: Unused variable '" + ParamToSearchFor
+						Warings.push_back("WARNING: Unused variable '" + ParamToSearchFor
 							+ "' found in function " + Iterator->first 
 							+ "(). Did you mean to use this variable somewhere?");
 					}
@@ -76,32 +77,38 @@ private:
 		}
 	}
 
-	void SetupInitialSymbolTable(ASTNode astTree) {
-		vector<ASTNode*> list = astTree.getDefinitions()->getDefNodes();
+	void SetupInitialSymbolTable(ASTNode AstTree) {
+		// does initial pass through the functions in a program
+		// and creates an initial symbol table. Detects duplicate variables/functions as well.
+		vector<ASTNode*> List = AstTree.getDefinitions()->getDefNodes();
 
-		for (int i = 0; i <list.size(); i++)
+		for (int i = 0; i <List.size(); i++)
 		{
-			if (SymbolTable.find(list.at(i)->getIdentifierNode()->getIdentifierName()) != SymbolTable.end()) {
-				errors.push_back("ERROR: Function " + list.at(i)->getIdentifierNode()->getIdentifierName() + " already defined.");
+			// check if function already defined.
+			if (SymbolTable.find(List.at(i)->getIdentifierNode()->getIdentifierName()) != SymbolTable.end()) {
+				Errors.push_back("ERROR: Function " + List.at(i)->getIdentifierNode()->getIdentifierName() + " already defined.");
 			}
-			Function temp = Function(*list.at(i));
-			SymbolTable.insert(std::pair<string, Function>(list.at(i)->getIdentifierNode()->getIdentifierName(), temp));
 
-			vector<string> dupVars = {};
-			int functionParamssize = temp.getParameters().empty() ? 0 : temp.getParameters().size() - 1;
-			for (int k = 0; k < functionParamssize; k++)
+			// put pair into the map
+			Function Temp = Function(*List.at(i));
+			SymbolTable.insert(std::pair<string, Function>(List.at(i)->getIdentifierNode()->getIdentifierName(), Temp));
+
+			//check for duplicate variables. Only print error for each duplicate variable once.
+			vector<string> DupVars = {};
+			int FunctionParamsSize = Temp.getParameters().empty() ? 0 : Temp.getParameters().size() - 1;
+			for (int k = 0; k < FunctionParamsSize; k++)
 			{
-				if (find(dupVars.begin(), dupVars.end(), get<0>(temp.getParameters().at(k))) != dupVars.end()) {
+				if (find(DupVars.begin(), DupVars.end(), get<0>(Temp.getParameters().at(k))) != DupVars.end()) {
 					continue;
 				}
 
-				for (int j = k + 1; j < temp.getParameters().size(); j++) {
-					if (get<0>(temp.getParameters().at(j)) == get<0>(temp.getParameters().at(k))) {
-						errors.push_back("ERROR: Duplicate Variable " + get<0>(temp.getParameters().at(k)) 
+				for (int j = k + 1; j < Temp.getParameters().size(); j++) {
+					if (get<0>(Temp.getParameters().at(j)) == get<0>(Temp.getParameters().at(k))) {
+						Errors.push_back("ERROR: Duplicate Variable " + get<0>(Temp.getParameters().at(k))
 							+ " found in function "
-							+ list.at(i)->getIdentifierNode()->getIdentifierName() + " definition.");
+							+ List.at(i)->getIdentifierNode()->getIdentifierName() + " definition.");
 
-						dupVars.push_back(get<0>(temp.getParameters().at(k)));
+						DupVars.push_back(get<0>(Temp.getParameters().at(k)));
 						break;
 					}
 				}
@@ -110,11 +117,11 @@ private:
 		}
 		//After loop, ensure there is a main
 		if (SymbolTable.find("main") == SymbolTable.end()) {
-			errors.push_back("ERROR: Program does not have a function named main");
+			Errors.push_back("ERROR: Program does not have a function named main");
 		}
 		//After loop, make sure there isn't a print function
 		if (SymbolTable.find("print") != SymbolTable.end()) {
-			errors.push_back("ERROR: print function cannot be overloaded");
+			Errors.push_back("ERROR: print function cannot be overloaded");
 		}
 		//Add generic print function
 		else {
@@ -122,16 +129,16 @@ private:
 		}
 	}
 
+	// the method that actually kicks off type checking for our AST tree
 	void checkValidTypesOnTree(ASTNode ASTNodeTree) {
-		vector<ASTNode*> list = ASTNodeTree.getDefinitions()->getDefNodes();
+		vector<ASTNode*> List = ASTNodeTree.getDefinitions()->getDefNodes();
 
-		for (int i = 0; i <list.size(); i++)
+		for (int i = 0; i <List.size(); i++)
 		{
-			CurrentFunction = list.at(i)->getIdentifierNode()->getIdentifierName();
-			assignTypeForDefNode(*list.at(i));
+			CurrentFunction = List.at(i)->getIdentifierNode()->getIdentifierName();
+			assignTypeForDefNode(*List.at(i));
 		}
 	}
-
 
 	void assignTypeForIdentifierNode(ASTNode& Node);
 	void assignTypeForDefNode(ASTNode& Node);

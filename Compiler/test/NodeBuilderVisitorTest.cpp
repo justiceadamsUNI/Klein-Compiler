@@ -345,6 +345,8 @@ TEST_CASE("visitLessThanNode() throws error when no spimple expr nodes are on th
 	REQUIRE_THROWS_AS(Visitor.accept(BUILD_LESSTHAN_NODE, Stack, "NULL", "0"), runtime_error);
 }
 
+// The rest of these test still need to be implemented ----------------------------------------------
+
 TEST_CASE("Visitor callzs visitEqualNode() when accept() called with BUILD_EQUAL_NODE Stack Value", "[Node Builder Visitor]") {
 
 }

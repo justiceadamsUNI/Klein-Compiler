@@ -2,6 +2,9 @@
 #include "header/Parser.h"
 #include "header/Scanner.h"
 
+void printValueIfExist(ASTNode ASTNodeVar);
+void printASTNodeTree(ASTNode ASTNodeVar, int Treelevel);
+
 const map<ASTNodeType, string> ASTNodePrintMap{
 	{ IDENTIFIER_NODE_TYPE, "Identifier Node" },
 	{ FACTOR_NODE_TYPE, "Factor Node" },
@@ -40,143 +43,6 @@ const map<ASTNodeType, string> ASTNodePrintMap{
 	{ PROGRAM_NODE_TYPE, "Program Node" }
 };
 
-void printValueIfExist(ASTNode ASTNodeVar) {
-	if (ASTNodeVar.getLiteralValue() != "NULL")
-	{
-		cout << ASTNodeVar.getLiteralValue() << endl;
-	}
-	else if (ASTNodeVar.getDataType() != "NULL")
-	{
-		cout << ASTNodeVar.getDataType() << endl;
-	}
-	else if (ASTNodeVar.getIdentifierName() != "NULL")
-	{
-		cout << ASTNodeVar.getIdentifierName() << endl;
-	}
-	else {
-		cout << endl;
-	}
-}
-
-void printASTNodeTree(ASTNode ASTNodeVar, int treelevel) {
-	//Print tabs
-	for (int tabs = 0; tabs < treelevel; tabs++)
-	{
-		cout << "    ";
-	}
-
-	//Print Node of level
-	cout << ASTNodePrintMap.find(ASTNodeVar.getAstNodeType())->second << ": ";
-	printValueIfExist(ASTNodeVar);
-
-	//Print any children nodes if needed (next level of tree)
-	if (ASTNodeVar.getFactorNode())
-	{
-		printASTNodeTree(*ASTNodeVar.getFactorNode(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getFactorNode2())
-	{
-		printASTNodeTree(*ASTNodeVar.getFactorNode2(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getBaseTermNode())
-	{
-		printASTNodeTree(*ASTNodeVar.getBaseTermNode(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getBaseTermNode2())
-	{
-		printASTNodeTree(*ASTNodeVar.getBaseTermNode2(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getBaseSimpleExprNode())
-	{
-		printASTNodeTree(*ASTNodeVar.getBaseSimpleExprNode(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getBaseSimpleExprNode2())
-	{
-		printASTNodeTree(*ASTNodeVar.getBaseSimpleExprNode2(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getBaseExprNode())
-	{
-		printASTNodeTree(*ASTNodeVar.getBaseExprNode(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getBaseExprNode2())
-	{
-		printASTNodeTree(*ASTNodeVar.getBaseExprNode2(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getBaseExprNode3())
-	{
-		printASTNodeTree(*ASTNodeVar.getBaseExprNode3(), treelevel + 1);
-	}
-
-	for (int i = 0; i < ASTNodeVar.getExpressions().size(); i++)
-	{
-		printASTNodeTree(*ASTNodeVar.getExpressions()[i], treelevel + 1);
-	}
-
-	if (ASTNodeVar.getNonEmptyActualsNode())
-	{
-		printASTNodeTree(*ASTNodeVar.getNonEmptyActualsNode(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getLiteralNode())
-	{
-		printASTNodeTree(*ASTNodeVar.getLiteralNode(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getIdentifierNode())
-	{
-		printASTNodeTree(*ASTNodeVar.getIdentifierNode(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getBaseActualsNode())
-	{
-		printASTNodeTree(*ASTNodeVar.getBaseActualsNode(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getTypeNode())
-	{
-		printASTNodeTree(*ASTNodeVar.getTypeNode(), treelevel + 1);
-	}
-
-	for (int i = 0; i < ASTNodeVar.getPrintStatements().size(); i++)
-	{
-		printASTNodeTree(*ASTNodeVar.getPrintStatements()[i], treelevel + 1);
-	}
-
-	for (int i = 0; i < ASTNodeVar.getFormalNodes().size(); i++)
-	{
-		printASTNodeTree(*ASTNodeVar.getFormalNodes()[i], treelevel + 1);
-	}
-
-	if (ASTNodeVar.getFormalsNode())
-	{
-		printASTNodeTree(*ASTNodeVar.getFormalsNode(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getBodyNode())
-	{
-		printASTNodeTree(*ASTNodeVar.getBodyNode(), treelevel + 1);
-	}
-
-	if (ASTNodeVar.getDefinitions())
-	{
-		printASTNodeTree(*ASTNodeVar.getDefinitions(), treelevel + 1);
-	}
-
-	for (int i = 0; i < ASTNodeVar.getDefNodes().size(); i++)
-	{
-		printASTNodeTree(*ASTNodeVar.getDefNodes()[i], treelevel + 1);
-	}
-}
-
-
 int main(int argv, char* argc[])
 {
 	if (argv == 1) {
@@ -200,4 +66,140 @@ int main(int argv, char* argc[])
 		return 1;
 	}
 	return 0;
+}
+
+void printValueIfExist(ASTNode ASTNodeVar) {
+	if (ASTNodeVar.getLiteralValue() != "NULL")
+	{
+		cout << ASTNodeVar.getLiteralValue() << endl;
+	}
+	else if (ASTNodeVar.getDataType() != "NULL")
+	{
+		cout << ASTNodeVar.getDataType() << endl;
+	}
+	else if (ASTNodeVar.getIdentifierName() != "NULL")
+	{
+		cout << ASTNodeVar.getIdentifierName() << endl;
+	}
+	else {
+		cout << endl;
+	}
+}
+
+void printASTNodeTree(ASTNode ASTNodeVar, int TreeLevel) {
+	//Print tabs
+	for (int tabs = 0; tabs < TreeLevel; tabs++)
+	{
+		cout << "    ";
+	}
+
+	//Print Node of level
+	cout << ASTNodePrintMap.find(ASTNodeVar.getAstNodeType())->second << ": ";
+	printValueIfExist(ASTNodeVar);
+
+	//Print any children nodes if needed (next level of tree)
+	if (ASTNodeVar.getFactorNode())
+	{
+		printASTNodeTree(*ASTNodeVar.getFactorNode(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getFactorNode2())
+	{
+		printASTNodeTree(*ASTNodeVar.getFactorNode2(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getBaseTermNode())
+	{
+		printASTNodeTree(*ASTNodeVar.getBaseTermNode(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getBaseTermNode2())
+	{
+		printASTNodeTree(*ASTNodeVar.getBaseTermNode2(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getBaseSimpleExprNode())
+	{
+		printASTNodeTree(*ASTNodeVar.getBaseSimpleExprNode(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getBaseSimpleExprNode2())
+	{
+		printASTNodeTree(*ASTNodeVar.getBaseSimpleExprNode2(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getBaseExprNode())
+	{
+		printASTNodeTree(*ASTNodeVar.getBaseExprNode(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getBaseExprNode2())
+	{
+		printASTNodeTree(*ASTNodeVar.getBaseExprNode2(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getBaseExprNode3())
+	{
+		printASTNodeTree(*ASTNodeVar.getBaseExprNode3(), TreeLevel + 1);
+	}
+
+	for (int i = 0; i < ASTNodeVar.getExpressions().size(); i++)
+	{
+		printASTNodeTree(*ASTNodeVar.getExpressions()[i], TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getNonEmptyActualsNode())
+	{
+		printASTNodeTree(*ASTNodeVar.getNonEmptyActualsNode(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getLiteralNode())
+	{
+		printASTNodeTree(*ASTNodeVar.getLiteralNode(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getIdentifierNode())
+	{
+		printASTNodeTree(*ASTNodeVar.getIdentifierNode(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getBaseActualsNode())
+	{
+		printASTNodeTree(*ASTNodeVar.getBaseActualsNode(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getTypeNode())
+	{
+		printASTNodeTree(*ASTNodeVar.getTypeNode(), TreeLevel + 1);
+	}
+
+	for (int i = 0; i < ASTNodeVar.getPrintStatements().size(); i++)
+	{
+		printASTNodeTree(*ASTNodeVar.getPrintStatements()[i], TreeLevel + 1);
+	}
+
+	for (int i = 0; i < ASTNodeVar.getFormalNodes().size(); i++)
+	{
+		printASTNodeTree(*ASTNodeVar.getFormalNodes()[i], TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getFormalsNode())
+	{
+		printASTNodeTree(*ASTNodeVar.getFormalsNode(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getBodyNode())
+	{
+		printASTNodeTree(*ASTNodeVar.getBodyNode(), TreeLevel + 1);
+	}
+
+	if (ASTNodeVar.getDefinitions())
+	{
+		printASTNodeTree(*ASTNodeVar.getDefinitions(), TreeLevel + 1);
+	}
+
+	for (int i = 0; i < ASTNodeVar.getDefNodes().size(); i++)
+	{
+		printASTNodeTree(*ASTNodeVar.getDefNodes()[i], TreeLevel + 1);
+	}
 }
