@@ -5,7 +5,7 @@
 int main(int argv, char* argc[])
 {
 	if (argv==1){
-		cout << "Please insert a KLEIN file to scan for tokens." << endl;
+		cout << "Please insert a KLEIN file to Parse/Validate." << endl;
 		return 1;
 	}
 
