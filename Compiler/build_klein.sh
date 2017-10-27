@@ -16,11 +16,15 @@ kleinf (){
 }
 kleinp (){
 	buffer="$buffer -p --kleinp"
-	blank
+	echo "Creating klienp. Please Wait."
+	g++ -std=gnu++11 -o kleinp src/PrintASTNodeTree.cpp src/implementation/*.cpp
+	echo "kleinp has been created"
 }
 kleinv (){
 	buffer="$buffer -v --kleinv"
-	blank
+	echo "Creating kleinv. Please Wait."
+	g++ -std=gnu++11 -o kleinv src/SemanticValidator.cpp src/implementation/*.cpp
+	echo "kleinv has been created."
 }
 kleinc (){
 	buffer="$buffer -c --kleinc"
