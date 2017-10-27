@@ -2,7 +2,7 @@
 kleins (){
 	buffer="$buffer -s --kleins"
 	echo "Creating kleins.  Please Wait."
-	g++ -std=gnu++11 -o kleins src/BuildTokens.cpp src/implementation/*.cpp
+	g++ -std=gnu++11 -w -o kleins src/BuildTokens.cpp src/implementation/*.cpp
 	echo "kleins has been created."
 }
 blank (){
@@ -11,19 +11,19 @@ blank (){
 kleinf (){
 	buffer="$buffer -f --kleinf"
 	echo "Creating kleinf.  Please Wait."
-	g++ -std=gnu++11 -o kleinf src/ProgramValidator.cpp src/implementation/*.cpp
+	g++ -std=gnu++11 -w -o kleinf src/ProgramValidator.cpp src/implementation/*.cpp
 	echo "kleinf has been created."
 }
 kleinp (){
 	buffer="$buffer -p --kleinp"
 	echo "Creating klienp. Please Wait."
-	g++ -std=gnu++11 -o kleinp src/PrintASTNodeTree.cpp src/implementation/*.cpp
+	g++ -std=gnu++11 -w -o kleinp src/PrintASTNodeTree.cpp src/implementation/*.cpp
 	echo "kleinp has been created"
 }
 kleinv (){
 	buffer="$buffer -v --kleinv"
 	echo "Creating kleinv. Please Wait."
-	g++ -std=gnu++11 -o kleinv src/SemanticValidator.cpp src/implementation/*.cpp
+	g++ -std=gnu++11 -w -o kleinv src/SemanticValidator.cpp src/implementation/*.cpp
 	echo "kleinv has been created."
 }
 kleinc (){

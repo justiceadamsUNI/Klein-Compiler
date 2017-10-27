@@ -1,0 +1,24 @@
+(*Program to enumerate a list of error cases for the semantic analyzer
+Corrected
+by Josh Hilliard, Harsha Varma, and Justice Adams
+CS 4550 Fall 2017
+Compiler Defilers
+
+*)
+function main() : integer
+	ALG2(1, 1, false)
+function ALG(x : integer) : integer
+	if UNUSED()
+	then 1
+	else ALG(x-1) + ALG(x-1)
+(* Leaving ALGa() uncalled to check that warnings work*)
+function ALGa(x : boolean) : integer
+	print(1)
+	ALG2(1,2,x)
+function ALG2(x : integer, y : integer, a : boolean ) : integer	
+	if a 
+	then 1
+	else x + y / x
+function UNUSED () : boolean
+	true
+
