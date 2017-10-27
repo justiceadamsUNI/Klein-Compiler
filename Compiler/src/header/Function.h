@@ -54,13 +54,13 @@ private:
 	vector<string> UsedVariables;
 
 
-	ReturnTypes convertToReturnType(ASTNode returnType) {
-		//This is assuming that returnType is a Def Node
-		if (returnType.getAstNodeType() == DEF_NODE_TYPE) {
-			 if (returnType.getTypeNode()->getDataType() == "integer") {
+	ReturnTypes convertToReturnType(ASTNode Node) {
+		//This is assuming that Node is a Def Node
+		if (Node.getAstNodeType() == DEF_NODE_TYPE) {
+			 if (Node.getTypeNode()->getDataType() == "integer") {
 				 return INTEGER_TYPE;
 			 }
-			 if (returnType.getTypeNode()->getDataType() == "boolean") {
+			 if (Node.getTypeNode()->getDataType() == "boolean") {
 				 return BOOLEAN_TYPE;
 			 }
 			 else {
