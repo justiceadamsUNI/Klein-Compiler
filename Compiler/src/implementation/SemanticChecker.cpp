@@ -2,6 +2,8 @@
 #include <string>
 #include <tuple>
 
+// Note that most AST nodes hold onto their children in the reverse order by the way
+// they are built and put onto the stack.
 
 void SemanticChecker::assignTypeForDefNode(ASTNode& Node) {
 	assignTypeForBodyNode(*Node.getBodyNode());
@@ -12,8 +14,7 @@ void SemanticChecker::assignTypeForDefNode(ASTNode& Node) {
 		return;
 	}
 	else {
-		//ERROR: The return type for {function name} does not match it's definition
-		errors.push_back("ERROR: The return type found for " + CurrentFunction + "() does not match it's definition");
+		Errors.push_back("ERROR: The return type found for " + CurrentFunction + "() does not match it's definition");
 	}
 }
 
@@ -34,11 +35,11 @@ void SemanticChecker::assignTypeForLessThanNode(ASTNode& Node)
 
 	if (RightSideType != INTEGER_TYPE)
 	{
-		errors.push_back("ERROR: Right side of the < operator is not an integer. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Right side of the < operator is not an integer. Found within -  " + CurrentFunction + "()");
 	}
 	if (LeftSideType != INTEGER_TYPE)
 	{
-		errors.push_back("ERROR: Left side of the < operator is not an integer. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Left side of the < operator is not an integer. Found within -  " + CurrentFunction + "()");
 	}
 
 	Node.setReturnType(BOOLEAN_TYPE);
@@ -51,16 +52,16 @@ void SemanticChecker::assignTypeForEqualNode(ASTNode& Node)
 
 	if (RightSideType != INTEGER_TYPE && RightSideType != BOOLEAN_TYPE)
 	{
-		errors.push_back("ERROR: Right side of the = operator is not an integer or a boolean. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Right side of the = operator is not an integer or a boolean. Found within -  " + CurrentFunction + "()");
 	}
 	if (LeftSideType != INTEGER_TYPE && LeftSideType != BOOLEAN_TYPE)
 	{
-		errors.push_back("ERROR: Left side of the = operator is not an integer or a boolean. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Left side of the = operator is not an integer or a boolean. Found within -  " + CurrentFunction + "()");
 	}
 
 	if (RightSideType != LeftSideType)
 	{
-		errors.push_back("ERROR: Left side of the = operator is of a different type than the right side! found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Left side of the = operator is of a different type than the right side! Found within -  " + CurrentFunction + "()");
 	}
 
 	Node.setReturnType(BOOLEAN_TYPE);
@@ -96,7 +97,7 @@ void SemanticChecker::assignTypeForAdditionNode(ASTNode& Node)
 	ReturnTypes RightSideType = assignTypeForTermNode(*Node.getBaseTermNode());
 	if (RightSideType != INTEGER_TYPE)
 	{
-		errors.push_back("ERROR: Right side of the + operator is not an integer. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Right side of the + operator is not an integer. Found within -  " + CurrentFunction + "()");
 	}
 
 	ReturnTypes LeftSideType;
@@ -110,7 +111,7 @@ void SemanticChecker::assignTypeForAdditionNode(ASTNode& Node)
 
 	if (LeftSideType != INTEGER_TYPE)
 	{
-		errors.push_back("ERROR: Left side of the + operator is not an integer. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Left side of the + operator is not an integer. Found within -  " + CurrentFunction + "()");
 	}
 
 	Node.setReturnType(INTEGER_TYPE);
@@ -121,7 +122,7 @@ void SemanticChecker::assignTypeForSubtractionNode(ASTNode& Node)
 	ReturnTypes RightSideType = assignTypeForTermNode(*Node.getBaseTermNode());
 	if (RightSideType != INTEGER_TYPE)
 	{
-		errors.push_back("ERROR: Right side of the - operator is not an integer. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Right side of the - operator is not an integer. Found within -  " + CurrentFunction + "()");
 	}
 
 	ReturnTypes LeftSideType;
@@ -135,7 +136,7 @@ void SemanticChecker::assignTypeForSubtractionNode(ASTNode& Node)
 
 	if (LeftSideType != INTEGER_TYPE)
 	{
-		errors.push_back("ERROR: Left side of the - operator is not an integer. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Left side of the - operator is not an integer. Found within -  " + CurrentFunction + "()");
 	}
 
 	Node.setReturnType(INTEGER_TYPE);
@@ -146,7 +147,7 @@ void SemanticChecker::assignTypeForOrNode(ASTNode& Node)
 	ReturnTypes RightSideType = assignTypeForTermNode(*Node.getBaseTermNode());
 	if (RightSideType != BOOLEAN_TYPE)
 	{
-		errors.push_back("ERROR: Right side of the 'or' operator is not an boolean. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Right side of the 'or' operator is not an boolean. Found within -  " + CurrentFunction + "()");
 	}
 
 	ReturnTypes LeftSideType;
@@ -160,7 +161,7 @@ void SemanticChecker::assignTypeForOrNode(ASTNode& Node)
 
 	if (LeftSideType != BOOLEAN_TYPE)
 	{
-		errors.push_back("ERROR: Left side of the 'or' operator is not a boolean. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Left side of the 'or' operator is not a boolean. Found within -  " + CurrentFunction + "()");
 	}
 
 	Node.setReturnType(BOOLEAN_TYPE);
@@ -177,7 +178,7 @@ void SemanticChecker::assignTypeForMultiplicatorNode(ASTNode& Node)
 	ReturnTypes RightSideType = assignTypeForFactorNode(*Node.getFactorNode());
 	if (RightSideType != INTEGER_TYPE)
 	{
-		errors.push_back("ERROR: Right side of the * operator is not an integer. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Right side of the * operator is not an integer. Found within -  " + CurrentFunction + "()");
 	}
 
 	ReturnTypes LeftSideType;
@@ -195,7 +196,7 @@ void SemanticChecker::assignTypeForMultiplicatorNode(ASTNode& Node)
 
 	if (LeftSideType != INTEGER_TYPE)
 	{
-		errors.push_back("ERROR: Left side of the * operator is not an integer. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Left side of the * operator is not an integer. Found within -  " + CurrentFunction + "()");
 	}
 
 Node.setReturnType(INTEGER_TYPE);
@@ -206,7 +207,7 @@ void SemanticChecker::assignTypeForDividerNode(ASTNode& Node)
 	ReturnTypes RightSideType = assignTypeForFactorNode(*Node.getFactorNode());
 	if (RightSideType != INTEGER_TYPE)
 	{
-		errors.push_back("ERROR: Right side of the / operator is not an integer. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Right side of the / operator is not an integer. Found within -  " + CurrentFunction + "()");
 	}
 
 	ReturnTypes LeftSideType;
@@ -224,7 +225,7 @@ void SemanticChecker::assignTypeForDividerNode(ASTNode& Node)
 
 	if (LeftSideType != INTEGER_TYPE)
 	{
-		errors.push_back("ERROR: Left side of the / operator is not an integer. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Left side of the / operator is not an integer. Found within -  " + CurrentFunction + "()");
 	}
 
 	Node.setReturnType(INTEGER_TYPE);
@@ -235,7 +236,7 @@ void SemanticChecker::assignTypeForAndNode(ASTNode& Node)
 	ReturnTypes RightSideType = assignTypeForFactorNode(*Node.getFactorNode());
 	if (RightSideType != BOOLEAN_TYPE)
 	{
-		errors.push_back("ERROR: Right side of the 'and' operator is not a boolean. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Right side of the 'and' operator is not a boolean. Found within -  " + CurrentFunction + "()");
 	}
 
 	ReturnTypes LeftSideType;
@@ -249,7 +250,7 @@ void SemanticChecker::assignTypeForAndNode(ASTNode& Node)
 
 	if (LeftSideType != BOOLEAN_TYPE)
 	{
-		errors.push_back("ERROR: Left side of the 'and' operator is not a boolean. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: Left side of the 'and' operator is not a boolean. Found within -  " + CurrentFunction + "()");
 	}
 
 	Node.setReturnType(BOOLEAN_TYPE);
@@ -267,7 +268,7 @@ void SemanticChecker::assignTypeForSubtractionFactorNode(ASTNode& Node)
 
 	if (Type != INTEGER_TYPE)
 	{
-		errors.push_back("ERROR: you can't apply a negative operator to a non-integer data value. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: You can't apply a negative operator to a non-integer data value. Found within -  " + CurrentFunction + "()");
 	}
 
 	Node.setReturnType(INTEGER_TYPE);
@@ -286,40 +287,58 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode& Node)
 
 	if (SymbolTable.find(FunctionName) != SymbolTable.end())
 	{
-		if (Node.getBaseActualsNode()->getAstNodeType() == BaseActualsNodeTYPE) {
-			if (!SymbolTable.find(FunctionName)->second.getParameters(CurrentFunction).empty()) {
-				errors.push_back("ERROR: you attempted to call " + FunctionName + " with no paramaters. found within -  " + CurrentFunction + "()");
+		//There are no parameters in the function call
+		if (Node.getBaseActualsNode()->getAstNodeType() == BASE_ACTUALS_NODE_TYPE) {
+			if (!SymbolTable.find(FunctionName)->second.getParameters().empty()) {
+				Errors.push_back("ERROR: You attempted to call " 
+					+ FunctionName 
+					+ " with no paramaters, but it expects some. Found within -  " 
+					+ CurrentFunction + "()");
 			}
 		}
 		//There are parameters in the function call
 		else {
-			vector<ASTNode*> functionParams = Node.getBaseActualsNode()->getNonEmptyActualsNode()->getExpressions();
-			vector<tuple<string, ReturnTypes>> symbolTableParams = SymbolTable.find(FunctionName)->second.getParameters(CurrentFunction);
+			vector<ASTNode*> FunctionCallParams = Node.getBaseActualsNode()->getNonEmptyActualsNode()->getExpressions();
+			vector<tuple<string, ReturnTypes>> SymbolTableParams = SymbolTable.find(FunctionName)->second.getParameters();
 			ReturnTypes type = NO_RETURN_TYPE;
-			if (functionParams.size() == symbolTableParams.size()) {
-				for (int i = functionParams.size() - 1, j = 0; i >= 0, j < symbolTableParams.size(); i--, j++) {
-					type = assignTypeForExpressionNode(*functionParams.at(i));
-					if (type == get<1>(symbolTableParams.at(j))) {
+			
+			// check Type on each expression used in the function call
+			if (FunctionCallParams.size() == SymbolTableParams.size()) {
+				for (int i = FunctionCallParams.size() - 1, j = 0; i >= 0, j < SymbolTableParams.size(); i--, j++) {
+					type = assignTypeForExpressionNode(*FunctionCallParams.at(i));
+					if (type == get<1>(SymbolTableParams.at(j))) {
 						continue;
 					}
 					else
 					{
-						errors.push_back("ERROR: There was a type mismatch when calling function " + FunctionName + ".found within - " + CurrentFunction + "()");
+						// param doesn't match the expected Type
+						Errors.push_back("ERROR: There was a type mismatch when calling function " 
+							+ FunctionName 
+							+ "(). Found within - " 
+							+ CurrentFunction + "()");
 						break;
 					}
 				}
 			}
 			else
 			{
-				errors.push_back("ERROR: You attempted to call " + FunctionName + "() with a mismatching number of arguments. This function expects " + to_string(functionParams.size())+  " parameters. found within - " + CurrentFunction + "()");
+				Errors.push_back("ERROR: You attempted to call " 
+					+ FunctionName + "() with a mismatching number of arguments. This function expects " 
+					+ to_string(SymbolTableParams.size())
+					+  " parameter(s). Found within - " + CurrentFunction + "()");
 			}
 		}
 
-		//set this expression node type to that of the function call
+		// set this expression node Type to that of the function call. 
+		// Also put the CurrentFunction into the called functions list.
+		SymbolTable.find(FunctionName)->second.addFunctionCallers(CurrentFunction);
 		Node.setReturnType(SymbolTable.find(FunctionName)->second.getReturnType());
 	}
 	else {
-		errors.push_back("ERROR: Call to function " + FunctionName + ": Function does not exist.");
+		Errors.push_back("ERROR: Call to function " 
+			+ FunctionName 
+			+ "(), but the Function does not exist. Found within - " 
+			+ CurrentFunction + "()");
 	}
 }
 
@@ -335,7 +354,7 @@ void SemanticChecker::assignTypeForNotFactorNode(ASTNode& Node)
 	ReturnTypes Type = assignTypeForFactorNode(*Node.getFactorNode());
 	if (Type != BOOLEAN_TYPE)
 	{
-		errors.push_back("ERROR: you can't negate a non integer data value. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: You can't apply the 'not' operation to a non-boolean data type. Found within -  " + CurrentFunction + "()");
 	}
 	Node.setReturnType(BOOLEAN_TYPE);
 }
@@ -348,7 +367,7 @@ void SemanticChecker::assignTypeForIfFactorNode(ASTNode& Node)
 	
 	if (IfCheck != BOOLEAN_TYPE)
 	{
-		errors.push_back("ERROR: If statement condition needs to be of type boolean. found within -  " + CurrentFunction + "()");
+		Errors.push_back("ERROR: If statement condition needs to be of type boolean. Found within -  " + CurrentFunction + "()");
 	}
 
 	if (ThenType == ElseType)
@@ -363,21 +382,24 @@ void SemanticChecker::assignTypeForIfFactorNode(ASTNode& Node)
 
 void SemanticChecker::assignTypeForIdentifierNode(ASTNode& Node)
 {
-	vector<tuple<string, ReturnTypes>> symbolTableParams = SymbolTable.find(CurrentFunction)->second.getParameters("");
-	ReturnTypes type = NO_RETURN_TYPE;
-	for (int i = 0; i < symbolTableParams.size(); i++) {
-		if (Node.getIdentifierName() == get<0>(symbolTableParams.at(i))) {
-			//add variable to used variable list and assign type to it
+	vector<tuple<string, ReturnTypes>> SymbolTableParams = SymbolTable.find(CurrentFunction)->second.getParameters();
+	ReturnTypes Type = NO_RETURN_TYPE;
+	for (int i = 0; i < SymbolTableParams.size(); i++) {
+		if (Node.getIdentifierName() == get<0>(SymbolTableParams.at(i))) {
+			//add variable to used variable list and assign Type to it
 			SymbolTable.find(CurrentFunction)->second.variableUsed(Node.getIdentifierName());
-			type = get<1>(symbolTableParams.at(i));
+			Type = get<1>(SymbolTableParams.at(i));
 			break;
 		}
 	}
-	if (type == NO_RETURN_TYPE)
+	if (Type == NO_RETURN_TYPE)
 	{
-		errors.push_back("ERROR: variable " + Node.getIdentifierName() + " has not been declared.");
+		Errors.push_back("ERROR: Variable '" 
+			+ Node.getIdentifierName() 
+			+ "' has not been declared.  Found within -  " 
+			+ CurrentFunction + "()");
 	}
-	Node.setReturnType(type);
+	Node.setReturnType(Type);
 }
 
 void SemanticChecker::assignTypeForIntegerLiteralNode(ASTNode& Node)
@@ -399,12 +421,12 @@ void SemanticChecker::assignTypeForPrintStatementNode(ASTNode& Node)
 
 // helper methods -------------------------------------------------------
 ReturnTypes SemanticChecker::assignTypeForExpressionNode(ASTNode& Node) {
-	if (Node.getAstNodeType() == BaseExprNodeType)
+	if (Node.getAstNodeType() == BASE_EXPR_NODE_TYPE)
 	{
 		assignTypeForBaseExpressionNode(Node);
 		return Node.getReturnType();
 	}
-	else if (Node.getAstNodeType() == LessThanExprNodeTYPE)
+	else if (Node.getAstNodeType() == LESS_THAN_EXPR_NODE_TYPE)
 	{
 		assignTypeForLessThanNode(Node);
 		return BOOLEAN_TYPE;
@@ -416,18 +438,18 @@ ReturnTypes SemanticChecker::assignTypeForExpressionNode(ASTNode& Node) {
 }
 
 ReturnTypes SemanticChecker::assignTypeForSimpleExpressionNode(ASTNode& Node) {
-	if (Node.getAstNodeType() == BaseSimpleExprNodeType)
+	if (Node.getAstNodeType() == BASE_SIMPLE_EXPR_NODE_TYPE)
 	{
 		assignTypeForBaseSimpleExpressionNode(Node);
 		return Node.getReturnType();
 	}
-	else if (Node.getAstNodeType() == AdditionSimpleExprNodeTYPE)
+	else if (Node.getAstNodeType() == ADDITION_SIMPLE_EXPR_NODE_TYPE)
 	{
 		assignTypeForAdditionNode(Node);
 		return INTEGER_TYPE;
 
 	}
-	else if (Node.getAstNodeType() == SubtractorSimpleExprNodeTYPE)
+	else if (Node.getAstNodeType() == SUBTRACTOR_SIMPLE_EXPR_NODE_TYPE)
 	{
 		assignTypeForSubtractionNode(Node);
 		return INTEGER_TYPE;
@@ -442,19 +464,19 @@ ReturnTypes SemanticChecker::assignTypeForSimpleExpressionNode(ASTNode& Node) {
 
 ReturnTypes SemanticChecker::assignTypeForTermNode(ASTNode& Node)
 {
-	if (Node.getAstNodeType() == BaseTermNodeTYPE)
+	if (Node.getAstNodeType() == BASE_TERM_NODE_TYPE)
 	{
 		assignTypeForBaseTermNode(Node);
 		return Node.getReturnType();
 
 	}
-	else if (Node.getAstNodeType() == MultiplicatorTermNodeTYPE)
+	else if (Node.getAstNodeType() == MULTIPLICATOR_TERM_NODE_TYPE)
 	{
 		assignTypeForMultiplicatorNode(Node);
 		return INTEGER_TYPE;
 
 	}
-	else if (Node.getAstNodeType() == DividerTermNodeTYPE)
+	else if (Node.getAstNodeType() == DIVIDER_TERM_NODE_TYPE)
 	{
 		assignTypeForDividerNode(Node);
 		return INTEGER_TYPE;
@@ -467,47 +489,47 @@ ReturnTypes SemanticChecker::assignTypeForTermNode(ASTNode& Node)
 
 ReturnTypes SemanticChecker::assignTypeForFactorNode(ASTNode& Node)
 {
-	if (Node.getAstNodeType() == ParenExprFactorNodeTYPE)
+	if (Node.getAstNodeType() == PARENTHESISED_EXPR_FACTOR_NODE_TYPE)
 	{
 		assignTypeForParenthesisedExpressionNode(Node);
 		return Node.getReturnType();
 
 	}
-	else if (Node.getAstNodeType() == SubtractionFactorNodeTYPE)
+	else if (Node.getAstNodeType() == SUBTRACTION_FACTOR_NODE_TYPE)
 	{
 		assignTypeForSubtractionFactorNode(Node);
 		return INTEGER_TYPE;
 	}
-	else if (Node.getAstNodeType() == LiteralFactorNodeTYPE)
+	else if (Node.getAstNodeType() == LITERAL_FACTOR_NODE_TYPE)
 	{
 		assignTypeForLiteralFactorNode(Node);
 		return Node.getReturnType();
 	}
-	else if (Node.getAstNodeType() == FunctionCallType)
+	else if (Node.getAstNodeType() == FUNCTION_CALL_TYPE)
 	{
 		assignTypeForFunctionCallNode(Node);
 		return Node.getReturnType();
 	}
-	else if (Node.getAstNodeType() == SingletonIdentifierFactorNodeTYPE)
+	else if (Node.getAstNodeType() == SINGLETON_IDENTIFIER_FACTOR_NODE_TYPE)
 	{
 		assignTypeForSingletonIdentifierFactorNode(Node);
 		return Node.getReturnType();
 	}
-	else if (Node.getAstNodeType() == NotFactorNodeTYPE)
+	else if (Node.getAstNodeType() == NOT_FACTOR_NODE_TYPE)
 	{
 		assignTypeForNotFactorNode(Node);
 		return BOOLEAN_TYPE;
 	}
 	else {
 		assignTypeForIfFactorNode(Node);
-		// not a boolean because it could be an OR type
+		// not a boolean because it could be an OR Type
 		return Node.getReturnType();
 	}
 }
 
 ReturnTypes SemanticChecker::assignTypeForLiteralNode(ASTNode& Node)
 {
-	if (Node.getAstNodeType() == IntegerLiteralNodeTYPE)
+	if (Node.getAstNodeType() == INTEGER_LITERAL_NODE_TYPE)
 	{
 		assignTypeForIntegerLiteralNode(Node);
 		return INTEGER_TYPE;

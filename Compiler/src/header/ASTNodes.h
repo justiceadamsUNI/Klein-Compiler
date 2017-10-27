@@ -6,41 +6,41 @@
 using namespace std;
 
 enum ASTNodeType {
-	IDENTIFIERNODETYPE,
-	FactorNodeTYPE,
-	BaseActualsNodeTYPE,
-	BaseTermNodeTYPE,
-	BaseSimpleExprNodeType,
-	BaseExprNodeType,
-	FormalsNodeType,
-	PrintStatemetNodeTYPE,
-	LiteralNodeTYPE,
-	IntegerLiteralNodeTYPE,
-	BooleanLiteralNodeTYPE,
-	NonEmptyActualsNodeTYPE,
-	NonBaseActualsNodeTYPE,
-	ParenExprFactorNodeTYPE,
-	SubtractionFactorNodeTYPE,
-	LiteralFactorNodeTYPE,
-	FunctionCallType,
-	SingletonIdentifierFactorNodeTYPE,
-	NotFactorNodeTYPE,
-	IfFactorNodeTYPE,
-	MultiplicatorTermNodeTYPE,
-	DividerTermNodeTYPE,
-	AndTermNodeType,
-	SubtractorSimpleExprNodeTYPE,
-	OrSimpleExprNodeTYPE,
-	AdditionSimpleExprNodeTYPE,
-	EqualToExprNodeTYPE,
-	LessThanExprNodeTYPE,
-	TypeNodeTYPE,
-	BodyNodeTYPE,
-	FormalNodeTYPE,
-	NonEmptyFormalsNodeTYPE,
-	DefNodeTYPE,
-	DefinitionsNodeTYPE,
-	ProgramNodeTYPE
+	IDENTIFIER_NODE_TYPE,
+	FACTOR_NODE_TYPE,
+	BASE_ACTUALS_NODE_TYPE,
+	BASE_TERM_NODE_TYPE,
+	BASE_SIMPLE_EXPR_NODE_TYPE,
+	BASE_EXPR_NODE_TYPE,
+	FORMALS_NODE_TYPE,
+	PRINT_STATEMENT_NODE_TYPE,
+	LITERAL_NODE_TYPE,
+	INTEGER_LITERAL_NODE_TYPE,
+	BOOLEAN_LITERAL_NODE_TYPE,
+	NON_EMPTY_ACTUALS_NODE_TYPE,
+	NON_BASE_ACTUALS_NODE_TYPE,
+	PARENTHESISED_EXPR_FACTOR_NODE_TYPE,
+	SUBTRACTION_FACTOR_NODE_TYPE,
+	LITERAL_FACTOR_NODE_TYPE,
+	FUNCTION_CALL_TYPE,
+	SINGLETON_IDENTIFIER_FACTOR_NODE_TYPE,
+	NOT_FACTOR_NODE_TYPE,
+	IF_FACTOR_NODE_TYPE,
+	MULTIPLICATOR_TERM_NODE_TYPE,
+	DIVIDER_TERM_NODE_TYPE,
+	AND_TERM_NODE_TYPE,
+	SUBTRACTOR_SIMPLE_EXPR_NODE_TYPE,
+	OR_SIMPLE_EXPR_NODE_TYPE,
+	ADDITION_SIMPLE_EXPR_NODE_TYPE,
+	EQUAL_TO_EXPR_NODE_TYPE,
+	LESS_THAN_EXPR_NODE_TYPE,
+	TYPE_NODE_TYPE,
+	BODY_NODE_TYPE,
+	FORMAL_NODE_TYPE,
+	NON_EMPTY_FORMALS_NODE_TYPE,
+	DEF_NODE_TYPE,
+	DEFINITIONS_NODE_TYPE,
+	PROGRAM_NODE_TYPE
 };
 
 class ASTNode {
@@ -130,129 +130,129 @@ public:
 		return NodeReturnType;
 	}
 
-	//Validator methods
+	// Validator methods
 	bool isFormalsNode() {
-		return NodeType == FormalsNodeType || NodeType == NonEmptyFormalsNodeTYPE;
+		return NodeType == FORMALS_NODE_TYPE || NodeType == NON_EMPTY_FORMALS_NODE_TYPE;
 	}
 
 	bool isExpressionNode() {
-		return NodeType == BaseExprNodeType ||
-			NodeType == LessThanExprNodeTYPE ||
-			NodeType == EqualToExprNodeTYPE;
+		return NodeType == BASE_EXPR_NODE_TYPE ||
+			NodeType == LESS_THAN_EXPR_NODE_TYPE ||
+			NodeType == EQUAL_TO_EXPR_NODE_TYPE;
 	}
 
 	bool isSimpleExpressionNode() {
-		return NodeType == BaseSimpleExprNodeType ||
-			NodeType == AdditionSimpleExprNodeTYPE ||
-			NodeType == SubtractorSimpleExprNodeTYPE ||
-			NodeType == OrSimpleExprNodeTYPE;
+		return NodeType == BASE_SIMPLE_EXPR_NODE_TYPE ||
+			NodeType == ADDITION_SIMPLE_EXPR_NODE_TYPE ||
+			NodeType == SUBTRACTOR_SIMPLE_EXPR_NODE_TYPE ||
+			NodeType == OR_SIMPLE_EXPR_NODE_TYPE;
 	}
 
 	bool isTermNode() {
-		return NodeType == BaseTermNodeTYPE ||
-			NodeType == MultiplicatorTermNodeTYPE ||
-			NodeType == DividerTermNodeTYPE ||
-			NodeType == AndTermNodeType;
+		return NodeType == BASE_TERM_NODE_TYPE ||
+			NodeType == MULTIPLICATOR_TERM_NODE_TYPE ||
+			NodeType == DIVIDER_TERM_NODE_TYPE ||
+			NodeType == AND_TERM_NODE_TYPE;
 	}
 
-	//check if we need FactorNodeTYPE.
+	// check if we need FACTOR_NODE_TYPE.
 	bool isFactorNode() {
-		return NodeType == FactorNodeTYPE ||
-			NodeType == ParenExprFactorNodeTYPE ||
-			NodeType == SubtractionFactorNodeTYPE ||
-			NodeType == LiteralFactorNodeTYPE ||
-			NodeType == FunctionCallType ||
-			NodeType == SingletonIdentifierFactorNodeTYPE ||
-			NodeType == NotFactorNodeTYPE ||
-			NodeType == IfFactorNodeTYPE;
+		return NodeType == FACTOR_NODE_TYPE ||
+			NodeType == PARENTHESISED_EXPR_FACTOR_NODE_TYPE ||
+			NodeType == SUBTRACTION_FACTOR_NODE_TYPE ||
+			NodeType == LITERAL_FACTOR_NODE_TYPE ||
+			NodeType == FUNCTION_CALL_TYPE ||
+			NodeType == SINGLETON_IDENTIFIER_FACTOR_NODE_TYPE ||
+			NodeType == NOT_FACTOR_NODE_TYPE ||
+			NodeType == IF_FACTOR_NODE_TYPE;
 	}
 
 	bool isLiteralNode() {
-		return NodeType == BooleanLiteralNodeTYPE ||
-			NodeType == IntegerLiteralNodeTYPE;
+		return NodeType == BOOLEAN_LITERAL_NODE_TYPE ||
+			NodeType == INTEGER_LITERAL_NODE_TYPE;
 	}
 
 	bool isActualsNode() {
-		return NodeType == BaseActualsNodeTYPE ||
-			NodeType == NonBaseActualsNodeTYPE;
+		return NodeType == BASE_ACTUALS_NODE_TYPE ||
+			NodeType == NON_BASE_ACTUALS_NODE_TYPE;
 	}
 
 	bool isArithmeticTerm() {
-		return NodeType == DividerTermNodeTYPE ||
-			NodeType == MultiplicatorTermNodeTYPE;
+		return NodeType == DIVIDER_TERM_NODE_TYPE ||
+			NodeType == MULTIPLICATOR_TERM_NODE_TYPE;
 	}
 
 	bool isArithmeticSimpleExpression() {
-		return NodeType == AdditionSimpleExprNodeTYPE ||
-			NodeType == SubtractorSimpleExprNodeTYPE;
+		return NodeType == ADDITION_SIMPLE_EXPR_NODE_TYPE ||
+			NodeType == SUBTRACTOR_SIMPLE_EXPR_NODE_TYPE;
 	}
 	
-	//Setters
-	void setIdentifierName(string inIdentifierName) {
-		IdentifierName = inIdentifierName;
+	// Setters
+	void setIdentifierName(string InIdentifierName) {
+		IdentifierName = InIdentifierName;
 	}
-	void setFactorNode(ASTNode* inFactorNode) {
-		FactorNode = inFactorNode;
+	void setFactorNode(ASTNode* InFactorNode) {
+		FactorNode = InFactorNode;
 	}
-	void setBaseTermNode(ASTNode* inBaseTermNode) {
-		BaseTermNode = inBaseTermNode;
+	void setBaseTermNode(ASTNode* InBaseTermNode) {
+		BaseTermNode = InBaseTermNode;
 	}
-	void setBaseSimpleExprNode(ASTNode* inBaseSimpleExprNode) {
-		BaseSimpleExprNode = inBaseSimpleExprNode;
+	void setBaseSimpleExprNode(ASTNode* InBaseSimpleExprNode) {
+		BaseSimpleExprNode = InBaseSimpleExprNode;
 	}
-	void setBaseExprNode(ASTNode* inBaseExprNode) {
-		BaseExprNode = inBaseExprNode;
+	void setBaseExprNode(ASTNode* InBaseExprNode) {
+		BaseExprNode = InBaseExprNode;
 	}
-	void setLiteralValue(string inLiteralValue) {
-		LiteralValue = inLiteralValue;
+	void setLiteralValue(string InLiteralValue) {
+		LiteralValue = InLiteralValue;
 	}
-	void addExpressionToVector(ASTNode* inExpressions) {
-		Expressions.push_back(inExpressions);
+	void addExpressionToVector(ASTNode* InExpressions) {
+		Expressions.push_back(InExpressions);
 	}
-	void setNonEmptyActualsNode(ASTNode* inNoneEmptyActualsNode) {
-		NonEmptyActualsNode = inNoneEmptyActualsNode;
+	void setNonEmptyActualsNode(ASTNode* InNoneEmptyActualsNode) {
+		NonEmptyActualsNode = InNoneEmptyActualsNode;
 	}
-	void setLiteralNode(ASTNode* inLiteralNode) {
-		LiteralNode = inLiteralNode;
+	void setLiteralNode(ASTNode* InLiteralNode) {
+		LiteralNode = InLiteralNode;
 	}
-	void setIdentifierNode(ASTNode* inIdentifierNodeVar) {
-		IdentifierNodeVar = inIdentifierNodeVar;
+	void setIdentifierNode(ASTNode* InIdentifierNodeVar) {
+		IdentifierNodeVar = InIdentifierNodeVar;
 	}
-	void setBaseActualsNode(ASTNode* inBaseActualsNode) {
-		BaseActualsNode = inBaseActualsNode;
+	void setBaseActualsNode(ASTNode* InBaseActualsNode) {
+		BaseActualsNode = InBaseActualsNode;
 	}
-	void setBaseExprNode2(ASTNode* inBaseExprNode2) {
-		BaseExprNode2 = inBaseExprNode2;
+	void setBaseExprNode2(ASTNode* InBaseExprNode2) {
+		BaseExprNode2 = InBaseExprNode2;
 	}
-	void setBaseExprNode3(ASTNode* inBaseExprNode3) {
-		BaseExprNode3 = inBaseExprNode3;
+	void setBaseExprNode3(ASTNode* InBaseExprNode3) {
+		BaseExprNode3 = InBaseExprNode3;
 	}
-	void setFactorNode2(ASTNode* inFactorNode2) {
-		FactorNode2 = inFactorNode2;
+	void setFactorNode2(ASTNode* InFactorNode2) {
+		FactorNode2 = InFactorNode2;
 	}
-	void setBaseTermNode2(ASTNode* inBaseTermNode2) {
-		BaseTermNode2 = inBaseTermNode2;
+	void setBaseTermNode2(ASTNode* InBaseTermNode2) {
+		BaseTermNode2 = InBaseTermNode2;
 	}
-	void setBaseSimpleExprNode2(ASTNode* inBaseSimpleExprNode2) {
-		BaseSimpleExprNode2 = inBaseSimpleExprNode2;
+	void setBaseSimpleExprNode2(ASTNode* InBaseSimpleExprNode2) {
+		BaseSimpleExprNode2 = InBaseSimpleExprNode2;
 	}
-	void setDataType(string inDataType) {
-		DataType = inDataType;
+	void setDataType(string InDataType) {
+		DataType = InDataType;
 	}
-	void setTypeNode(ASTNode* inTypeNode) {
-		TypeNode = inTypeNode;
+	void setTypeNode(ASTNode* InTypeNode) {
+		TypeNode = InTypeNode;
 	}
-	void addPrintStatementToVector(ASTNode* inPrintStatement) {
-		PrintStatements.push_back(inPrintStatement);
+	void addPrintStatementToVector(ASTNode* InPrintStatement) {
+		PrintStatements.push_back(InPrintStatement);
 	}
 	void addFormalNodeToVector(ASTNode* Formal) {
 		FormalNodes.push_back(Formal);
 	}
-	void setFormalsNode(ASTNode* inFormalsNode) {
-		FormalsNode = inFormalsNode;
+	void setFormalsNode(ASTNode* InFormalsNode) {
+		FormalsNode = InFormalsNode;
 	}
-	void setBodyNode(ASTNode* inBodyNode) {
-		BodyNode = inBodyNode;
+	void setBodyNode(ASTNode* InBodyNode) {
+		BodyNode = InBodyNode;
 	}
 	void setDefinitionsNode(ASTNode* InDefinitions) {
 		Definitions = InDefinitions;
@@ -264,6 +264,7 @@ public:
 		NodeReturnType = type;
 	}
 private :
+	// everything initialized to null to represent there is no child node there in the tree.
 	ASTNodeType NodeType;
 	ReturnTypes NodeReturnType = NO_RETURN_TYPE;
 
