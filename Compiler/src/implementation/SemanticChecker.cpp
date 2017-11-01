@@ -316,7 +316,7 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode& Node)
 							+ FunctionName 
 							+ "(). Found within - " 
 							+ CurrentFunction + "()");
-						break;
+						continue;
 					}
 				}
 			}
