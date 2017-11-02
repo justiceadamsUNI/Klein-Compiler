@@ -1,0 +1,33 @@
+Harsha Varma, Josh Hilliard, and Justice Adams
+Compiler Defilers
+Compilers, Fall 2017
+
+Layout of Stack Frame:
+	Return Value of Stack Frame - 1 slot of memory	
+	Value of Args - n slots of memory
+	Control Link - 1 slots of memory //Returns to the line in program
+	Access Link - 1 slot of memory //Prior top of Stack address
+	Prior State of Program - 5 slots of memory (Registers 1,2,3,4,6)
+	Temp Data Objects - n slots of memory
+
+Layout DMem:
+	Our command line arguments will be moved within the main function, moving from the last argument to the 1st
+	argument.  This will allow us to keep the vars in order of which they are received in assending memory
+	slots.  The stack will grow from DMEM location 1 to DMEM location 1023 (or further if using extended
+	memory).  Memory will be allocated when we are adding stack frames.  This would include any temporary
+	data objects that need to be added.  If additional temporary data objects are needed, we will add them to
+	the temp data objects location of the current stack frame, and update the top pointer location as needed.
+
+	DMEM Loc0: 1023
+	DMEM Loc1: n Arguments (before main is called moving vars)
+	DMEM Loc1: Stack Frame 1 (after main is called, vars moved)
+
+Eight Registers
+	0:RESERVED FOR 0 VALUE
+	1:Stores variable from symbol table to pass into DMEM 
+	2:Return Values for Operations
+	3:Left Operand for Operations
+	4:Right Operand for Operations
+	5:Top of Stack
+	6:Status Pointer
+	7:RESERVED FOR PROGRAM COUNTER
