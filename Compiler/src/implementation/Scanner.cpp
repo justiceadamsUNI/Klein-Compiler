@@ -224,7 +224,12 @@ Token Scanner::consumeIntegerToken()
 
 Token Scanner::consumeZeroToken()
 {
-	
+	if (FilePosition + 1 == FileSize)
+	{
+		//Last character in file. Update pointer. Skips past while loop
+		FilePosition++;
+	}
+
 	while (FilePosition + 1  < FileSize)
 	{
 		char NextChar = FileContents[FilePosition + 1];
