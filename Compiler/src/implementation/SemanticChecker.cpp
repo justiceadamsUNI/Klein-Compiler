@@ -339,6 +339,12 @@ void SemanticChecker::assignTypeForFunctionCallNode(ASTNode& Node)
 			+ FunctionName 
 			+ "(), but the Function does not exist. Found within - " 
 			+ CurrentFunction + "()");
+
+		// Still need to assign types to paramaters in order to see if any variables are used
+		vector<ASTNode*> FunctionCallParams = Node.getBaseActualsNode()->getNonEmptyActualsNode()->getExpressions();
+		for (int i = FunctionCallParams.size() - 1; i >= 0;  i--) {
+			assignTypeForExpressionNode(*FunctionCallParams.at(i));
+		}
 	}
 }
 
