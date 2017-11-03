@@ -9,7 +9,7 @@ const map<ReturnTypes, string> ReturnTypePrintMap{
 	{ INTEGER_TYPE, "Integer" },
 	{ BOOLEAN_TYPE, "Boolean" },
 	{ OR_TYPE, "Or Type (boolean or integer)" },
-	{ NO_RETURN_TYPE, "No Return Type" }
+	{ NO_RETURN_TYPE, "None" }
 };
 
 int main(int argv, char* argc[])
