@@ -8,6 +8,8 @@ public:
 		SymbolTable = GeneratedSymbolTable;
 	}
 
+	void writeOutTargetCode();
+
 private:
 	ASTNode Tree = ASTNode(PROGRAM_NODE_TYPE);
 	map<string, Function> SymbolTable;
