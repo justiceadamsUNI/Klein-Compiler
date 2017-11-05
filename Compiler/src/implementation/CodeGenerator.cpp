@@ -8,6 +8,7 @@ void CodeGenerator::writeOutTargetCode()
 {
 	setUpRuntimeEnvironment();
 	generateMainFunction();
+	generatePrintFunction();
 	writeInstructionsToFile();
 }
 
@@ -66,6 +67,14 @@ void CodeGenerator::generateMainFunction()
 	GenerateFunction();
 
 	addInstruction("OUT  7,0,0   ; This is main doing stuff");
+	returnFromFunction();
+}
+
+void CodeGenerator::generatePrintFunction()
+{
+	GenerateFunction();
+	addInstruction("LD  1, -3(6)   ; Loading the value of whatever argument is passed to print to R1");
+	addInstruction("OUT 1,0,0   ; Printing the value of whatever argument is passed to print");
 	returnFromFunction();
 }
 
