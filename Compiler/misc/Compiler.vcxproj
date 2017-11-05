@@ -156,16 +156,12 @@
     <ClInclude Include="test\fakeit.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\BuildTokens.cpp" />
-    <ClCompile Include="src\Compiler.cpp" />
     <ClCompile Include="src\implementation\Parser.cpp" />
     <ClCompile Include="src\implementation\PStack.cpp" />
     <ClCompile Include="src\implementation\Scanner.cpp" />
     <ClCompile Include="src\implementation\SemanticChecker.cpp" />
     <ClCompile Include="src\implementation\SemanticStack.cpp" />
     <ClCompile Include="src\implementation\Token.cpp" />
-    <ClCompile Include="src\PrintASTNodeTree.cpp" />
-    <ClCompile Include="src\ProgramValidator.cpp" />
     <ClCompile Include="src\SemanticValidator.cpp" />
     <ClCompile Include="test\ASTNodeTest.cpp" />
     <ClCompile Include="test\BaseASTNodeVisitorTest.cpp" />

@@ -14,6 +14,17 @@ private:
 	ASTNode Tree = ASTNode(PROGRAM_NODE_TYPE);
 	map<string, Function> SymbolTable;
 	vector<string> Instructions;
+	int InstructionCount = 0;
 
 	void writeInstructionsToFile();
+	void setUpRuntimeEnvironment();
+	void addInstruction(string Instruction);
+	void addWhiteSpace();
+	void generateMainFunction();
+	
+	
+	void GenerateFunction();
+	void setRegistersInDmem();
+	void restoreRegistersFromDmem();
+	void returnFromFunction();
 };

@@ -1,9 +1,4 @@
-(*Fraction Addition
-by Josh Hilliard, Harsha Varma, and Justice Adams
-CS 4550 Fall 2017
-Compiler Defilers
-*)
-function main(a : integer, b : integer, c : integer, d : integer) : integer
-	print(a*d + c*b)
-	print(b * d)
+
+function main() : integer
+	print(1)
 	1
