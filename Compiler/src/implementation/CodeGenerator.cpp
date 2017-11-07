@@ -7,9 +7,8 @@ using namespace std;
 void CodeGenerator::writeOutTargetCode()
 {
 	setUpRuntimeEnvironment();
+	generatePrintFunction();
 	generateMainFunction();
-	//generatePrintFunction();
-	//walkTree(//takes in an astnode);
 	writeInstructionsToFile();
 }
 
@@ -44,7 +43,7 @@ void CodeGenerator::setUpRuntimeEnvironment()
 	addInstruction("ST  " + to_string(1) + ", " + to_string(LastParamLocation + 1) + "(0)   ; Storing the return adress in DMEM at the control link slot");
 
 	//jump
-	addInstruction("LDA  " + to_string(7) + ", " + to_string(1) + "(7)   ; Jump to main");
+	addInstruction("LDA  " + to_string(7) + ", " + to_string(16) + "(7)   ; Jump to main");  //16 slots to skip Print function
 
 	//quit
 	addInstruction("HALT  0,0,0   ;End of program");
@@ -65,14 +64,21 @@ void CodeGenerator::addWhiteSpace()
 
 void CodeGenerator::generateMainFunction()
 {
+	FunctionLocation.insert(pair<string, int>("main", InstructionCount));
 	GenerateFunction();
-	addInstruction("OUT  7,0,0   ; This is main doing stuff");
-	//Find functions in main and then branch
+	vector<ASTNode*> DefNodes = Tree.getDefinitions()->getDefNodes();
+	for (int i = 0; i < DefNodes.size(); i++) {
+		if (DefNodes.at(i)->getIdentifierNode()->getIdentifierName() == "main"){
+			walkTree(*DefNodes.at(i));
+			break;
+		}
+	}
 	returnFromFunction();
 }
 
-void CodeGenerator::generatePrintFunction(string temp)
+void CodeGenerator::generatePrintFunction()
 {
+	FunctionLocation.insert(pair<string, int>("print", InstructionCount));
 	GenerateFunction();
 	addInstruction("LD  1, -3(6)   ; Loading the value of whatever argument is passed to print to R1");
 	addInstruction("OUT 1,0,0   ; Printing the value of whatever argument is passed to print");
@@ -83,16 +89,19 @@ void CodeGenerator::walkTree(ASTNode ASTTree)
 {
 	//Assume that we have a Def Node
 	//Handle code for the print function
-	if (ASTTree.getAstNodeType == "DEF_NODE_TYPE") {
-		vector<ASTNode*> printStatements = ASTTree.getBodyNode()->getPrintStatements();
-		for (int i = 0; i < printStatements.size(); i++) {
-			/*
-			In the future we will have to pass temp to the function for evaluation purposes
-			addInstruction("")*/
-			string temp = printStatements.at(i)->getBaseExprNode()->getBaseSimpleExprNode()->getBaseTermNode()->getLiteralNode()->getLiteralValue();
-			
-			generatePrintFunction(temp);
-			
+		if (ASTTree.getAstNodeType() == DEF_NODE_TYPE) {
+			vector<ASTNode*> printStatements = ASTTree.getBodyNode()->getPrintStatements();
+			for (int i = 0; i < printStatements.size(); i++) {
+				/*
+				In the future we will have to pass temp to the function for evaluation purposes
+				addInstruction("")*/
+				string temp = printStatements.at(i)->getBaseExprNode()->getBaseSimpleExprNode()->getBaseTermNode()->getFactorNode()->getLiteralNode()->getLiteralValue();
+				addInstruction("LDC 1, 1(0)   ; Push 1 into the temp reg R1");
+				addInstruction("ADD 5,1,5   ; Incrementing Stack top by 1");
+				addInstruction("LDC 1, " + temp + "(0)   ; Pushing the value of the print statement into a temp reg R1");
+				addInstruction("ST 1, 0(5)   ; storing into DMEM");
+				callFunction("print");
+				//goto Print
 		}
 	}
 	//Handle code for the integer literal value of 1
@@ -123,6 +132,38 @@ void CodeGenerator::returnFromFunction()
 	restoreRegistersFromDmem();
 	addInstruction("LD  5,-1(1)   ; Restoring the stack top variable");
 	addInstruction("LD  7,-2(1)   ; Restoring the return adress from the control link");
+}
+
+void CodeGenerator::callFunction(string functionName)
+{
+	int argCount = SymbolTable.find(functionName)->second.getParameters().size();
+	//set incoming args
+	for (int i = 0; i < argCount; i++) {
+		addInstruction("LD 1, -" + to_string(i) + "(5)   ; Moving Temp " + to_string(i) + " to R1");
+		addInstruction("ST 1, " + to_string(i + 2) + "(5)   ; Storing Temp " + to_string(i) + " to Arg 1");
+	}
+	//set access link
+	//set ctrl link
+	//update status pointer
+	//jump to function
+	// 1 slots past the last command line arg = access link (top of stack)
+	addInstruction("ST  5, " + to_string(argCount + 3) + "(5)   ; Storing Access Link, about to call " + functionName);
+
+
+	//adjust status pointer by loading constant into R6.
+	addInstruction("LDC  " + to_string(6) + ", " + to_string(argCount + 4) + "(5)   ; Adjusting Status pointer, about to call " + functionName);
+
+
+	//set return adress
+	// control link = return adress. Store it into Dmem at 2 slots past last command line arg.
+	// USING REGISTER 1 AS TEMP REGISTER.
+	addInstruction("LDA  " + to_string(1) + ", " + to_string(2) + "(7) ; Saving next executed line, about to call " + functionName);
+	addInstruction("ST  " + to_string(1) + ", " + to_string(argCount + 2) + "(5)   ; Storing the return adress in DMEM at the control link slot");
+
+	//jump
+	addInstruction("LDA  " + to_string(7) + ", " + to_string(FunctionLocation.find(functionName)->second) + "(0)   ; Jump to " + functionName);
+
+
 }
 
 void CodeGenerator::restoreRegistersFromDmem()
