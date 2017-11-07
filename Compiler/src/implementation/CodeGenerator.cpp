@@ -115,13 +115,13 @@ void CodeGenerator::GenerateFunction()
 
 void CodeGenerator::setRegistersInDmem()
 {
-	addInstruction("ST  2, 1(6)   ; Store register 2 into (status pointer + 1) ");
-	addInstruction("ST  3, 2(6)   ; Store register 3 into (status pointer + 2) ");
-	addInstruction("ST  4, 3(6)   ; Store register 4 into (status pointer + 3) ");
-	addInstruction("ST  6, 4(6)   ; Store register 6 into (status pointer + 4) ");
+	addInstruction("ST  2, 0(6)   ; Store register 2 into ( new status pointer) ");
+	addInstruction("ST  3, 1(6)   ; Store register 3 into (new status pointer + 1) ");
+	addInstruction("ST  4, 2(6)   ; Store register 4 into (new status pointer + 2) ");
+	addInstruction("ST  1, 3(6)   ; Store register 1 (the old status pointer) into ( new status pointer + 3) ");
 
-	addInstruction("LDC  1, 5(0)   ; Store constant 5 in R1 ");
-	addInstruction("ADD  5,1,6   ; Adjust top of stack to be (status pointer + 5) ");
+	addInstruction("LDC  1, 3(0)   ; Store constant 3 in R1 ");
+	addInstruction("ADD  5,1,6   ; Adjust top of stack to be (new status pointer + 3) ");
 }
 
 void CodeGenerator::returnFromFunction()
@@ -136,7 +136,8 @@ void CodeGenerator::returnFromFunction()
 
 void CodeGenerator::callFunction(string functionName)
 {
-	int argCount = SymbolTable.find(functionName)->second.getParameters().size();
+	int argCount = functionName == "print" ? 1 : SymbolTable.find(functionName)->second.getParameters().size();
+
 	//set incoming args
 	for (int i = 0; i < argCount; i++) {
 		addInstruction("LD 1, -" + to_string(i) + "(5)   ; Moving Temp " + to_string(i) + " to R1");
@@ -150,15 +151,15 @@ void CodeGenerator::callFunction(string functionName)
 	addInstruction("ST  5, " + to_string(argCount + 3) + "(5)   ; Storing Access Link, about to call " + functionName);
 
 
-	//adjust status pointer by loading constant into R6.
-	addInstruction("LDC  " + to_string(6) + ", " + to_string(argCount + 4) + "(5)   ; Adjusting Status pointer, about to call " + functionName);
-
-
 	//set return adress
 	// control link = return adress. Store it into Dmem at 2 slots past last command line arg.
 	// USING REGISTER 1 AS TEMP REGISTER.
-	addInstruction("LDA  " + to_string(1) + ", " + to_string(2) + "(7) ; Saving next executed line, about to call " + functionName);
+	addInstruction("LDA  " + to_string(1) + ", " + to_string(4) + "(7) ; Saving next executed line, about to call " + functionName);
 	addInstruction("ST  " + to_string(1) + ", " + to_string(argCount + 2) + "(5)   ; Storing the return adress in DMEM at the control link slot");
+
+	//adjust status pointer but remember to keep old one alive in R1 so that the called function can store it.
+	addInstruction("ADD  1, 6, 0   ; Copying current status pointer before function call, about to call " + functionName);
+	addInstruction("LDA  " + to_string(6) + ", " + to_string(argCount + 4) + "(5)   ; Adjusting Status pointer, about to call " + functionName);
 
 	//jump
 	addInstruction("LDA  " + to_string(7) + ", " + to_string(FunctionLocation.find(functionName)->second) + "(0)   ; Jump to " + functionName);
@@ -168,10 +169,10 @@ void CodeGenerator::callFunction(string functionName)
 
 void CodeGenerator::restoreRegistersFromDmem()
 {
-	addInstruction("LD  2, 1(6)   ; restore register 2 from (status pointer + 1) ");
-	addInstruction("LD  3, 2(6)   ; restore register 3 from (status pointer + 2) ");
-	addInstruction("LD  4, 3(6)   ; restore register 4 from (status pointer + 3) ");
-	addInstruction("LD  6, 4(6)   ; restore register 6 from (status pointer + 4) ");
+	addInstruction("LD  2, 0(6)   ; restore register 2 from (status pointer ) ");
+	addInstruction("LD  3, 1(6)   ; restore register 3 from (status pointer + 1) ");
+	addInstruction("LD  4, 2(6)   ; restore register 4 from (status pointer + 2) ");
+	addInstruction("LD  6, 3(6)   ; restore register 6 from (status pointer + 3) ");
 }
 
 void CodeGenerator::writeInstructionsToFile()
