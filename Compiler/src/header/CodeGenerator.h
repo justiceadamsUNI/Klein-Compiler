@@ -21,8 +21,8 @@ private:
 	void addInstruction(string Instruction);
 	void addWhiteSpace();
 	void generateMainFunction();
-	void generatePrintFunction();
-	
+	void generatePrintFunction(string temp);
+	void walkTree(ASTNode ASTTree);
 	
 	void GenerateFunction();
 	void setRegistersInDmem();

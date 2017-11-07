@@ -8,7 +8,8 @@ void CodeGenerator::writeOutTargetCode()
 {
 	setUpRuntimeEnvironment();
 	generateMainFunction();
-	generatePrintFunction();
+	//generatePrintFunction();
+	//walkTree(//takes in an astnode);
 	writeInstructionsToFile();
 }
 
@@ -65,17 +66,36 @@ void CodeGenerator::addWhiteSpace()
 void CodeGenerator::generateMainFunction()
 {
 	GenerateFunction();
-
 	addInstruction("OUT  7,0,0   ; This is main doing stuff");
+	//Find functions in main and then branch
 	returnFromFunction();
 }
 
-void CodeGenerator::generatePrintFunction()
+void CodeGenerator::generatePrintFunction(string temp)
 {
 	GenerateFunction();
 	addInstruction("LD  1, -3(6)   ; Loading the value of whatever argument is passed to print to R1");
 	addInstruction("OUT 1,0,0   ; Printing the value of whatever argument is passed to print");
 	returnFromFunction();
+}
+
+void CodeGenerator::walkTree(ASTNode ASTTree)
+{
+	//Assume that we have a Def Node
+	//Handle code for the print function
+	if (ASTTree.getAstNodeType == "DEF_NODE_TYPE") {
+		vector<ASTNode*> printStatements = ASTTree.getBodyNode()->getPrintStatements();
+		for (int i = 0; i < printStatements.size(); i++) {
+			/*
+			In the future we will have to pass temp to the function for evaluation purposes
+			addInstruction("")*/
+			string temp = printStatements.at(i)->getBaseExprNode()->getBaseSimpleExprNode()->getBaseTermNode()->getLiteralNode()->getLiteralValue();
+			
+			generatePrintFunction(temp);
+			
+		}
+	}
+	//Handle code for the integer literal value of 1
 }
 
 void CodeGenerator::GenerateFunction()
