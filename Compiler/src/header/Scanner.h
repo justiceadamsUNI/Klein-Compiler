@@ -31,7 +31,7 @@ private:
 	string FinalFileName;
 	int FilePosition;
 	int FileSize;
-	int ShouldCheckForKlnExtension;
+	int ShouldCheckForKlnExtension = 1;
 
 	const map<string, TokenType> GenericKeywordTypeMap{
 		{ "function", PRIMITIVE_KEYWORD},

@@ -99,7 +99,7 @@ void CodeGenerator::walkTree(ASTNode ASTTree)
 	// For now, we know the structure.
 	if (ASTTree.getAstNodeType() == DEF_NODE_TYPE) {
 		vector<ASTNode*> printStatements = ASTTree.getBodyNode()->getPrintStatements();
-		for (int i = 0; i < printStatements.size(); i++) {
+		for (int i = printStatements.size() - 1; i >= 0; i--) {
 			temp = printStatements.at(i)->getBaseExprNode()->getBaseSimpleExprNode()->getBaseTermNode()->getFactorNode()->getLiteralNode()->getLiteralValue();
 			addInstruction("LDC 1, 1(0)   ; Push 1 into the temp reg R1");
 			addInstruction("ADD 5,1,5   ; Incrementing Stack top by 1");
