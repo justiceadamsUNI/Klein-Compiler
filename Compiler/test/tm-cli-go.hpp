@@ -8,13 +8,7 @@
 /*
    Modification History
 
-   
-      November 2017   Justice Adams
-                      University of Northern Iowa
-         The simulator has been wrapped in a c++ class
-		 and doesn't print anything. Only adds Output
-		 into a string vector. This is soley for unit
-		 testing purposes. Live and Die by the unit test!
+ 
       November 2007   Mike Volz and Eugene Wallingford
                       University of Northern Iowa
          The simulator now accepts 0 or more command-line arguments,
@@ -33,6 +27,13 @@
                       University of Northern Iowa
          Augmented use of fgets() with strcspn(), to remove EOL
          characters.  Fixes TM commands that require arguments.
+	
+	November 2017   Justice Adams
+					University of Northern Iowa
+		 The simulator has been wrapped in a c++ class
+		 and doesn't print anything. Only adds Output
+		 instructions into a string vector. This is soley
+		 for unit testing purposes. Live and Die by the unit test!
 */
 
 
@@ -135,7 +136,7 @@ public:
 	int done;
 
 	/* Holds onto output statements to check in test program. See getOutputStatements() above main */
-	std::vector<std::string> OutputStatements = {};
+	std::vector<int> OutputStatements = {};
 
 	char* opCodeTab[20]
 		= { "HALT","IN","OUT","ADD","SUB","MUL","DIV","????",
@@ -435,7 +436,7 @@ public:
 
 		case opOUT:
 			PRINTF("OUT instruction prints: %d\n", reg[r]);
-			OutputStatements.push_back(std::to_string(reg[r]));
+			OutputStatements.push_back(reg[r]);
 			break;
 		case opADD:  reg[r] = reg[s] + reg[t];  break;
 		case opSUB:  reg[r] = reg[s] - reg[t];  break;
@@ -640,7 +641,7 @@ public:
 
 
 	  /* Gives us a way to access output statements for assertions on the output of the TM program */
-	std::vector<std::string> getOutputStatemnts() {
+	std::vector<int> getOutputStatemnts() {
 		return OutputStatements;
 	}
 
