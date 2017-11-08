@@ -4,7 +4,7 @@
 
 // This test file needs to be expanded
 TEST_CASE("Semantic Checker Finds No Errors Or Warnings For Valid Program", "[Scanner]") {
-	Scanner Scanner("programs/fractionAddition.kln");
+	Scanner Scanner("programs/fractionAddition.kln", 1);
 	Parser Parser(Scanner);
 
 	Parser.parseProgram();

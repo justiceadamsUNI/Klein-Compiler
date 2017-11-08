@@ -12,9 +12,11 @@ using namespace std;
 class Scanner
 {
 public:
+	// Added int to serve as a boolean while differentiating
+	// from public testing constructor.
 	Scanner(string FilePath, int CheckForKlnExtension);
 
-	//Constructor for testing.
+	// Constructor for testing.
 	Scanner(string TestFileContents, bool Testing);
 	
 	Token next();

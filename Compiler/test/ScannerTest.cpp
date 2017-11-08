@@ -483,15 +483,15 @@ TEST_CASE("Scanner next() Throws Error When Unsported Character Found", "[Scanne
 }
 
 TEST_CASE("Scanner Constructor() Throws Error When File Not Found", "[Scanner]") {
-	REQUIRE_THROWS_AS(Scanner("fakeFile.kln"), invalid_argument);
+	REQUIRE_THROWS_AS(Scanner("fakeFile.kln", 1), invalid_argument);
 }
 
 TEST_CASE("Scanner Constructor() Throws Error When File Not Klein File", "[Scanner]") {
-	REQUIRE_THROWS_AS(Scanner("fakeFile.txt"), invalid_argument);
+	REQUIRE_THROWS_AS(Scanner("fakeFile.txt", 1), invalid_argument);
 }
 
 TEST_CASE("Scanner Constructor() Sucessfull Opens File And Reads Tokens When Tokens Are Valid", "[Scanner]") {
-	Scanner Scanner("test/test_klein_program_1.kln");
+	Scanner Scanner("test/test_klein_program_1.kln", 1);
 
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, PARENTHESIS, "(");
 	assertScannerHasNextTokenOfTypeWithValue(Scanner, INTEGER, "34");
@@ -504,14 +504,14 @@ TEST_CASE("Scanner Constructor() Sucessfull Opens File And Reads Tokens When Tok
 }
 
 TEST_CASE("Scanner next() Sucessfull Reads Token of 256 Characters But Blows Up When There's 257 Characters", "[Scanner]") {
-	Scanner Scanner("test/test_klein_program_2_long_identifiers.kln");
+	Scanner Scanner("test/test_klein_program_2_long_identifiers.kln", 1);
 
 	assertScannerHasNextTokenOfType(Scanner, IDENTIFIER);
 	REQUIRE_THROWS_AS(Scanner.next(), runtime_error);
 }
 
 TEST_CASE("Scanner next() Sucessfull Reads Integer == 2^32 But Blows Up When Integer == 2^32 + 1", "[Scanner]") {
-	Scanner Scanner("test/test_klein_program_3_int_range.kln");
+	Scanner Scanner("test/test_klein_program_3_int_range.kln", 1);
 
 	assertScannerHasNextTokenOfType(Scanner, INTEGER);
 	REQUIRE_THROWS_AS(Scanner.next(), runtime_error);

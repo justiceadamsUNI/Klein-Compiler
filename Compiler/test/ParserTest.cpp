@@ -200,35 +200,35 @@ TEST_CASE("Parser mapFromScannerTokenToStackValue() Correctly maps END_OF_FILE t
 }
 
 TEST_CASE("Parser throws error for failing program with no return value", "[Parser]") {
-	Scanner Scanner("programs/parser_failing_program_no_return_value.kln");
+	Scanner Scanner("programs/parser_failing_program_no_return_value.kln", 1);
 	Parser Parser(Scanner);
 	
 	REQUIRE_THROWS_AS(Parser.parseProgram(), runtime_error);
 }
 
 TEST_CASE("Parser throws error for failing program with that misuses a colon", "[Parser]") {
-	Scanner Scanner("programs/parser_failing_program_misuse_colon.kln");
+	Scanner Scanner("programs/parser_failing_program_misuse_colon.kln", 1);
 	Parser Parser(Scanner);
 
 	REQUIRE_THROWS_AS(Parser.parseProgram(), runtime_error);
 }
 
 TEST_CASE("Parser throws error for failing with a non-finished function declaration", "[Parser]") {
-	Scanner Scanner("programs/parser_failing_program_new_function.kln");
+	Scanner Scanner("programs/parser_failing_program_new_function.kln", 1);
 	Parser Parser(Scanner);
 
 	REQUIRE_THROWS_AS(Parser.parseProgram(), runtime_error);
 }
 
 TEST_CASE("Parser throws error for failing program that spells boolean wrong when defining a data type", "[Parser]") {
-	Scanner Scanner("programs/parser_failing_program_spelling_error_wrong_data_type.kln");
+	Scanner Scanner("programs/parser_failing_program_spelling_error_wrong_data_type.kln", 1);
 	Parser Parser(Scanner);
 
 	REQUIRE_THROWS_AS(Parser.parseProgram(), runtime_error);
 }
 
 TEST_CASE("Parser throws error for failing program that uses an int data type instead of integer", "[Parser]") {
-	Scanner Scanner("programs/parser_failing_program_wrong_data_type.kln");
+	Scanner Scanner("programs/parser_failing_program_wrong_data_type.kln", 1);
 	Parser Parser(Scanner);
 
 	REQUIRE_THROWS_AS(Parser.parseProgram(), runtime_error);
