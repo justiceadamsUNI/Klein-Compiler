@@ -3,6 +3,8 @@
 #include "header/SemanticChecker.h"
 #include "header/CodeGenerator.h"
 
+string GenerateFinalTmFileName(string KlnFilePath);
+
 int main(int argv, char* argc[])
 {
 	if (argv == 1) {
@@ -12,7 +14,7 @@ int main(int argv, char* argc[])
 
 	try
 	{
-		Scanner Scanner(argc[1]);
+		Scanner Scanner(argc[1], 0);
 		Parser Parser(Scanner);
 		Parser.parseProgram();
 
@@ -25,10 +27,12 @@ int main(int argv, char* argc[])
 			cout << SemanticCheckerVar.getWarnings().at(i) << endl;
 		}
 
-		// print Errors, and if there are none, then print the symbol table
+		string OutFileName = GenerateFinalTmFileName(Scanner.getFinalFileName());
+
+		// print Errors, and if there are none, then compile!
 		if (SemanticCheckerVar.getErrors().empty())
 		{
-			CodeGenerator CodeGenerator(AstTree, SemanticCheckerVar.getSymbolTable());
+			CodeGenerator CodeGenerator(AstTree, SemanticCheckerVar.getSymbolTable(), OutFileName);
 			CodeGenerator.writeOutTargetCode();
 		}
 		else {
@@ -45,4 +49,24 @@ int main(int argv, char* argc[])
 		return 1;
 	}
 	return 0;
+}
+
+string GenerateFinalTmFileName(string KlnFilePath) {
+	string OutFileName = KlnFilePath.replace(KlnFilePath.size() - 4, 4, ".tm");
+
+	// Need to account for both Windows and Unix Directory seperators
+	// We use 0 here to account for unsigned ints representation being a large
+	// integer.
+	size_t Position = OutFileName.rfind("/");
+	Position = Position == string::npos ? 0 : Position;
+
+	size_t Position2 = OutFileName.rfind("\\");
+	Position2 = Position2 == string::npos ? 0 : Position2;
+
+	size_t IndexOfSlash = std::max<size_t>(Position, Position2);
+	if (IndexOfSlash != 0) {
+		OutFileName.erase(0, IndexOfSlash + 1);
+	}
+
+	return OutFileName;
 }

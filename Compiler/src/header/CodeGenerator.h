@@ -3,9 +3,10 @@
 
 class CodeGenerator {
 public:
-	CodeGenerator(ASTNode AstTree, map<string, Function> GeneratedSymbolTable) {
+	CodeGenerator(ASTNode AstTree, map<string, Function> GeneratedSymbolTable, string FileName) {
 		Tree = AstTree;
 		SymbolTable = GeneratedSymbolTable;
+		OutFileName = FileName;
 	}
 
 	void writeOutTargetCode();
@@ -15,6 +16,7 @@ private:
 	map<string, Function> SymbolTable;
 	map<string, int> FunctionLocation;
 	vector<string> Instructions;
+	string OutFileName;
 	int InstructionCount = 0;
 	string CurrentFunction;
 

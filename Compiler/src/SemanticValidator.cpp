@@ -21,7 +21,7 @@ int main(int argv, char* argc[])
 
 	try
 	{
-		Scanner Scanner(argc[1]);
+		Scanner Scanner(argc[1], 1);
 		Parser Parser(Scanner);
 		Parser.parseProgram();
 

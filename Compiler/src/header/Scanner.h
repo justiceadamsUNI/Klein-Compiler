@@ -12,7 +12,7 @@ using namespace std;
 class Scanner
 {
 public:
-	Scanner(string FilePath);
+	Scanner(string FilePath, int CheckForKlnExtension);
 
 	//Constructor for testing.
 	Scanner(string TestFileContents, bool Testing);
@@ -21,11 +21,15 @@ public:
 
 	Token peek();
 
+	string getFinalFileName();
+
 private:
 	string SelfDelimiters = "+-*/,:,<=()";
 	string FileContents;
+	string FinalFileName;
 	int FilePosition;
 	int FileSize;
+	int ShouldCheckForKlnExtension;
 
 	const map<string, TokenType> GenericKeywordTypeMap{
 		{ "function", PRIMITIVE_KEYWORD},

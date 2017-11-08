@@ -10,7 +10,7 @@ int main(int argv, char* argc[])
 	}
 	try
 	{
-		Scanner Scanner(argc[1]);
+		Scanner Scanner(argc[1], 1);
 		Token Token = Scanner.next();
 		while (Token.getTokenType() != END_OF_FILE)
 		{

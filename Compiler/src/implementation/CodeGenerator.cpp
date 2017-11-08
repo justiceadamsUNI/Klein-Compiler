@@ -186,7 +186,7 @@ void CodeGenerator::restoreRegistersFromDmem()
 void CodeGenerator::writeInstructionsToFile()
 {
 	ofstream TMFile;
-	TMFile.open("TmFile.tm", ios::out); // change file name
+	TMFile.open(OutFileName, ios::out);
 
 
 	// read in all cl args and put into a stack frame.
