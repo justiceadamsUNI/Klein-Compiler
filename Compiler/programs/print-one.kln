@@ -1,0 +1,4 @@
+(* Trivial program to test run-time system *)
+function main() : integer
+	print(1)
+	1
