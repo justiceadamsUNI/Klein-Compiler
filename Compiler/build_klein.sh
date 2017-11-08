@@ -28,7 +28,9 @@ kleinv (){
 }
 kleinc (){
 	buffer="$buffer -c --kleinc"
-	blank
+	echo "Creating kleinc. Please Wait."
+	g++ -std=gnu+11 -w -o kleinc src/TMGenerator.cpp src/implementation/*.cpp
+	echo "kleinc has been created."
 }
 i=0
 buffer=""
