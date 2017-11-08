@@ -43,7 +43,11 @@ void CodeGenerator::setUpRuntimeEnvironment()
 	addInstruction("ST  " + to_string(1) + ", " + to_string(LastParamLocation + 1) + "(0)   ; Storing the return adress in DMEM at the control link slot");
 
 	//jump
-	addInstruction("LDA  " + to_string(7) + ", " + to_string(16) + "(7)   ; Jump to main");  //16 slots to skip Print function
+	addInstruction("LDA  " + to_string(7) + ", 18(7)   ; Jump to main");  //16 slots to skip Print function
+
+	// load into register 1 the value returned from main and print it.
+	addInstruction("LD  1, 1(5)   ; load return value");
+	addInstruction("OUT  1,0,0   ; Printing main return value");
 
 	//quit
 	addInstruction("HALT  0,0,0   ;End of program");
@@ -68,10 +72,8 @@ void CodeGenerator::generateMainFunction()
 	GenerateFunction();
 	vector<ASTNode*> DefNodes = Tree.getDefinitions()->getDefNodes();
 	for (int i = 0; i < DefNodes.size(); i++) {
-		if (DefNodes.at(i)->getIdentifierNode()->getIdentifierName() == "main"){
-			walkTree(*DefNodes.at(i));
-			break;
-		}
+		CurrentFunction = DefNodes.at(i)->getIdentifierNode()->getIdentifierName();
+		walkTree(*DefNodes.at(i));
 	}
 	returnFromFunction();
 }
@@ -89,22 +91,28 @@ void CodeGenerator::walkTree(ASTNode ASTTree)
 {
 	//Assume that we have a Def Node
 	//Handle code for the print function
-		if (ASTTree.getAstNodeType() == DEF_NODE_TYPE) {
-			vector<ASTNode*> printStatements = ASTTree.getBodyNode()->getPrintStatements();
-			for (int i = 0; i < printStatements.size(); i++) {
-				/*
-				In the future we will have to pass temp to the function for evaluation purposes
-				addInstruction("")*/
-				string temp = printStatements.at(i)->getBaseExprNode()->getBaseSimpleExprNode()->getBaseTermNode()->getFactorNode()->getLiteralNode()->getLiteralValue();
-				addInstruction("LDC 1, 1(0)   ; Push 1 into the temp reg R1");
-				addInstruction("ADD 5,1,5   ; Incrementing Stack top by 1");
-				addInstruction("LDC 1, " + temp + "(0)   ; Pushing the value of the print statement into a temp reg R1");
-				addInstruction("ST 1, 0(5)   ; storing into DMEM");
-				callFunction("print");
-				//goto Print
+	int CurrentFunctionParamsSize = SymbolTable.find(CurrentFunction)->second.getParameters().size();
+	string temp;
+	
+	
+	// This code below will need to change drastically to actually walk whatever tree it's given in project 6.
+	// For now, we know the structure.
+	if (ASTTree.getAstNodeType() == DEF_NODE_TYPE) {
+		vector<ASTNode*> printStatements = ASTTree.getBodyNode()->getPrintStatements();
+		for (int i = 0; i < printStatements.size(); i++) {
+			temp = printStatements.at(i)->getBaseExprNode()->getBaseSimpleExprNode()->getBaseTermNode()->getFactorNode()->getLiteralNode()->getLiteralValue();
+			addInstruction("LDC 1, 1(0)   ; Push 1 into the temp reg R1");
+			addInstruction("ADD 5,1,5   ; Incrementing Stack top by 1");
+			addInstruction("LDC 1, " + temp + "(0)   ; Pushing the value of the print statement into a temp reg R1");
+			addInstruction("ST 1, 0(5)   ; storing into DMEM");
+			callFunction("print");
 		}
 	}
-	//Handle code for the integer literal value of 1
+
+	// We know what the base expression node looks like So we can directly walk down it to get the literal node. Will change with project 6
+	temp = ASTTree.getBodyNode()->getBaseExprNode()->getBaseSimpleExprNode()->getBaseTermNode()->getFactorNode()->getLiteralNode()->getLiteralValue();
+	addInstruction("LDC 1, " + temp + "(0)   ; Pushing the return value of main into a register.");
+	addInstruction("ST 1, -" + to_string(3 + CurrentFunctionParamsSize) + "(6)   ; storing return value of main into its' stack frame");
 }
 
 void CodeGenerator::GenerateFunction()
@@ -140,8 +148,8 @@ void CodeGenerator::callFunction(string functionName)
 
 	//set incoming args
 	for (int i = 0; i < argCount; i++) {
-		addInstruction("LD 1, -" + to_string(i) + "(5)   ; Moving Temp " + to_string(i) + " to R1");
-		addInstruction("ST 1, " + to_string(i + 2) + "(5)   ; Storing Temp " + to_string(i) + " to Arg 1");
+		addInstruction("LD 1, -" + to_string(i) + "(5)   ; Moving Temp arg " + to_string(i) + " to R1");
+		addInstruction("ST 1, " + to_string(i + 2) + "(5)   ; Storing Temp arg " + to_string(i) + " to Arg 1");
 	}
 	//set access link
 	//set ctrl link

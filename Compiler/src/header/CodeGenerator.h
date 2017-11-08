@@ -16,6 +16,7 @@ private:
 	map<string, int> FunctionLocation;
 	vector<string> Instructions;
 	int InstructionCount = 0;
+	string CurrentFunction;
 
 	void writeInstructionsToFile();
 	void setUpRuntimeEnvironment();
