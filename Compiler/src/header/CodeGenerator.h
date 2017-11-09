@@ -17,20 +17,20 @@ private:
 	map<string, int> FunctionLocation;
 	vector<string> Instructions;
 	string OutFileName;
-	int InstructionCount = 0;
 	string CurrentFunction;
+	int InstructionCount = 0;
 
-	void writeInstructionsToFile();
+	void addInitialComments();
 	void setUpRuntimeEnvironment();
 	void addInstruction(string Instruction);
-	void addWhiteSpace();
+	void addWhiteSpace(string FunctionName);
+	void walkTree(ASTNode ASTTree);
+	void writeInstructionsToFile();
+	void generateFunctionHeader(string FunctionName);
 	void generateMainFunction();
 	void generatePrintFunction();
-	void walkTree(ASTNode ASTTree);
-	
-	void GenerateFunction();
 	void setRegistersInDmem();
 	void restoreRegistersFromDmem();
-	void returnFromFunction();
-	void callFunction(string functionName);
+	void generateFunctionReturnSequence();
+	void callFunction(string FunctionName);
 };
