@@ -39,19 +39,19 @@ void CodeGenerator::setUpRuntimeEnvironment()
 		}
 	}
 
-	//Setup main stack frame before call to function
+	// Setup main stack frame before call to function
 	addInstruction("ST  0, " + to_string(LastParamLocation + 2) + "(0)   ; Storing access link before call to main");
 	addInstruction("LDC  6, " + to_string(LastParamLocation + 3) + "(0)   ; Adjust status pointer before call to main");
 	addInstruction("LDA  1, 2(7)   ; Setting return adress and storing in temp register R1");
 	addInstruction("ST  1, " + to_string(LastParamLocation + 1) + "(0)   ; Storing the return adress in DMEM at the control link slot");
-	//18 slots to skip Print function
+	// 18 slots to skip Print function
 	addInstruction("LDA  7, 18(7)   ; Jump to main"); 
 
-	// load into register 1 the value returned from main and print it.
+	// Load into register 1 the value returned from main and print it.
 	addInstruction("LD  1, 1(5)   ; Load main's return value");
 	addInstruction("OUT  1, 0, 0   ; Printing main return value");
 
-	//quit
+	// Quit
 	addInstruction("HALT  0, 0, 0   ; End of program");
 }
 

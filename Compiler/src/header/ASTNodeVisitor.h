@@ -81,13 +81,13 @@ public:
 			visitLiteralFactorNode(SemanticStack);
 			return;
 		case BUILD_SUBTRACTIONFACTOR_NODE:
-			visitSubtractionFactorNode(SemanticStack);
+			visitNegatedFactorNode(SemanticStack);
 			return;
 		case BUILD_PARENEXPR_NODE:
 			visitParenthesisedExpressionNode(SemanticStack);
 			return;
 		case BUILD_IDENTIFIERACTUALS_NODE:
-			visitIdentifierActualsNode(SemanticStack);
+			visitFunctionCallNode(SemanticStack);
 			return;
 		case BUILD_SINGLETONIDENTIFIERFACTOR_NODE:
 			visitSingletonIdentifierFactorNode(SemanticStack);
@@ -141,9 +141,9 @@ public:
 	virtual void visitIfFactorNode(SemanticStack& SemanticStack) = 0;
 	virtual void visitNotFactorNode(SemanticStack& SemanticStack) = 0;
 	virtual void visitLiteralFactorNode(SemanticStack& SemanticStack) = 0;
-	virtual void visitSubtractionFactorNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitNegatedFactorNode(SemanticStack& SemanticStack) = 0;
 	virtual void visitParenthesisedExpressionNode(SemanticStack& SemanticStack) = 0;
-	virtual void visitIdentifierActualsNode(SemanticStack& SemanticStack) = 0;
+	virtual void visitFunctionCallNode(SemanticStack& SemanticStack) = 0;
 	virtual void visitSingletonIdentifierFactorNode(SemanticStack& SemanticStack) = 0;
 	virtual void visitBaseActualsNode(SemanticStack& SemanticStack) = 0;
 	virtual void visitNonBaseActualsNode(SemanticStack& SemanticStack) = 0;

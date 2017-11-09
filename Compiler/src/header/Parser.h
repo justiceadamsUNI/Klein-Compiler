@@ -138,14 +138,7 @@ private:
 
 	void checkValidEndState(StackValues PeekedTokenValue);
 
-	void setSemanticBuildDataForTerminal();
-
-
 	// PARSE TABLE - Sparse 2D array representation.
-	// After struggling for a while, I think this is the best data structure to use here.
-	// Ideally from our cpp file we call for example map.find(make_pair<StackValues, StackValues>(BODY, LEFT_PAREN)) and it
-	// would return {EXPR} as a list! (see last row here). Anyway, if a pair isn't a key in the table, we're in an error state.
-
 	const map<pair<StackValues, StackValues>, list<StackValues>> ParseTable {
 		{
 			{ make_pair<StackValues, StackValues>(PROGRAM, FUNCTION), list<StackValues>{DEFINITIONS, BUILD_PROGRAM_NODE} },
