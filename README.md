@@ -52,7 +52,7 @@ directory and open the solution!
 **SRC:** A directory containing all code for the project. Header files can be found in /header
 and implementation files of those headers found in /implementation. You'll notice 
 Compiler.cpp, BuildTokens.cpp, PrintASTNodeTree.cpp, ProgramValidator.cpp, 
-SemanticValidator.cpp and TMGenerator.cpp in the src/ directory. They serve separate purposes
+SemanticValidator.cpp and TMGenerator.cpp in the src/directory. They serve separate purposes
 and are thus separated. Compiler.cpp will be our final cpp class containing all other objects,
 BuildTokens.cpp prints the tokens of a valid Klein file to the screen, PrintASTNodeTree.cpp 
 prints a formatted listing of tree nodes of the klein program, ProgramValidator.cpp parses 
@@ -81,7 +81,7 @@ the catch.h is not ours, we're just using it to test! It's a header-only framewo
 We also use FakeIt, a header-only C++ mocking framework that's fully compatible with Catch.
 (Again, Fakeit.hpp is not our code!)
 
-NOTE: tm-cli-go.hpp was not written by us. It has been modified for unit testing purposes.
+**NOTE:** tm-cli-go.hpp was not written by us. It has been modified for unit testing purposes.
 
 To run our test you can compile  
 test/*.cpp and src/implementation/*.cpp into an 
