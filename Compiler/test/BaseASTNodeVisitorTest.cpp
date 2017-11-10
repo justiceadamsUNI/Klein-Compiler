@@ -217,13 +217,13 @@ TEST_CASE("Visitor calls visitLiteralFactorNode() when accept() called with BUIL
 	Verify(Method(MockVisitor, visitLiteralFactorNode));
 }
 
-TEST_CASE("Visitor calls visitSubtractionFactorNode() when accept() called with BUILD_SUBTRACTIONFACTOR_NODE Stack Value", "[Base AST Node Visitor]") {
+TEST_CASE("Visitor calls visitNegatedFactorNode() when accept() called with BUILD_SUBTRACTIONFACTOR_NODE Stack Value", "[Base AST Node Visitor]") {
 	Mock <ASTNodeVisitor> MockVisitor;
-	Fake(Method(MockVisitor, visitSubtractionFactorNode));
+	Fake(Method(MockVisitor, visitNegatedFactorNode));
 
 	mockVisitorAccept(MockVisitor, BUILD_SUBTRACTIONFACTOR_NODE);
 
-	Verify(Method(MockVisitor, visitSubtractionFactorNode));
+	Verify(Method(MockVisitor, visitNegatedFactorNode));
 }
 
 TEST_CASE("Visitor calls visitParenthesisedExpressionNode() when accept() called with BUILD_PARENEXPR_NODE Stack Value", "[Base AST Node Visitor]") {
@@ -235,13 +235,13 @@ TEST_CASE("Visitor calls visitParenthesisedExpressionNode() when accept() called
 	Verify(Method(MockVisitor, visitParenthesisedExpressionNode));
 }
 
-TEST_CASE("Visitor calls visitIdentifierActualsNode() when accept() called with BUILD_IDENTIFIERACTUALS_NODE Stack Value", "[Base AST Node Visitor]") {
+TEST_CASE("Visitor calls visitFunctionCallNode() when accept() called with BUILD_IDENTIFIERACTUALS_NODE Stack Value", "[Base AST Node Visitor]") {
 	Mock <ASTNodeVisitor> MockVisitor;
-	Fake(Method(MockVisitor, visitIdentifierActualsNode));
+	Fake(Method(MockVisitor, visitFunctionCallNode));
 
 	mockVisitorAccept(MockVisitor, BUILD_IDENTIFIERACTUALS_NODE);
 
-	Verify(Method(MockVisitor, visitIdentifierActualsNode));
+	Verify(Method(MockVisitor, visitFunctionCallNode));
 }
 
 TEST_CASE("Visitor calls visitSingletonIdentifierFactorNode() when accept() called with BUILD_SINGLETONIDENTIFIERFACTOR_NODE Stack Value", "[Base AST Node Visitor]") {

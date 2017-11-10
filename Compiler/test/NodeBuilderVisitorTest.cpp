@@ -399,7 +399,7 @@ TEST_CASE("Visitor callzs visitLiteralFactorNode() when accept() called with BUI
 
 }
 
-TEST_CASE("Visitor callzs visitSubtractionFactorNode() when accept() called with BUILD_SUBTRACTIONFACTOR_NODE Stack Value", "[Node Builder Visitor]") {
+TEST_CASE("Visitor callzs visitNegatedFactorNode() when accept() called with BUILD_SUBTRACTIONFACTOR_NODE Stack Value", "[Node Builder Visitor]") {
 
 }
 
@@ -407,7 +407,7 @@ TEST_CASE("Visitor callzs visitParenthesisedExpressionNode() when accept() calle
 
 }
 
-TEST_CASE("Visitor callzs visitIdentifierActualsNode() when accept() called with BUILD_IDENTIFIERACTUALS_NODE Stack Value", "[Node Builder Visitor]") {
+TEST_CASE("Visitor callzs visitFunctionCallNode() when accept() called with BUILD_IDENTIFIERACTUALS_NODE Stack Value", "[Node Builder Visitor]") {
 
 }
 

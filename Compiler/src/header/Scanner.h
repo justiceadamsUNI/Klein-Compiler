@@ -12,20 +12,26 @@ using namespace std;
 class Scanner
 {
 public:
-	Scanner(string FilePath);
+	// Added int to serve as a boolean while differentiating
+	// from public testing constructor.
+	Scanner(string FilePath, int CheckForKlnExtension);
 
-	//Constructor for testing.
+	// Constructor for testing.
 	Scanner(string TestFileContents, bool Testing);
 	
 	Token next();
 
 	Token peek();
 
+	string getFinalFileName();
+
 private:
 	string SelfDelimiters = "+-*/,:,<=()";
 	string FileContents;
+	string FinalFileName;
 	int FilePosition;
 	int FileSize;
+	int ShouldCheckForKlnExtension = 1;
 
 	const map<string, TokenType> GenericKeywordTypeMap{
 		{ "function", PRIMITIVE_KEYWORD},

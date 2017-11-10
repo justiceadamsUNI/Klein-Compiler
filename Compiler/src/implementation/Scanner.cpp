@@ -9,8 +9,9 @@
 
 using namespace std;
 
-Scanner::Scanner(string FilePath)
+Scanner::Scanner(string FilePath, int CheckForKlnExtension)
 {	
+	ShouldCheckForKlnExtension = CheckForKlnExtension;
 	FileContents = readFile(FilePath);
 	FilePosition = 0;
 	FileSize = FileContents.size();
@@ -117,9 +118,16 @@ string Scanner::readFile(string FilePath)
 {
 	if (!isValidKleinFile(FilePath))
 	{
-		throw invalid_argument("The File Must be a .kln File! - " + FilePath);
+		if (!ShouldCheckForKlnExtension == 1)
+		{
+			FilePath = FilePath + ".kln";
+		}
+		else {
+			throw invalid_argument("The File Must be a .kln File! - " + FilePath);
+		}
 	}
 
+	FinalFileName = FilePath;
 	string FileData;
 	fstream inputFile;
 	inputFile.open(FilePath.c_str());
@@ -134,6 +142,11 @@ string Scanner::readFile(string FilePath)
 		(istreambuf_iterator<char>()));
 
 	return FileData;
+}
+
+string Scanner::getFinalFileName()
+{
+	return FinalFileName;
 }
 
 bool Scanner::isValidKleinFile(string FilePath)
