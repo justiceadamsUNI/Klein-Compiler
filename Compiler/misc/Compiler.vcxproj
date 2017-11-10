@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="src\header\ASTNodes.h" />
     <ClInclude Include="src\header\ASTNodeVisitor.h" />
+    <ClInclude Include="src\header\CodeGenerator.h" />
     <ClInclude Include="src\header\Function.h" />
     <ClInclude Include="src\header\NodeBuilderVisitor.h" />
     <ClInclude Include="src\header\Parser.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="test\fakeit.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\implementation\CodeGenerator.cpp" />
     <ClCompile Include="src\implementation\Parser.cpp" />
     <ClCompile Include="src\implementation\PStack.cpp" />
     <ClCompile Include="src\implementation\Scanner.cpp" />
@@ -165,6 +167,7 @@
     <ClCompile Include="src\SemanticValidator.cpp" />
     <ClCompile Include="test\ASTNodeTest.cpp" />
     <ClCompile Include="test\BaseASTNodeVisitorTest.cpp" />
+    <ClCompile Include="test\CodeGeneratorTest.cpp" />
     <ClCompile Include="test\NodeBuilderVisitorTest.cpp" />
     <ClCompile Include="test\ParserTest.cpp" />
     <ClCompile Include="test\PStackTest.cpp" />
@@ -174,6 +177,7 @@
     <ClCompile Include="test\TokenTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="test\RunAllKleinPrograms.sh" />
     <None Include="test\test_klein_program_1.kln" />
     <None Include="test\test_klein_program_2_long_identifiers.kln" />
     <None Include="test\test_klein_program_3_int_range.kln" />

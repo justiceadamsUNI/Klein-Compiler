@@ -60,6 +60,9 @@
     <ClInclude Include="test\fakeit.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\header\CodeGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test\RunAllTest.cpp">
@@ -110,10 +113,17 @@
     <ClCompile Include="test\ASTNodeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\implementation\CodeGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\CodeGeneratorTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="test\test_klein_program_1.kln" />
     <None Include="test\test_klein_program_2_long_identifiers.kln" />
     <None Include="test\test_klein_program_3_int_range.kln" />
+    <None Include="test\RunAllKleinPrograms.sh" />
   </ItemGroup>
 </Project>

@@ -30,11 +30,12 @@ This is the code repository for the Klein Compiler we are writing. We are
 implementing a Klein compiler that will translate .kln files into machine 
 language. This compiler implementation is written in C++. Currently, we have a
 working Scanner which converts characters in a .kln file into tokens, a 
-parser that validates Klein programs and produces an AST tree, and a Semantic 
-analyzer for static code analysis on a given AST tree. We developed this 
-using a feature-branch workflow utilizing Github. You'll notice the repo 
-has an extra outer directory for various reasons including continuous 
-integration purposes.
+parser that validates Klein programs and produces an AST tree, a Semantic 
+analyzer for static code analysis on a given AST tree, and a partial code
+generator that outputs a .tm file (NOTE: The code generator only works for
+print-one.kln file presently). We developed this using a feature-branch 
+workflow utilizing Github. You'll notice the repo has an extra outer 
+directory for various reasons including continuous integration purposes.
 
 **A quick note about Visual Studio.** If you don't intend to edit this using 
 visual studio, ignore the Compiler.sln, Compiler.vcxproj, 
@@ -50,9 +51,13 @@ directory and open the solution!
 	
 **SRC:** A directory containing all code for the project. Header files can be found in /header
 and implementation files of those headers found in /implementation. You'll notice 
-Compiler.cpp and BuildTokens.cpp in the src/ directory. They serve separate purposes and 
-are thus separated. Compiler.cpp will be our final cpp class containing all other objects
-and BuildTokens.cpp prints the tokens of a valid Klein file to the screen.
+Compiler.cpp, BuildTokens.cpp, PrintASTNodeTree.cpp, ProgramValidator.cpp, 
+SemanticValidator.cpp and TMGenerator.cpp in the src/directory. They serve separate purposes
+and are thus separated. Compiler.cpp will be our final cpp class containing all other objects,
+BuildTokens.cpp prints the tokens of a valid Klein file to the screen, PrintASTNodeTree.cpp 
+prints a formatted listing of tree nodes of the klein program, ProgramValidator.cpp parses 
+the klein program and outputs if it is valid or not, SemanticValidator checks to see if the
+klein program adheres to klein's grammar and TMGenerator creates a tm file.
 	
 **TEST:** A directory containing all files for testing our code. This includes unit test and 
 arbitrary (invalid) .kln files for further testing.
@@ -75,6 +80,8 @@ IDE-independent, and fully featured. Their repo describes it as
 the catch.h is not ours, we're just using it to test! It's a header-only framework.
 We also use FakeIt, a header-only C++ mocking framework that's fully compatible with Catch.
 (Again, Fakeit.hpp is not our code!)
+
+**NOTE:** tm-cli-go.hpp was not written by us. It has been modified for unit testing purposes.
 
 To run our test you can compile  
 test/*.cpp and src/implementation/*.cpp into an 
@@ -121,7 +128,10 @@ print the Symbol Table of a valid Klein program. 'kleinv' will let the user
 know of all errors and warnings to fix with the Klein program. 'kleinv' takes 
 in 1 command line argument, a .kln file!
 
--c or --kleinc: Functionality coming soon!
+-c or --kleinc: This will build a tm file that is named the same as the input file
+with the extension ".tm". 'kleinc' will let the user know of any warnings and if
+there are errors, it won't continue with code generation. 'kleinc' takes in 
+1 command line argument, a klein file, with or without the .kln extension.
 
 We have verified that this works on STUDENT.CS.UNI.EDU server.
 
@@ -155,7 +165,6 @@ exhaustive right now, but we're hoping it will be.
 locally on our machines, and does pass the TravisCI testing. We believe there
 is some conflict with the version of g++ compiler on the server and the FakeIt
 version. (note this works on other g++ compilers, just not on the server)
-- We need to clean the NodeBuilderVisitor code file (it's quite large).
 - PrettyPrinter Node structure needs to be cleaned/collapsed for easier
 reading
 
