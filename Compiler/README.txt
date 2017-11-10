@@ -65,9 +65,13 @@ Our project is structured like the following
 	found in /header and implementation files of those headers found in 
 	/implementation. You'll notice Compiler.cpp, BuildTokens.cpp, 
 	PrintASTNodeTree.cpp, ProgramValidator.cpp, SemanticValidator.cpp
-	and TMGenerator.coo in the src/ directory. They serve separate purposes 
+	and TMGenerator.cpp in the src/ directory. They serve separate purposes 
 	and are thus separated. Compiler.cpp will be our final cpp class containing 
-	all other objects.
+	all other objects, BuildTokens.cpp prints the tokens of a valid Klein file 
+	to the screen, PrintASTNodeTree.cpp prints a formatted listing of tree 
+	nodes of the klein program, ProgramValidator.cpp parses the klein program
+	and outputs if it is valid or not, SemanticValidator checks to see if the 
+	klein program adheres to klein's grammar and TMGenerator creates a tm file.
 	
 	TEST: A directory containing all files for testing our code. This includes
 	unit test and arbitrary (invalid) .kln files for further testing.
@@ -91,6 +95,9 @@ BDD'. Note that the catch.h is not ours, we're just using it to test!
 It's a header-only framework. We also use FakeIt, a header-only C++ mocking
 framework that's fully compatible with Catch. 
 (Again, Fakeit.hpp is not our code!)
+
+NOTE: tm-cli-go.hpp was not written by us. It has been modified for unit
+testing purposes.
 
 To run our test you can compile  test/*.cpp and src/implementation/*.cpp into
 an executable and run it. All you need is a c++ compiler! For Example: Using 
@@ -137,8 +144,8 @@ in 1 command line argument, a .kln file!
 
 -c or --kleinc: This will build a tm file that is named the same as the input file
 with the extension ".tm". 'kleinc' will let the user know of any warnings and if
-there are errors, it won't output a .tm file. 'kleinc' takes in 1 command line 
-argument, a klein file, with or without the .kln extension.
+there are errors, it won't continue with code generation. 'kleinc' takes in 
+1 command line argument, a klein file, with or without the .kln extension.
 
 We have verified that this works on STUDENT.CS.UNI.EDU server.
 
@@ -178,7 +185,6 @@ practices this time around. Namely
 	locally on our machines, and does pass the TravisCI testing. We believe there
 	is some conflict with the version of g++ compiler on the server and the FakeIt
 	version. (note this works on other g++ compilers, just not on the server)
-- We need to clean the NodeBuilderVisitor code file (it's quite large).
 - PrettyPrinter node structure needs to be cleaned/collapsed for easier
 	reading
 
