@@ -23,9 +23,11 @@ This is the code repository for the Klein Compiler we are writing. We are
 implementing a Klein compiler that will translate .kln files into machine 
 language. This compiler implementation is written in C++. Currently, we have a
 working Scanner which converts characters in a .kln file into tokens, a 
-parser that validates Klein programs and produces an AST tree, and a Semantic 
-analyzer for static code analysis on a given AST tree. We developed this 
-using a feature-branch workflow utilizing  Github. View the repo here: 
+parser that validates Klein programs and produces an AST tree, a Semantic 
+analyzer for static code analysis on a given AST tree, and a partial code
+generator that outputs a .tm file (NOTE: The code generator only works for
+print-one.kln file presently). We developed this using a feature-branch workflow
+utilizing  Github. View the repo here: 
 (https://github.com/justiceadamsUNI/Klein-Compiler) You'll notice the repo has 
 an extra outer directory for various reasons including continuous integration 
 purposes.
@@ -61,10 +63,11 @@ Our project is structured like the following
 	
 	SRC: A directory containing all code for the project. Header files can be 
 	found in /header and implementation files of those headers found in 
-	/implementation. You'll notice Compiler.cpp and BuildTokens.cpp in the 
-	src/ directory. They serve separate purposes and are thus separated. 
-	Compiler.cpp will be our final cpp class containing all other objects and 
-	BuildTokens.cpp prints the tokens of a valid Klein file to the screen.
+	/implementation. You'll notice Compiler.cpp, BuildTokens.cpp, 
+	PrintASTNodeTree.cpp, ProgramValidator.cpp, SemanticValidator.cpp
+	and TMGenerator.coo in the src/ directory. They serve separate purposes 
+	and are thus separated. Compiler.cpp will be our final cpp class containing 
+	all other objects.
 	
 	TEST: A directory containing all files for testing our code. This includes
 	unit test and arbitrary (invalid) .kln files for further testing.
@@ -132,7 +135,10 @@ print the Symbol Table of a valid Klein program. 'kleinv' will let the user
 know of all errors and warnings to fix with the Klein program. 'kleinv' takes 
 in 1 command line argument, a .kln file!
 
--c or --kleinc: Functionality coming soon!
+-c or --kleinc: This will build a tm file that is named the same as the input file
+with the extension ".tm". 'kleinc' will let the user know of any warnings and if
+there are errors, it won't output a .tm file. 'kleinc' takes in 1 command line 
+argument, a klein file, with or without the .kln extension.
 
 We have verified that this works on STUDENT.CS.UNI.EDU server.
 
