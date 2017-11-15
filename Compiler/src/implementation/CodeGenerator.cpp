@@ -260,12 +260,55 @@ void CodeGenerator::generateCodeForAndNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForMultiplicatorNode(ASTNode Node)
 {
-	//Stub
+	// Right Side
+	generateCodeForFactorNode(*Node.getFactorNode());
+
+	// Left Side
+	if (Node.getBaseSimpleExprNode())
+	{
+		generateCodeForSimpleExpressionNode(*Node.getBaseSimpleExprNode());
+	}
+	else if (Node.getBaseTermNode())
+	{
+		generateCodeForTermNode(*Node.getBaseTermNode());
+	}
+	else {
+		generateCodeForFactorNode(*Node.getFactorNode2());
+	}
+
+	addInstruction("LD 3, 0(5)   ; Getting left operand of multiplication");
+	addInstruction("LD 4, -1(5)   ; Getting right operand of multiplication");
+	addInstruction("MUL 2, 3, 4   ; Performing multiplication on R3 and R4");
+	addInstruction("ST 2, -1(5)   ; Store result of multiplication as temp (overwrite left operand)");
+	addInstruction("LDC 1, -1(0)   ; Store -1 ");
+	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
+
 }
 
 void CodeGenerator::generateCodeForDividerNode(ASTNode Node)
 {
-	//Stub
+	// Right Side
+	generateCodeForFactorNode(*Node.getFactorNode());
+
+	// Left Side
+	if (Node.getBaseSimpleExprNode())
+	{
+		generateCodeForSimpleExpressionNode(*Node.getBaseSimpleExprNode());
+	}
+	else if (Node.getBaseTermNode())
+	{
+		generateCodeForTermNode(*Node.getBaseTermNode());
+	}
+	else {
+		generateCodeForFactorNode(*Node.getFactorNode2());
+	}
+
+	addInstruction("LD 3, 0(5)   ; Getting left operand of division");
+	addInstruction("LD 4, -1(5)   ; Getting right operand of division");
+	addInstruction("DIV 2, 3, 4   ; Performing division on R3 and R4");
+	addInstruction("ST 2, -1(5)   ; Store result of division as temp (overwrite left operand)");
+	addInstruction("LDC 1, -1(0)   ; Store -1 ");
+	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
 }
 
 void CodeGenerator::generateCodeForOrNode(ASTNode Node)
@@ -275,9 +318,10 @@ void CodeGenerator::generateCodeForOrNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForAdditionNode(ASTNode Node)
 {
+	// Right Side
 	generateCodeForTermNode(*Node.getBaseTermNode());
 
-	ReturnTypes LeftSideType;
+	// Left Side
 	if (Node.getBaseSimpleExprNode())
 	{
 		generateCodeForSimpleExpressionNode(*Node.getBaseSimpleExprNode());
@@ -296,9 +340,10 @@ void CodeGenerator::generateCodeForAdditionNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForSubtractionNode(ASTNode Node)
 {
+	// Right Side
 	generateCodeForTermNode(*Node.getBaseTermNode());
 
-	ReturnTypes LeftSideType;
+	// Left Side
 	if (Node.getBaseSimpleExprNode())
 	{
 		generateCodeForSimpleExpressionNode(*Node.getBaseSimpleExprNode());

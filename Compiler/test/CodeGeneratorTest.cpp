@@ -149,3 +149,69 @@ TEST_CASE("Test that subtraction nodes work and are printed correctly when passe
 	REQUIRE(OutputStatements.at(1) == 1);
 	REQUIRE(OutputStatements.at(0) == 10);
 }
+
+TEST_CASE("Test that simple multiplication works and computes the correct value", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer print(1) 3*9");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 27);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that run on multiplication works and computes the correct value", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer print(1) 3 * 3 * 10*2");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 180);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that multiplication nodes work and are printed correctly when passed as a paramater to print()", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer print(10*3) 1");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 1);
+	REQUIRE(OutputStatements.at(0) == 30);
+}
+
+TEST_CASE("Test that simple division works and computes the correct value", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer print(1) 120/10");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 12);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that run on division works and computes the correct value", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer print(1) 120/10/2/2");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 3);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that division nodes work and are printed correctly when passed as a paramater to print()", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer print(100/4) 1");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 1);
+	REQUIRE(OutputStatements.at(0) == 25);
+}
