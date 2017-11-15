@@ -275,7 +275,6 @@ void CodeGenerator::generateCodeForOrNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForAdditionNode(ASTNode Node)
 {
-	//Stub
 	generateCodeForTermNode(*Node.getBaseTermNode());
 
 	ReturnTypes LeftSideType;
@@ -297,7 +296,23 @@ void CodeGenerator::generateCodeForAdditionNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForSubtractionNode(ASTNode Node)
 {
-	//Stub
+	generateCodeForTermNode(*Node.getBaseTermNode());
+
+	ReturnTypes LeftSideType;
+	if (Node.getBaseSimpleExprNode())
+	{
+		generateCodeForSimpleExpressionNode(*Node.getBaseSimpleExprNode());
+	}
+	else {
+		generateCodeForTermNode(*Node.getBaseTermNode2());
+	}
+
+	addInstruction("LD 3, 0(5)   ; Getting left operand of subtraction");
+	addInstruction("LD 4, -1(5)   ; Getting right operand of subtraction");
+	addInstruction("SUB 2, 3, 4   ; Performing subtraction on R3 and R4");
+	addInstruction("ST 2, -1(5)   ; Store result of subtraction as temp (overwrite left operand)");
+	addInstruction("LDC 1, -1(0)   ; Store -1 ");
+	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
 }
 
 void CodeGenerator::generateCodeForLessThanNode(ASTNode Node)

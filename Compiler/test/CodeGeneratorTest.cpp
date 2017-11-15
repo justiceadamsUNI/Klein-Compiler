@@ -72,7 +72,6 @@ TEST_CASE("Test that the runtime env prints mains return value correctly for any
 	REQUIRE(OutputStatements.at(0) == 1);
 }
 
-
 TEST_CASE("Test that print can be called more than once and succesfully prints each time", "[Code Generator]") {
 	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer print(1) print(2) 3");
 
@@ -116,4 +115,37 @@ TEST_CASE("Test that addition nodes work and are printed correctly when passed a
 	REQUIRE(OutputStatements.size() == 2);
 	REQUIRE(OutputStatements.at(1) == 1);
 	REQUIRE(OutputStatements.at(0) == 61);
+}
+
+TEST_CASE("Test that simple subtraction works and computes the correct value", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer print(1) 3-1");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 2);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that run on subtraction works and computes the correct value", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer print(1) 3-3 -10- 40");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == -50);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that subtraction nodes work and are printed correctly when passed as a paramater to print()", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer print(20 - 10) 1");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 1);
+	REQUIRE(OutputStatements.at(0) == 10);
 }
