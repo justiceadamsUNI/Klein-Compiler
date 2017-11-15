@@ -231,7 +231,7 @@ void CodeGenerator::generateCodeForSubtractionFactorNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForParenthesisedExpressionNode(ASTNode Node)
 {
-	//Stub
+	generateCodeForExpressionNode(*Node.getBaseExprNode());
 }
 
 void CodeGenerator::generateCodeForFunctionCallNode(ASTNode Node)

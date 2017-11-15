@@ -215,3 +215,23 @@ TEST_CASE("Test that division nodes work and are printed correctly when passed a
 	REQUIRE(OutputStatements.at(1) == 1);
 	REQUIRE(OutputStatements.at(0) == 25);
 }
+
+TEST_CASE("Test arithmetic expression and ensure that the order of operations are done correctly", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer 10*100+30-60/20*3");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 1021);
+}
+
+TEST_CASE("Test arithmetic expression and ensure that the order of operations are done correctly with parenthesis", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer (10*100+30-60/(20*3))*2");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 2058);
+}
