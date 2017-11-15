@@ -165,11 +165,6 @@ void CodeGenerator::writeInstructionsToFile()
 
 
 //----------------------------------------------------------------
-
-void CodeGenerator::generateCodeForIdentifierNode(ASTNode Node)
-{
-}
-
 void CodeGenerator::generateCodeForDefNode(ASTNode Node)
 {
 	generateCodeForBodyNode(*Node.getBodyNode());
@@ -212,7 +207,7 @@ void CodeGenerator::generateCodeForLiteralFactorNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForIntegerLiteralNode(ASTNode Node)
 {
-	addInstruction("LDC 1, " + Node.getLiteralValue() + "(0)   ; Pushing the return value of main into a register.");
+	addInstruction("LDC 1, " + Node.getLiteralValue() + "(0)   ; Pushing the literal value into a register.");
 	addInstruction("ST 1, 1(5)   ; Storing integer literal into temp varaibles slot");
 	addInstruction("LDC 1, 1(0)   ; Loading 1 into R1");
 	addInstruction("ADD 5, 1, 5   ; Add 1 to Stack Top");
@@ -281,6 +276,23 @@ void CodeGenerator::generateCodeForOrNode(ASTNode Node)
 void CodeGenerator::generateCodeForAdditionNode(ASTNode Node)
 {
 	//Stub
+	generateCodeForTermNode(*Node.getBaseTermNode());
+
+	ReturnTypes LeftSideType;
+	if (Node.getBaseSimpleExprNode())
+	{
+		generateCodeForSimpleExpressionNode(*Node.getBaseSimpleExprNode());
+	}
+	else {
+		generateCodeForTermNode(*Node.getBaseTermNode2());
+	}
+
+	addInstruction("LD 3, 0(5)   ; Getting left operand of addition");
+	addInstruction("LD 4, -1(5)   ; Getting right operand of addition");
+	addInstruction("ADD 2, 3, 4   ; Performing addition on R3 and R4");
+	addInstruction("ST 2, -1(5)   ; Store result of addition as temp (overwrite left operand)");
+	addInstruction("LDC 1, -1(0)   ; Store -1 ");
+	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
 }
 
 void CodeGenerator::generateCodeForSubtractionNode(ASTNode Node)
@@ -297,6 +309,12 @@ void CodeGenerator::generateCodeForEqualNode(ASTNode Node)
 {
 	//Stub
 }
+
+void CodeGenerator::generateCodeForIdentifierNode(ASTNode Node)
+{
+	//Stub
+}
+
 
 
 // helper methods -------------------------------------------------------

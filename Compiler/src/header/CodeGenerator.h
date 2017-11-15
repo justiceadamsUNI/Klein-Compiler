@@ -24,7 +24,6 @@ private:
 	void setUpRuntimeEnvironment();
 	void addInstruction(string Instruction);
 	void addWhiteSpace(string FunctionName);
-	void walkTree(ASTNode ASTTree);
 	void writeInstructionsToFile();
 	void generateFunctionHeader(string FunctionName);
 	void generateMainFunction();
