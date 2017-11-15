@@ -78,7 +78,7 @@ void CodeGenerator::generateMainFunction()
 	vector<ASTNode*> DefNodes = Tree.getDefinitions()->getDefNodes();
 	for (int i = 0; i < DefNodes.size(); i++) {
 		CurrentFunction = DefNodes.at(i)->getIdentifierNode()->getIdentifierName();
-		walkTree(*DefNodes.at(i));
+		generateCodeForDefNode(*DefNodes.at(i));
 	}
 
 	generateFunctionReturnSequence();
@@ -91,50 +91,6 @@ void CodeGenerator::generatePrintFunction()
 	addInstruction("LD  1, -3(6)   ; Loading the value of whatever argument is passed to print to R1");
 	addInstruction("OUT 1, 0, 0   ; Printing the value of whatever argument is passed to print");
 	generateFunctionReturnSequence();
-}
-
-/*Walks the AST Tree and adds corresponding code for each node
-  Assumes that we are given a def node.*/
-void CodeGenerator::walkTree(ASTNode ASTTree)
-{
-	int CurrentFunctionParamsSize = SymbolTable.find(CurrentFunction)->second.getParameters().size();
-	string LiteralValue;
-	
-	// This code below will need to change drastically to actually walk whatever tree it's given in project 6.
-	// For now, we know the structure, so this is hard coded. Consider this a ToDo:
-	if (ASTTree.getAstNodeType() == DEF_NODE_TYPE) {
-		vector<ASTNode*> printStatements = ASTTree.getBodyNode()->getPrintStatements();
-		for (int i = printStatements.size() - 1; i >= 0; i--) {
-			LiteralValue = 
-				printStatements.at(i)->
-				getBaseExprNode()->
-				getBaseSimpleExprNode()->
-				getBaseTermNode()->
-				getFactorNode()->
-				getLiteralNode()->
-				getLiteralValue();
-
-			addInstruction("LDC 1, 1(0)   ; Push 1 into the temp reg R1");
-			addInstruction("ADD 5, 1, 5   ; Incrementing Stack top by 1");
-			addInstruction("LDC 1, " + LiteralValue + "(0)   ; Pushing the value of the print statement into a temp reg R1");
-			addInstruction("ST 1, 0(5)   ; Storing into DMEM in the temp data objects slot. Print statement will grab the arg from here.");
-			callFunction("print");
-		}
-	}
-
-	// We know what the base expression node looks like So we can directly walk down it 
-	// to get the literal node. Will change with project 6.
-	LiteralValue = 
-		ASTTree.getBodyNode()->
-		getBaseExprNode()->
-		getBaseSimpleExprNode()->
-		getBaseTermNode()->
-		getFactorNode()->
-		getLiteralNode()->
-		getLiteralValue();
-
-	addInstruction("LDC 1, " + LiteralValue + "(0)   ; Pushing the return value of main into a register.");
-	addInstruction("ST 1, -" + to_string(3 + CurrentFunctionParamsSize) + "(6)   ; Storing return value of main into its' stack frame");
 }
 
 void CodeGenerator::generateFunctionHeader(string FunctionName)
@@ -205,4 +161,234 @@ void CodeGenerator::writeInstructionsToFile()
 	}
 
 	TMFile.close();
+}
+
+
+//----------------------------------------------------------------
+
+void CodeGenerator::generateCodeForIdentifierNode(ASTNode Node)
+{
+}
+
+void CodeGenerator::generateCodeForDefNode(ASTNode Node)
+{
+	generateCodeForBodyNode(*Node.getBodyNode());
+}
+
+void CodeGenerator::generateCodeForBodyNode(ASTNode Node)
+{
+	vector<ASTNode*> PrintStatements = Node.getPrintStatements();
+	int CurrentFunctionParamsSize = SymbolTable.find(CurrentFunction)->second.getParameters().size();
+
+	// Assign types to print statments
+	for (int i = PrintStatements.size() - 1; i >= 0; i--) {
+		generateCodeForPrintStatementNode(*PrintStatements.at(i));
+	}
+	generateCodeForExpressionNode(*Node.getBaseExprNode());
+
+	addInstruction("LD 1, 0(5)   ; Pushing the return value of " + CurrentFunction + " into a register");
+	addInstruction("ST 1, -" + to_string(3 + CurrentFunctionParamsSize) + "(6)   ; Storing return value of " + CurrentFunction + " into its' stack frame");
+}
+
+void CodeGenerator::generateCodeForBaseExpressionNode(ASTNode Node)
+{
+	generateCodeForSimpleExpressionNode(*Node.getBaseSimpleExprNode());
+}
+
+void CodeGenerator::generateCodeForBaseSimpleExpressionNode(ASTNode Node)
+{
+	generateCodeForTermNode(*Node.getBaseTermNode());
+}
+
+void CodeGenerator::generateCodeForBaseTermNode(ASTNode Node)
+{
+	generateCodeForFactorNode(*Node.getFactorNode());
+}
+
+void CodeGenerator::generateCodeForLiteralFactorNode(ASTNode Node)
+{
+	generateCodeForLiteralNode(*Node.getLiteralNode());
+}
+
+void CodeGenerator::generateCodeForIntegerLiteralNode(ASTNode Node)
+{
+	addInstruction("LDC 1, " + Node.getLiteralValue() + "(0)   ; Pushing the return value of main into a register.");
+	addInstruction("ST 1, 1(5)   ; Storing integer literal into temp varaibles slot");
+	addInstruction("LDC 1, 1(0)   ; Loading 1 into R1");
+	addInstruction("ADD 5, 1, 5   ; Add 1 to Stack Top");
+}
+
+void CodeGenerator::generateCodeForPrintStatementNode(ASTNode Node)
+{
+	generateCodeForBaseExpressionNode(*Node.getBaseExprNode());
+	callFunction("print");
+}
+
+void CodeGenerator::generateCodeForBooleanLiteralNode(ASTNode Node)
+{
+	//Stub
+}
+
+void CodeGenerator::generateCodeForSubtractionFactorNode(ASTNode Node)
+{
+	//Stub
+}
+
+void CodeGenerator::generateCodeForParenthesisedExpressionNode(ASTNode Node)
+{
+	//Stub
+}
+
+void CodeGenerator::generateCodeForFunctionCallNode(ASTNode Node)
+{
+	//Stub
+}
+
+void CodeGenerator::generateCodeForSingletonIdentifierFactorNode(ASTNode Node)
+{
+	//Stub
+}
+
+void CodeGenerator::generateCodeForIfFactorNode(ASTNode Node)
+{
+}
+
+void CodeGenerator::generateCodeForNotFactorNode(ASTNode Node)
+{
+	//Stub
+}
+
+void CodeGenerator::generateCodeForAndNode(ASTNode Node)
+{
+	//Stub
+}
+
+void CodeGenerator::generateCodeForMultiplicatorNode(ASTNode Node)
+{
+	//Stub
+}
+
+void CodeGenerator::generateCodeForDividerNode(ASTNode Node)
+{
+	//Stub
+}
+
+void CodeGenerator::generateCodeForOrNode(ASTNode Node)
+{
+	//Stub
+}
+
+void CodeGenerator::generateCodeForAdditionNode(ASTNode Node)
+{
+	//Stub
+}
+
+void CodeGenerator::generateCodeForSubtractionNode(ASTNode Node)
+{
+	//Stub
+}
+
+void CodeGenerator::generateCodeForLessThanNode(ASTNode Node)
+{
+	//Stub
+}
+
+void CodeGenerator::generateCodeForEqualNode(ASTNode Node)
+{
+	//Stub
+}
+
+
+// helper methods -------------------------------------------------------
+void CodeGenerator::generateCodeForExpressionNode(ASTNode Node) {
+	if (Node.getAstNodeType() == BASE_EXPR_NODE_TYPE)
+	{
+		generateCodeForBaseExpressionNode(Node);
+	}
+	else if (Node.getAstNodeType() == LESS_THAN_EXPR_NODE_TYPE)
+	{
+		generateCodeForLessThanNode(Node);
+	}
+	else {
+		generateCodeForEqualNode(Node);
+	}
+}
+
+void CodeGenerator::generateCodeForSimpleExpressionNode(ASTNode Node) {
+	if (Node.getAstNodeType() == BASE_SIMPLE_EXPR_NODE_TYPE)
+	{
+		generateCodeForBaseSimpleExpressionNode(Node);
+	}
+	else if (Node.getAstNodeType() == ADDITION_SIMPLE_EXPR_NODE_TYPE)
+	{
+		generateCodeForAdditionNode(Node);
+	}
+	else if (Node.getAstNodeType() == SUBTRACTOR_SIMPLE_EXPR_NODE_TYPE)
+	{
+		generateCodeForSubtractionNode(Node);
+	}
+	else {
+		generateCodeForOrNode(Node);
+	}
+}
+
+void CodeGenerator::generateCodeForTermNode(ASTNode Node)
+{
+	if (Node.getAstNodeType() == BASE_TERM_NODE_TYPE)
+	{
+		generateCodeForBaseTermNode(Node);
+	}
+	else if (Node.getAstNodeType() == MULTIPLICATOR_TERM_NODE_TYPE)
+	{
+		generateCodeForMultiplicatorNode(Node);
+	}
+	else if (Node.getAstNodeType() == DIVIDER_TERM_NODE_TYPE)
+	{
+		generateCodeForDividerNode(Node);
+	}
+	else {
+		generateCodeForAndNode(Node);
+	}
+}
+
+void CodeGenerator::generateCodeForFactorNode(ASTNode Node)
+{
+	if (Node.getAstNodeType() == PARENTHESISED_EXPR_FACTOR_NODE_TYPE)
+	{
+		generateCodeForParenthesisedExpressionNode(Node);
+	}
+	else if (Node.getAstNodeType() == SUBTRACTION_FACTOR_NODE_TYPE)
+	{
+		generateCodeForSubtractionFactorNode(Node);
+	}
+	else if (Node.getAstNodeType() == LITERAL_FACTOR_NODE_TYPE)
+	{
+		generateCodeForLiteralFactorNode(Node);
+	}
+	else if (Node.getAstNodeType() == FUNCTION_CALL_TYPE)
+	{
+		generateCodeForFunctionCallNode(Node);
+	}
+	else if (Node.getAstNodeType() == SINGLETON_IDENTIFIER_FACTOR_NODE_TYPE)
+	{
+		generateCodeForSingletonIdentifierFactorNode(Node);
+	}
+	else if (Node.getAstNodeType() == NOT_FACTOR_NODE_TYPE)
+	{
+		generateCodeForNotFactorNode(Node);
+	}
+	else {
+		generateCodeForIfFactorNode(Node);
+	}
+}
+
+void CodeGenerator::generateCodeForLiteralNode(ASTNode Node)
+{
+	if (Node.getAstNodeType() == INTEGER_LITERAL_NODE_TYPE)
+	{
+		generateCodeForIntegerLiteralNode(Node);
+	}
+	else {
+		generateCodeForBooleanLiteralNode(Node);
+	}
 }

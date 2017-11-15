@@ -33,4 +33,38 @@ private:
 	void restoreRegistersFromDmem();
 	void generateFunctionReturnSequence();
 	void callFunction(string FunctionName);
+
+	// AST node to target code helper functions.
+	void generateCodeForIdentifierNode(ASTNode Node);
+	void generateCodeForDefNode(ASTNode Node);
+	void generateCodeForBodyNode(ASTNode Node);
+	void generateCodeForLessThanNode(ASTNode Node);
+	void generateCodeForEqualNode(ASTNode Node);
+	void generateCodeForBaseExpressionNode(ASTNode Node);
+	void generateCodeForOrNode(ASTNode Node);
+	void generateCodeForAdditionNode(ASTNode Node);
+	void generateCodeForSubtractionNode(ASTNode Node);
+	void generateCodeForBaseSimpleExpressionNode(ASTNode Node);
+	void generateCodeForAndNode(ASTNode Node);
+	void generateCodeForMultiplicatorNode(ASTNode Node);
+	void generateCodeForDividerNode(ASTNode Node);
+	void generateCodeForBaseTermNode(ASTNode Node);
+	void generateCodeForIfFactorNode(ASTNode Node);
+	void generateCodeForNotFactorNode(ASTNode Node);
+	void generateCodeForLiteralFactorNode(ASTNode Node);
+	void generateCodeForSubtractionFactorNode(ASTNode Node);
+	void generateCodeForParenthesisedExpressionNode(ASTNode Node);
+	void generateCodeForFunctionCallNode(ASTNode Node);
+	void generateCodeForSingletonIdentifierFactorNode(ASTNode Node);
+	void generateCodeForIntegerLiteralNode(ASTNode Node);
+	void generateCodeForBooleanLiteralNode(ASTNode Node);
+	void generateCodeForPrintStatementNode(ASTNode Node);
+
+
+	//helper methods
+	void generateCodeForExpressionNode(ASTNode Node);
+	void generateCodeForSimpleExpressionNode(ASTNode Node);
+	void generateCodeForTermNode(ASTNode Node);
+	void generateCodeForFactorNode(ASTNode Node);
+	void generateCodeForLiteralNode(ASTNode Node);
 };
