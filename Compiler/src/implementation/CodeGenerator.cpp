@@ -243,7 +243,7 @@ void CodeGenerator::generateCodeForNegatedFactorNode(ASTNode Node)
 	addInstruction("LD 3, 0(5)   ; Getting left operand of negation multiplication");
 	addInstruction("LDC 4, -1(0)   ; setting right operand of negation to -1");
 	addInstruction("MUL 2, 3, 4   ; Performing negation multiplication on R3 and R4");
-	addInstruction("ST 2, 0(5)   ; Store result of negation multiplication as temp (overwrite left operand)");
+	addInstruction("ST 2, 0(5)   ; Store result of negation multiplication as temp (overwrite original value)");
 }
 
 void CodeGenerator::generateCodeForParenthesisedExpressionNode(ASTNode Node)
@@ -267,7 +267,16 @@ void CodeGenerator::generateCodeForIfFactorNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForNotFactorNode(ASTNode Node)
 {
-	//Stub
+	generateCodeForFactorNode(*Node.getFactorNode());
+
+	// We can simply subtract 1 then multiply by -1 when negating boolean statements.
+	// Not(true) = (1-1) * 0. Not(False) = (0-1)*-1
+	addInstruction("LD 3, 0(5)   ; Getting original boolean value");
+	addInstruction("LDC 4, 1(0)   ; setting right operand to 1 for subtraction");
+	addInstruction("SUB 2, 3, 4   ; Performing subtraction on R3 and R4");
+	addInstruction("LDC 4, -1(0)   ; setting right operand of negation to -1");
+	addInstruction("MUL 2, 2, 4   ; Performing negation multiplication on R3 and R4");
+	addInstruction("ST 2, 0(5)   ; Store result of negating boolean statement as temp (overwrite original value)");
 }
 
 void CodeGenerator::generateCodeForAndNode(ASTNode Node)

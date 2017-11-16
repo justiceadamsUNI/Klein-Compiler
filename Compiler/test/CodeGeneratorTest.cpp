@@ -399,3 +399,44 @@ TEST_CASE("Test that run on OR operations work and are computed correctly", "[Co
 	REQUIRE(OutputStatements.at(1) == 0);
 	REQUIRE(OutputStatements.at(0) == 1);
 }
+
+TEST_CASE("Test that boolean negation works for true", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean not true");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 0);
+}
+
+TEST_CASE("Test that boolean negation works for false", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean not false");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that boolean negation works with run on scenarios and respects order of operations (negations first)", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean print(not true and false or false) not false or not true");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 1);
+	REQUIRE(OutputStatements.at(0) == 0);
+}
+
+TEST_CASE("Test that boolean negation works with parenthesised expressions", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean not (false or not true)");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
