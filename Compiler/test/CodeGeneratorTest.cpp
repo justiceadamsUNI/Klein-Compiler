@@ -358,3 +358,44 @@ TEST_CASE("Test that run on AND operations work and are computed correctly", "[C
 	REQUIRE(OutputStatements.at(1) == 1);
 	REQUIRE(OutputStatements.at(0) == 0);
 }
+
+TEST_CASE("Test that simple OR operation works and computes the correct value when doing 'true or true'", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean true or true");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that simple OR operation works and computes the correct value when doing 'true or false'", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean true or false");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that simple OR operation works and computes the correct value when doing 'false or false'", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean false or false");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 0);
+}
+
+TEST_CASE("Test that run on OR operations work and are computed correctly", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean print((true or true or true or true or true) or false) false or false or false or false or false");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 0);
+	REQUIRE(OutputStatements.at(0) == 1);
+}

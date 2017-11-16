@@ -318,7 +318,6 @@ void CodeGenerator::generateCodeForMultiplicatorNode(ASTNode Node)
 	addInstruction("ST 2, -1(5)   ; Store result of multiplication as temp (overwrite left operand)");
 	addInstruction("LDC 1, -1(0)   ; Store -1 ");
 	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
-
 }
 
 void CodeGenerator::generateCodeForDividerNode(ASTNode Node)
@@ -349,7 +348,39 @@ void CodeGenerator::generateCodeForDividerNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForOrNode(ASTNode Node)
 {
-	//Stub
+	// Right Side
+	generateCodeForTermNode(*Node.getBaseTermNode());
+
+	// Left Side
+	if (Node.getBaseSimpleExprNode())
+	{
+		generateCodeForSimpleExpressionNode(*Node.getBaseSimpleExprNode());
+	}
+	else {
+		generateCodeForTermNode(*Node.getBaseTermNode2());
+	}
+
+	// We do an addition and if the result is >0 we have a true value.
+	addInstruction("LD 3, 0(5)   ; Getting left operand of addition");
+	addInstruction("LD 4, -1(5)   ; Getting right operand of addition");
+	addInstruction("ADD 2, 3, 4   ; Performing addition on R3 and R4");
+
+	// Adjust value by subtracting 1
+	addInstruction("ADD 1, 2, 0   ; Store result into temp R1");
+	addInstruction("LDC 3, 1(0)   ; Store 1 into R3 ");
+	addInstruction("SUB 1, 1, 3   ; Performing subtraction on R1 and R3");
+
+	// If result is > 1 then store result - 1 as the temp variable.
+	addInstruction("JGT 1, 2(7)   ; Performing subtraction on R1 and R3");
+	addInstruction("ST 2, -1(5)   ; Store the result of OR operation as temp (overwrite left operand)");
+	addInstruction("ADD 7, 7, 3   ; Skip 1 instruction");
+
+	// Store adjusted value
+	addInstruction("ST 1, -1(5)   ; Store adjusted result of OR operation as temp (overwrite left operand)");
+
+	// Adjust stack top
+	addInstruction("LDC 1, -1(0)   ; Store -1 ");
+	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
 }
 
 void CodeGenerator::generateCodeForAdditionNode(ASTNode Node)
