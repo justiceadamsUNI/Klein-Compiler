@@ -29,7 +29,7 @@ void CodeGenerator::setUpRuntimeEnvironment()
 	int LastParamLocation = 1;
 	if (!Params.empty())
 	{
-		LastParamLocation = Params.size() + 2;
+		LastParamLocation = Params.size() + 1;
 
 		// Loads all command line args into stack frame.
 		for (int i = Params.size(); i >= 0; i--)
@@ -258,7 +258,7 @@ void CodeGenerator::generateCodeForFunctionCallNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForSingletonIdentifierFactorNode(ASTNode Node)
 {
-	//Stub
+	generateCodeForIdentifierNode(*Node.getIdentifierNode());
 }
 
 void CodeGenerator::generateCodeForIfFactorNode(ASTNode Node)
@@ -472,10 +472,19 @@ void CodeGenerator::generateCodeForEqualNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForIdentifierNode(ASTNode Node)
 {
-	//Stub
+	vector<tuple<string, ReturnTypes>> Params = SymbolTable.at(CurrentFunction).getParameters();
+	ptrdiff_t Position = find_if(
+		Params.begin(), 
+		Params.end(), 
+		[&](const tuple<string, ReturnTypes>& tuple) {return get<0>(tuple) == Node.getIdentifierName(); }) - Params.begin();
+
+	int ArgumentPointer = -1 * (2 + Params.size()) + int(Position);
+	addInstruction("LD 1, " + to_string(ArgumentPointer) + "(6)   ; Loading actual value of argument into R1 from stack");
+
+	addInstruction("ST 1, 1(5)   ; Store the argument into the temp variables slot");
+	addInstruction("LDC 1, 1(0)   ; Store 1 ");
+	addInstruction("ADD 5, 1, 5   ; Increment stack top ");
 }
-
-
 
 // helper methods -------------------------------------------------------
 void CodeGenerator::generateCodeForExpressionNode(ASTNode Node) {
