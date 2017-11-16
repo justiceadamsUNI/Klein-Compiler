@@ -440,3 +440,34 @@ TEST_CASE("Test that boolean negation works with parenthesised expressions", "[C
 	REQUIRE(OutputStatements.size() == 1);
 	REQUIRE(OutputStatements.at(0) == 1);
 }
+
+TEST_CASE("Test that < works with correctly when expression is true", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean 2 < 3");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that < works with correctly when expression is false", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean 20 < 3");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 0);
+}
+
+TEST_CASE("Test that < works with correctly when used in conjunction with boolean statements", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean print((20 < 3) or (50<100)) false");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 0);
+	REQUIRE(OutputStatements.at(0) == 1);
+}

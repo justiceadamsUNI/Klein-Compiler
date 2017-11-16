@@ -438,7 +438,31 @@ void CodeGenerator::generateCodeForSubtractionNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForLessThanNode(ASTNode Node)
 {
-	//Stub
+	// Right Side
+	generateCodeForSimpleExpressionNode(*Node.getBaseSimpleExprNode());
+
+	// Left Side
+	generateCodeForSimpleExpressionNode(*Node.getBaseSimpleExprNode2());
+
+	// We do Right - Left then compare the results to 0.
+	addInstruction("LD 3, 0(5)   ; Getting left operand of <");
+	addInstruction("LD 4, -1(5)   ; Getting right operand of <");
+	addInstruction("SUB 2, 4, 3   ; Performing Subtraction on R4 and R3");
+
+	// If result is > 0 then store 1 as the value (since left was less than right).
+	addInstruction("JGT 2, 4(7)   ; Jumping if R2 greater than 0");
+	addInstruction("LDC 1, 0(0)   ; Load 0 (false) ");
+	addInstruction("ST 1, -1(5)   ; Store the result of < as temp (overwrite left operand)");
+	addInstruction("LDC 1, 2(0)   ; Load 2 into R1 ");
+	addInstruction("ADD 7, 7, 1   ; Skip 2 instructions");
+
+	// Store adjusted value
+	addInstruction("LDC 1, 1(0)   ; Load 1 (true) ");
+	addInstruction("ST 1, -1(5)   ; Store the result of < as temp (overwrite left operand)");
+
+	// Adjust stack top
+	addInstruction("LDC 1, -1(0)   ; Store -1 ");
+	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
 }
 
 void CodeGenerator::generateCodeForEqualNode(ASTNode Node)
