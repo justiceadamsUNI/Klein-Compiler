@@ -221,7 +221,19 @@ void CodeGenerator::generateCodeForPrintStatementNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForBooleanLiteralNode(ASTNode Node)
 {
-	//Stub
+	// We treat "true" as == 1 and "false" as == 0
+	if (Node.getLiteralValue() == "true")
+	{
+		addInstruction("LDC 1, 1(0)   ; Pushing the boolean value (true == 1) into a register.");
+		addInstruction("ST 1, 1(5)   ; Storing boolean literal into temp varaibles slot");
+	}
+	else {
+		addInstruction("LDC 1, 0(0)   ; Pushing the boolean value (false == 0) into a register.");
+		addInstruction("ST 1, 1(5)   ; Storing boolean literal into temp varaibles slot");
+	}
+
+	addInstruction("LDC 1, 1(0)   ; Loading 1 into R1");
+	addInstruction("ADD 5, 1, 5   ; Add 1 to Stack Top");
 }
 
 void CodeGenerator::generateCodeForNegatedFactorNode(ASTNode Node)
@@ -230,8 +242,8 @@ void CodeGenerator::generateCodeForNegatedFactorNode(ASTNode Node)
 
 	addInstruction("LD 3, 0(5)   ; Getting left operand of negation multiplication");
 	addInstruction("LDC 4, -1(0)   ; setting right operand of negation to -1");
-	addInstruction("MUL 2, 3, 4   ; Performing multiplication on R3 and R4");
-	addInstruction("ST 2, 0(5)   ; Store result of multiplication as temp (overwrite left operand)");
+	addInstruction("MUL 2, 3, 4   ; Performing negation multiplication on R3 and R4");
+	addInstruction("ST 2, 0(5)   ; Store result of negation multiplication as temp (overwrite left operand)");
 }
 
 void CodeGenerator::generateCodeForParenthesisedExpressionNode(ASTNode Node)
@@ -260,7 +272,26 @@ void CodeGenerator::generateCodeForNotFactorNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForAndNode(ASTNode Node)
 {
-	//Stub
+	// Right Side
+	generateCodeForFactorNode(*Node.getFactorNode());
+
+	// Left Side
+	if (Node.getBaseTermNode())
+	{
+		generateCodeForTermNode(*Node.getBaseTermNode());
+	}
+	else {
+		generateCodeForFactorNode(*Node.getFactorNode2());
+	}
+
+	// We simple multiply here! 1*0 = true and false = 0 = false.
+	// 1 * 1 = 1 = true.
+	addInstruction("LD 3, 0(5)   ; Getting left operand of and operator");
+	addInstruction("LD 4, -1(5)   ; Getting right operand of and operator");
+	addInstruction("MUL 2, 3, 4   ; Performing multiplication (and operation) on R3 and R4");
+	addInstruction("ST 2, -1(5)   ; Store result of and operation as temp (overwrite left operand)");
+	addInstruction("LDC 1, -1(0)   ; Store -1 ");
+	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
 }
 
 void CodeGenerator::generateCodeForMultiplicatorNode(ASTNode Node)

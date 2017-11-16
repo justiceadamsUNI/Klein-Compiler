@@ -285,3 +285,76 @@ TEST_CASE("Test arithmetic expression with negated elements", "[Code Generator]"
 	REQUIRE(OutputStatements.size() == 1);
 	REQUIRE(OutputStatements.at(0) == 1942);
 }
+
+TEST_CASE("Test boolean literal prints one for the value 'true'", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer true");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test boolean literal prints zero for the value 'false'", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer false");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 0);
+}
+
+TEST_CASE("Test that we can pass boolean literals to print as arguments", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer print(true) print((false)) false");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 3);
+	REQUIRE(OutputStatements.at(2) == 0);
+	REQUIRE(OutputStatements.at(1) == 0);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that simple AND operation works and computes the correct value when doing 'true and true'", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean true and true");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that simple AND operation works and computes the correct value when doing 'true and false'", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean true and false");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 0);
+}
+
+TEST_CASE("Test that simple AND operation works and computes the correct value when doing 'false and false'", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean false and false");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 0);
+}
+
+TEST_CASE("Test that run on AND operations work and are computed correctly", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean print((true and true and true and true and true) and false) true and true and true and true and true");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 1);
+	REQUIRE(OutputStatements.at(0) == 0);
+}
