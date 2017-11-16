@@ -235,3 +235,53 @@ TEST_CASE("Test arithmetic expression and ensure that the order of operations ar
 	REQUIRE(OutputStatements.size() == 1);
 	REQUIRE(OutputStatements.at(0) == 2058);
 }
+
+TEST_CASE("Test simple addition which contains negated element", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer 10 +-4");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 6);
+}
+
+TEST_CASE("Test simple subtraction which contains negated element", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer 10 --4");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 14);
+}
+
+TEST_CASE("Test simple multiplication which contains negated element", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer 10*-4");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == -40);
+}
+
+TEST_CASE("Test simple division which contains negated element", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer 10/-2");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == -5);
+}
+
+TEST_CASE("Test arithmetic expression with negated elements", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : integer (10*-100+30-60/(20*3))*-2");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 1942);
+}

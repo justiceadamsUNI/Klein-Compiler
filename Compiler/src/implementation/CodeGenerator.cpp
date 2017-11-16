@@ -224,9 +224,14 @@ void CodeGenerator::generateCodeForBooleanLiteralNode(ASTNode Node)
 	//Stub
 }
 
-void CodeGenerator::generateCodeForSubtractionFactorNode(ASTNode Node)
+void CodeGenerator::generateCodeForNegatedFactorNode(ASTNode Node)
 {
-	//Stub
+	generateCodeForFactorNode(*Node.getFactorNode());
+
+	addInstruction("LD 3, 0(5)   ; Getting left operand of negation multiplication");
+	addInstruction("LDC 4, -1(0)   ; setting right operand of negation to -1");
+	addInstruction("MUL 2, 3, 4   ; Performing multiplication on R3 and R4");
+	addInstruction("ST 2, 0(5)   ; Store result of multiplication as temp (overwrite left operand)");
 }
 
 void CodeGenerator::generateCodeForParenthesisedExpressionNode(ASTNode Node)
@@ -437,7 +442,7 @@ void CodeGenerator::generateCodeForFactorNode(ASTNode Node)
 	}
 	else if (Node.getAstNodeType() == SUBTRACTION_FACTOR_NODE_TYPE)
 	{
-		generateCodeForSubtractionFactorNode(Node);
+		generateCodeForNegatedFactorNode(Node);
 	}
 	else if (Node.getAstNodeType() == LITERAL_FACTOR_NODE_TYPE)
 	{

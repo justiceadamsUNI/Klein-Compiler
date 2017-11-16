@@ -51,7 +51,7 @@ private:
 	void generateCodeForIfFactorNode(ASTNode Node);
 	void generateCodeForNotFactorNode(ASTNode Node);
 	void generateCodeForLiteralFactorNode(ASTNode Node);
-	void generateCodeForSubtractionFactorNode(ASTNode Node);
+	void generateCodeForNegatedFactorNode(ASTNode Node);
 	void generateCodeForParenthesisedExpressionNode(ASTNode Node);
 	void generateCodeForFunctionCallNode(ASTNode Node);
 	void generateCodeForSingletonIdentifierFactorNode(ASTNode Node);
