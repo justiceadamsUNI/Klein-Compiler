@@ -496,3 +496,46 @@ TEST_CASE("Test that multiple command line variables are stored and accessed cor
 	REQUIRE(OutputStatements.at(1) == 20);
 	REQUIRE(OutputStatements.at(0) == 10);
 }
+
+TEST_CASE("Test that fraction addition works correctly", "[Code Generator]") {
+	compileKleinFileToTm("programs/fractionAddition.kln");
+
+	char* argv[6] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "1", "2", "3", "4" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(6, argv);
+
+	REQUIRE(OutputStatements.size() == 3);
+	REQUIRE(OutputStatements.at(2) == 1);
+	REQUIRE(OutputStatements.at(1) == 8);
+	REQUIRE(OutputStatements.at(0) == 10);
+}
+
+TEST_CASE("Test that = works correctly when expression is true", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean print(false = false) true = true");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(2, argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 1);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that = works with correctly when expression is false", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean false = true");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(2, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 0);
+}
+
+TEST_CASE("Test that = works with correctly when used in conjunction with boolean statements", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main() : boolean ((5 < 10) or (20 < 10)) = true");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(2, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
