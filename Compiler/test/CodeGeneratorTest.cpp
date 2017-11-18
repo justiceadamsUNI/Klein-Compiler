@@ -591,3 +591,23 @@ TEST_CASE("Test that test-function-calls.kln works correctly", "[Code Generator]
 	// Blaze it fam.
 	REQUIRE(OutputStatements.at(0) == 420);
 }
+
+TEST_CASE("Test that simple if statement works correctly when the if evaluation is true", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main():integer if 10 < 20 then 30 else -100");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm"};
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(2, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 30);
+}
+
+TEST_CASE("Test that simple if statement works correctly when the if evaluation is false", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main():integer if 10 < -20 then 30 else -100");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(2, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == -100);
+}

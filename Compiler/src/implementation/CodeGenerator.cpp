@@ -343,6 +343,53 @@ void CodeGenerator::generateCodeForSingletonIdentifierFactorNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForIfFactorNode(ASTNode Node)
 {
+	// Evaluate if check
+	generateCodeForExpressionNode(*Node.getBaseExprNode3());
+
+	addInstruction("LD 1, 0(5)   ; Getting value of boolean expression for if statment");
+	int BeforeThenCaseInstructionIndex = Instructions.size();
+	// If value of check == 0, jump to the else clause
+	addInstruction("JEQ 1, X(7)   ; Jump to else clause");
+
+	int BeforeThenCaseInstruction = InstructionCount;
+	generateCodeForExpressionNode(*Node.getBaseExprNode2());
+	int BeforeElseCaseInstructionIndex = Instructions.size();
+	addInstruction("LDC 1, Y(0)   ; Store value to skip");
+	addInstruction("ADD 7, 7, 1   ; Skip over then clause (since then clause was triggered)");
+	int AfterThenCaseInstruction = InstructionCount;
+
+	int BeforeElseCaseInstruction = InstructionCount;
+	generateCodeForExpressionNode(*Node.getBaseExprNode());
+	int AfterElseCaseInstruction = InstructionCount;
+
+	// Move value of evaluated if expression and overwrite the boolean expression
+	addInstruction("LD 1, 0(5)   ; Getting evaluated value of if expression");
+	addInstruction("ST 1, -1(5)   ; Moving evaluated value of if expression to overwrite boolean expression (if check)");
+	addInstruction("LDC 1, -1(0)   ; Store -1 ");
+	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
+
+
+	// We do the 'backpatching' here as opposed to the backpatch() method since we already have all the information
+	// we would need right here in the scope of this method. It makes more sense to do it here then to persist that
+	// info and wait until a later time.
+
+	// Do replacement on instruction string
+	string Temp = Instructions.at(BeforeThenCaseInstructionIndex);
+	Temp.replace(
+		Temp.find("X"),
+		1,
+		to_string(AfterThenCaseInstruction - BeforeThenCaseInstruction));
+
+	Instructions.at(BeforeThenCaseInstructionIndex) = Temp;
+
+	// Do replacement on instruction string
+	Temp = Instructions.at(BeforeElseCaseInstructionIndex);
+	Temp.replace(
+		Temp.find("Y"),
+		1,
+		to_string(AfterElseCaseInstruction - BeforeElseCaseInstruction));
+
+	Instructions.at(BeforeElseCaseInstructionIndex) = Temp;
 }
 
 void CodeGenerator::generateCodeForNotFactorNode(ASTNode Node)
