@@ -1,0 +1,12 @@
+(* Test program to test function calls *)
+function main(a: integer, b: integer, c: integer) : integer
+	multiply(multiply(add(a, b), divide(b,c)), 10)
+
+function multiply(a: integer, b: integer) : integer
+	a * b
+	
+function divide(a: integer, b: integer) : integer
+	a / b
+	
+function add(a: integer, b: integer) : integer
+	a + b

@@ -14,7 +14,8 @@ public:
 private:
 	ASTNode Tree = ASTNode(PROGRAM_NODE_TYPE);
 	map<string, Function> SymbolTable;
-	map<string, int> FunctionLocation;
+	map<string, int> FunctionLocations;
+	map<int, string> FunctionJumpReplacements;
 	vector<string> Instructions;
 	string OutFileName;
 	string CurrentFunction;
@@ -28,10 +29,12 @@ private:
 	void generateFunctionHeader(string FunctionName);
 	void generateMainFunction();
 	void generatePrintFunction();
+	void generateAllOtherFunctions();
 	void setRegistersInDmem();
 	void restoreRegistersFromDmem();
 	void generateFunctionReturnSequence();
 	void callFunction(string FunctionName);
+	void backPatch();
 
 	// AST node to target code helper functions.
 	void generateCodeForIdentifierNode(ASTNode Node);

@@ -1,6 +1,9 @@
 #include "../header/CodeGenerator.h"
 #include <iostream>
 #include <fstream>
+#include <algorithm>
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -10,6 +13,8 @@ void CodeGenerator::writeOutTargetCode()
 	setUpRuntimeEnvironment();
 	generatePrintFunction();
 	generateMainFunction();
+	generateAllOtherFunctions();
+	backPatch();
 	writeInstructionsToFile();
 }
 
@@ -71,22 +76,41 @@ void CodeGenerator::addWhiteSpace(string FunctionName)
 
 void CodeGenerator::generateMainFunction()
 {
-	FunctionLocation.insert(pair<string, int>("main", InstructionCount));
+	FunctionLocations.insert(pair<string, int>("main", InstructionCount));
 	generateFunctionHeader("main");
 	
-	// Walk the AST tree for every def node
+	// Find Main def node and generate code for it
 	vector<ASTNode*> DefNodes = Tree.getDefinitions()->getDefNodes();
 	for (int i = 0; i < DefNodes.size(); i++) {
-		CurrentFunction = DefNodes.at(i)->getIdentifierNode()->getIdentifierName();
-		generateCodeForDefNode(*DefNodes.at(i));
+		if (DefNodes.at(i)->getIdentifierNode()->getIdentifierName() == "main")
+		{
+			CurrentFunction = "main";
+			generateCodeForDefNode(*DefNodes.at(i));
+		}
 	}
 
 	generateFunctionReturnSequence();
 }
 
+void CodeGenerator::generateAllOtherFunctions()
+{
+	// Walk the AST tree for every def node and generate it's code while storing it's location in IMEM
+	vector<ASTNode*> DefNodes = Tree.getDefinitions()->getDefNodes();
+	for (int i = 0; i < DefNodes.size(); i++) {
+		if (DefNodes.at(i)->getIdentifierNode()->getIdentifierName() != "main")
+		{
+			CurrentFunction = DefNodes.at(i)->getIdentifierNode()->getIdentifierName();
+			FunctionLocations.insert(pair<string, int>(CurrentFunction, InstructionCount));
+			generateFunctionHeader(CurrentFunction);
+			generateCodeForDefNode(*DefNodes.at(i));
+			generateFunctionReturnSequence();
+		}
+	}
+}
+
 void CodeGenerator::generatePrintFunction()
 {
-	FunctionLocation.insert(pair<string, int>("print", InstructionCount));
+	FunctionLocations.insert(pair<string, int>("print", InstructionCount));
 	generateFunctionHeader("print");
 	addInstruction("LD  1, -3(6)   ; Loading the value of whatever argument is passed to print to R1");
 	addInstruction("OUT 1, 0, 0   ; Printing the value of whatever argument is passed to print");
@@ -137,8 +161,39 @@ void CodeGenerator::callFunction(string FunctionName)
 	addInstruction("LDA  1, 4(7)   ; Saving return adress in temp register, about to call " + FunctionName);
 	addInstruction("ST  1, " + to_string(ArgCount + 2) + "(5)   ; Storing the return adress in DMEM at the control link slot");
 	addInstruction("ADD  1, 6, 0   ; Copying current status pointer before function call, about to call " + FunctionName);
-	addInstruction("LDA  6, " +  to_string(ArgCount + 4) + "(5)   ; Adjusting Status pointer, about to call " + FunctionName);
-	addInstruction("LDA  7, " + to_string(FunctionLocation.find(FunctionName)->second) + "(0)   ; Jump to " + FunctionName);
+	addInstruction("LDA  6, " + to_string(ArgCount + 4) + "(5)   ; Adjusting Status pointer, about to call " + FunctionName);
+
+	if (FunctionLocations.find(FunctionName) != FunctionLocations.end()) {
+		addInstruction("LDA  7, " + to_string(FunctionLocations.find(FunctionName)->second) + "(0)   ; Jump to " + FunctionName);
+	}
+	else {
+		// Mark line for later backpatching
+		FunctionJumpReplacements.insert(pair<int, string>(Instructions.size(), FunctionName));
+		addInstruction("LDA  7, " + FunctionName +  "(0)   ; Jump to " + FunctionName);
+	}
+}
+
+void CodeGenerator::backPatch()
+{
+	map<int, string>::iterator iter = FunctionJumpReplacements.begin();
+	while (iter != FunctionJumpReplacements.end())
+	{
+		int InstructionIndex = iter->first;
+		string Placeholder = iter->second;
+
+		// Do replacement on instruction string
+		string Temp = Instructions.at(InstructionIndex);
+		Temp.replace(
+			Temp.find(Placeholder),
+			Placeholder.size(), 
+			to_string(FunctionLocations.find(Placeholder)->second));
+
+		// Actually do replacement
+		Instructions.at(InstructionIndex) = Temp;
+
+		// Incrememnt Iterator
+		iter++;
+	}
 }
 
 void CodeGenerator::restoreRegistersFromDmem()
@@ -175,7 +230,7 @@ void CodeGenerator::generateCodeForBodyNode(ASTNode Node)
 	vector<ASTNode*> PrintStatements = Node.getPrintStatements();
 	int CurrentFunctionParamsSize = SymbolTable.find(CurrentFunction)->second.getParameters().size();
 
-	// Assign types to print statments
+	// generate jumps to print statments
 	for (int i = PrintStatements.size() - 1; i >= 0; i--) {
 		generateCodeForPrintStatementNode(*PrintStatements.at(i));
 	}
@@ -253,7 +308,32 @@ void CodeGenerator::generateCodeForParenthesisedExpressionNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForFunctionCallNode(ASTNode Node)
 {
-	//Stub
+	string CalledFunction = Node.getIdentifierNode()->getIdentifierName();
+	int CalledFunctionsParamSize = SymbolTable.find(CalledFunction)->second.getParameters().size();
+
+	// Evaluate arguments and store as temp vaiables before jumping to function call (if there are any)
+	if (Node.getBaseActualsNode()->getAstNodeType() == NON_BASE_ACTUALS_NODE_TYPE) {
+		vector<ASTNode*> FunctionCallParams = Node.getBaseActualsNode()->getNonEmptyActualsNode()->getExpressions();
+		for (int i = 0; i < FunctionCallParams.size(); i++)
+		{
+			generateCodeForExpressionNode(*FunctionCallParams.at(i));
+		}
+	}
+	
+	callFunction(CalledFunction);
+	addInstruction("LD 1, 1(5)   ; Loading the return value of " + CalledFunction + " into R1");
+
+	// Overwrite arguments on the stack frame (if they exist)
+	if (CalledFunctionsParamSize == 0)
+	{
+		addInstruction("LDC 1, 1(0)   ; Loading 1 into R1");
+		addInstruction("ADD 5, 1, 5   ; Add 1 to Stack Top");
+	}
+	else {
+		addInstruction("ST 1, -" + to_string(CalledFunctionsParamSize - 1) + "(5)   ; Storing return value of " + CalledFunction + " as a temp variable (overwrites other params)");
+		addInstruction("LDC 1, " + to_string(CalledFunctionsParamSize - 1) + "(0)   ; Loading decrement value into R1");
+		addInstruction("SUB 5, 5, 1   ; Decrement Stack Top if needed");
+	}
 }
 
 void CodeGenerator::generateCodeForSingletonIdentifierFactorNode(ASTNode Node)

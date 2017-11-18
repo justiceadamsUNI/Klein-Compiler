@@ -539,3 +539,55 @@ TEST_CASE("Test that = works with correctly when used in conjunction with boolea
 	REQUIRE(OutputStatements.size() == 1);
 	REQUIRE(OutputStatements.at(0) == 1);
 }
+
+TEST_CASE("Test that a simple function call works ", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main(): integer foo() + 1 function foo(): integer 10 + 20");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(2, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 31);
+}
+
+TEST_CASE("Test that a simple function call works when passing paramaters ", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main():integer foo(30, 10) + 100 function foo(a: integer, b: integer): integer a - b");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(2, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 120);
+}
+
+TEST_CASE("Test that a simple function call works when passing paramaters and keeps paramater order", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main():integer foo(10, 30) + 100 function foo(a: integer, b: integer): integer a - b");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(2, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 80);
+}
+
+
+TEST_CASE("Test that nested function calls operate correctly", "[Code Generator]") {
+	compileKleinFileToTmWithoutOpeningKleinFile("function main():integer foo(100, foo(30, 20)) + 5 function foo(a: integer, b: integer): integer a - b");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(2, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 95);
+}
+
+TEST_CASE("Test that test-function-calls.kln works correctly", "[Code Generator]") {
+	compileKleinFileToTm("programs/test-function-calls.kln");
+
+	char* argv[5] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "1", "20", "10" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(5, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	// Blaze it fam.
+	REQUIRE(OutputStatements.at(0) == 420);
+}
