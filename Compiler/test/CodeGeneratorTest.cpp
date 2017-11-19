@@ -623,7 +623,7 @@ TEST_CASE("Test that test_klein_program_nested_if.kln works correctly", "[Code G
 }
 
 TEST_CASE("Test that isExcellent works correctly when number is excellent", "[Code Generator]") {
-	compileKleinFileToTm("programs/IsExcellent.kln");
+	compileKleinFileToTm("programs/isExcellent.kln");
 
 	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "3468" };
 	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(3, argv);
@@ -633,7 +633,7 @@ TEST_CASE("Test that isExcellent works correctly when number is excellent", "[Co
 }
 
 TEST_CASE("Test that isExcellent works correctly when number is not excellent", "[Code Generator]") {
-	compileKleinFileToTm("programs/IsExcellent.kln");
+	compileKleinFileToTm("programs/isExcellent.kln");
 
 	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "50" };
 	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(3, argv);
