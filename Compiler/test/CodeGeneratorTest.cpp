@@ -581,8 +581,8 @@ TEST_CASE("Test that nested function calls operate correctly", "[Code Generator]
 	REQUIRE(OutputStatements.at(0) == 95);
 }
 
-TEST_CASE("Test that test-function-calls.kln works correctly", "[Code Generator]") {
-	compileKleinFileToTm("programs/test-function-calls.kln");
+TEST_CASE("Test that test_klein_program_multiple_function_calls.kln works correctly", "[Code Generator]") {
+	compileKleinFileToTm("test/test_klein_program_multiple_function_calls.kln");
 
 	char* argv[5] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "1", "20", "10" };
 	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(5, argv);
@@ -611,3 +611,84 @@ TEST_CASE("Test that simple if statement works correctly when the if evaluation 
 	REQUIRE(OutputStatements.size() == 1);
 	REQUIRE(OutputStatements.at(0) == -100);
 }
+
+TEST_CASE("Test that test_klein_program_nested_if.kln works correctly", "[Code Generator]") {
+	compileKleinFileToTm("test/test_klein_program_nested_if.kln");
+
+	char* argv[2] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(2, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 100);
+}
+
+TEST_CASE("Test that isExcellent works correctly when number is excellent", "[Code Generator]") {
+	compileKleinFileToTm("programs/IsExcellent.kln");
+
+	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "3468" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(3, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that isExcellent works correctly when number is not excellent", "[Code Generator]") {
+	compileKleinFileToTm("programs/IsExcellent.kln");
+
+	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "50" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(3, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 0);
+}
+
+TEST_CASE("Test that divisible-by-seven.kln works correctly when number is divisible by seven", "[Code Generator]") {
+	compileKleinFileToTm("programs/divisible-by-seven.kln");
+
+	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "-49" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(3, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that divisible-by-seven.kln works correctly when number is not divisible by seven", "[Code Generator]") {
+	compileKleinFileToTm("programs/divisible-by-seven.kln");
+
+	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "701" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(3, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 0);
+}
+
+TEST_CASE("Test that modulus-by-hand.kln works correctly", "[Code Generator]") {
+	compileKleinFileToTm("programs/modulus-by-hand.kln");
+
+	char* argv[4] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "25", "13" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(4, argv);
+
+	REQUIRE(OutputStatements.size() == 2);
+	REQUIRE(OutputStatements.at(1) == 12);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
+
+TEST_CASE("Test that fibonacci.kln works correctly with valid paramater", "[Code Generator]") {
+	compileKleinFileToTm("programs/fibonacci.kln");
+
+	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "12" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(3, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 144);
+}
+TEST_CASE("Test that fibonacci.kln works correctly with invalid paramater", "[Code Generator]") {
+	compileKleinFileToTm("programs/fibonacci.kln");
+
+	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "-12" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(3, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 0);
+}
+
