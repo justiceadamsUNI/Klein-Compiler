@@ -682,6 +682,7 @@ TEST_CASE("Test that fibonacci.kln works correctly with valid paramater", "[Code
 	REQUIRE(OutputStatements.size() == 1);
 	REQUIRE(OutputStatements.at(0) == 144);
 }
+
 TEST_CASE("Test that fibonacci.kln works correctly with invalid paramater", "[Code Generator]") {
 	compileKleinFileToTm("programs/fibonacci.kln");
 
@@ -692,3 +693,16 @@ TEST_CASE("Test that fibonacci.kln works correctly with invalid paramater", "[Co
 	REQUIRE(OutputStatements.at(0) == 0);
 }
 
+TEST_CASE("Test that divide.kln works correctly", "[Code Generator]") {
+	compileKleinFileToTm("programs/divide.kln");
+
+	char* argv[5] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "89", "19", "4" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(5, argv);
+
+	REQUIRE(OutputStatements.size() == 5);
+	REQUIRE(OutputStatements.at(4) == 2);
+	REQUIRE(OutputStatements.at(3) == 2);
+	REQUIRE(OutputStatements.at(2) == 4);
+	REQUIRE(OutputStatements.at(1) == 8);
+	REQUIRE(OutputStatements.at(0) == 46);
+}
