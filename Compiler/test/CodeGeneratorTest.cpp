@@ -733,23 +733,23 @@ TEST_CASE("Test that horner-param.kln works correctly", "[Code Generator]") {
 	REQUIRE(OutputStatements.at(0) == 5047);
 }
 
-//TEST_CASE("Test that circular-prime.kln works correctly", "[Code Generator]") {
-//	compileKleinFileToTm("programs/circular-prime.kln");
-//
-//	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "73"};
-//	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(3, argv);
-//
-//	REQUIRE(OutputStatements.size() == 12);
-//	REQUIRE(OutputStatements.at(11) == 11);
-//	REQUIRE(OutputStatements.at(10) == 73);
-//	REQUIRE(OutputStatements.at(9) == 71);
-//	REQUIRE(OutputStatements.at(8) == 37);
-//	REQUIRE(OutputStatements.at(7) == 31);
-//	REQUIRE(OutputStatements.at(6) == 17);
-//	REQUIRE(OutputStatements.at(5) == 13);
-//	REQUIRE(OutputStatements.at(4) == 11);
-//	REQUIRE(OutputStatements.at(3) == 7);
-//	REQUIRE(OutputStatements.at(2) == 5);
-//	REQUIRE(OutputStatements.at(1) == 3);
-//	REQUIRE(OutputStatements.at(0) == 2);
-//}
+TEST_CASE("Test that circular-prime.kln works correctly", "[Code Generator]") {
+	compileKleinFileToTm("programs/circular-prime.kln");
+
+	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "73"};
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(3, argv);
+
+	REQUIRE(OutputStatements.size() == 12);
+	REQUIRE(OutputStatements.at(11) == 11);
+	REQUIRE(OutputStatements.at(10) == 73);
+	REQUIRE(OutputStatements.at(9) == 71);
+	REQUIRE(OutputStatements.at(8) == 37);
+	REQUIRE(OutputStatements.at(7) == 31);
+	REQUIRE(OutputStatements.at(6) == 17);
+	REQUIRE(OutputStatements.at(5) == 13);
+	REQUIRE(OutputStatements.at(4) == 11);
+	REQUIRE(OutputStatements.at(3) == 7);
+	REQUIRE(OutputStatements.at(2) == 5);
+	REQUIRE(OutputStatements.at(1) == 3);
+	REQUIRE(OutputStatements.at(0) == 2);
+}
