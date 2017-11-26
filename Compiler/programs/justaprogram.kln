@@ -1,0 +1,9 @@
+(*Just a program that works
+by Josh Hilliard, Harsha Varma, and Justice Adams
+CS 4550 Fall 2017
+Compiler Defilers
+
+*)
+function main () : boolean
+	print(false=false)
+	true = (6 < 5)
