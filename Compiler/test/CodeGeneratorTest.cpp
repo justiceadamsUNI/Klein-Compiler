@@ -706,3 +706,50 @@ TEST_CASE("Test that divide.kln works correctly", "[Code Generator]") {
 	REQUIRE(OutputStatements.at(1) == 8);
 	REQUIRE(OutputStatements.at(0) == 46);
 }
+
+TEST_CASE("Test that sieve.kln works correctly", "[Code Generator]") {
+	compileKleinFileToTm("programs/sieve.kln");
+
+	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "7" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(3, argv);
+
+	REQUIRE(OutputStatements.size() == 7);
+	REQUIRE(OutputStatements.at(6) == 1);
+	REQUIRE(OutputStatements.at(5) == 7);
+	REQUIRE(OutputStatements.at(4) == 0);
+	REQUIRE(OutputStatements.at(3) == 5);
+	REQUIRE(OutputStatements.at(2) == 0);
+	REQUIRE(OutputStatements.at(1) == 3);
+	REQUIRE(OutputStatements.at(0) == 2);
+}
+
+TEST_CASE("Test that horner-param.kln works correctly", "[Code Generator]") {
+	compileKleinFileToTm("programs/horner-param.kln");
+
+	char* argv[7] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "5", "1", "-5", "-3", "10" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(7, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 5047);
+}
+
+//TEST_CASE("Test that circular-prime.kln works correctly", "[Code Generator]") {
+//	compileKleinFileToTm("programs/circular-prime.kln");
+//
+//	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "73"};
+//	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(3, argv);
+//
+//	REQUIRE(OutputStatements.size() == 12);
+//	REQUIRE(OutputStatements.at(11) == 11);
+//	REQUIRE(OutputStatements.at(10) == 73);
+//	REQUIRE(OutputStatements.at(9) == 71);
+//	REQUIRE(OutputStatements.at(8) == 37);
+//	REQUIRE(OutputStatements.at(7) == 31);
+//	REQUIRE(OutputStatements.at(6) == 17);
+//	REQUIRE(OutputStatements.at(5) == 13);
+//	REQUIRE(OutputStatements.at(4) == 11);
+//	REQUIRE(OutputStatements.at(3) == 7);
+//	REQUIRE(OutputStatements.at(2) == 5);
+//	REQUIRE(OutputStatements.at(1) == 3);
+//	REQUIRE(OutputStatements.at(0) == 2);
+//}
