@@ -753,3 +753,23 @@ TEST_CASE("Test that circular-prime.kln works correctly", "[Code Generator]") {
 	REQUIRE(OutputStatements.at(1) == 3);
 	REQUIRE(OutputStatements.at(0) == 2);
 }
+
+TEST_CASE("Test that euclid.kln works correctly", "[Code Generator]") {
+	compileKleinFileToTm("programs/euclid.kln");
+
+	char* argv[4] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "7074", "108" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(4, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 54);
+}
+
+TEST_CASE("Test that euclid.kln works correctly with relitively prime numbers", "[Code Generator]") {
+	compileKleinFileToTm("programs/euclid.kln");
+
+	char* argv[4] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "7073", "108" };
+	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutput(4, argv);
+
+	REQUIRE(OutputStatements.size() == 1);
+	REQUIRE(OutputStatements.at(0) == 1);
+}
