@@ -98,7 +98,6 @@ string InstructionManager::MapROtoString(RegisterOnlyInstruction RO)
 	default:
 		return "ERROR";
 	}
-
 }
 
 string InstructionManager::MapRMtoString(RegisterMemoryInstruction RM)
