@@ -20,13 +20,13 @@ void CodeGenerator::writeOutTargetCode()
 
 void CodeGenerator::addInitialComments()
 {
-	Instructions.push_back("*");
-	Instructions.push_back("*\tRUN TIME!  gets command line args and calls main");
-	Instructions.push_back("*\t           R1 is used as temp register");
-	Instructions.push_back("*");
+	InstructionManagerInstance.addCommentToInstructions("*");
+	InstructionManagerInstance.addCommentToInstructions("*\tRUN TIME!  gets command line args and calls main");
+	InstructionManagerInstance.addCommentToInstructions("*\t           R1 is used as temp register");
+	InstructionManagerInstance.addCommentToInstructions("*");
 }
 
-/*Sets up the runtime environment and makes the call to main*/
+/* Sets up the runtime environment and makes the call to main */
 void CodeGenerator::setUpRuntimeEnvironment()
 {
 	vector<tuple<string, ReturnTypes>>Params = SymbolTable.at("main").getParameters();
@@ -36,47 +36,42 @@ void CodeGenerator::setUpRuntimeEnvironment()
 	{
 		LastParamLocation = Params.size() + 1;
 
-		// Loads all command line args into stack frame.
+		// Loads all command line args into stack frame
 		for (int i = Params.size(); i >= 0; i--)
 		{
-			addInstruction("LD  1, " + to_string(i + 1) + "(0)");
-			addInstruction("ST  1, " + to_string(i + 2) + "(0)   ; Storing Command line arg number " + to_string(i));
+			InstructionManagerInstance.addInstructionRM(LD, REGISTER_1, REGISTER_0, i + 1);
+			InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_0, i + 2, "Storing Command line arg number " + to_string(i));
 		}
 	}
 
 	// Setup main stack frame before call to function
-	addInstruction("ST  0, " + to_string(LastParamLocation + 2) + "(0)   ; Storing access link before call to main");
-	addInstruction("LDC  6, " + to_string(LastParamLocation + 3) + "(0)   ; Adjust status pointer before call to main");
-	addInstruction("LDA  1, 2(7)   ; Setting return adress and storing in temp register R1");
-	addInstruction("ST  1, " + to_string(LastParamLocation + 1) + "(0)   ; Storing the return adress in DMEM at the control link slot");
-	// 18 slots to skip Print function
-	addInstruction("LDA  7, 18(7)   ; Jump to main"); 
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_0, REGISTER_0, LastParamLocation + 2, "Storing access link before call to main");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_6, REGISTER_0, LastParamLocation + 3, "Adjust status pointer before call to main");
+	InstructionManagerInstance.addInstructionRM(LDA, REGISTER_1, REGISTER_7, 2, "Setting return adress and storing in temp register R1");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_0, LastParamLocation + 1, "Storing the return adress in DMEM at the control link slot");
 
-	// Load into register 1 the value returned from main and print it.
-	addInstruction("LD  1, 1(5)   ; Load main's return value");
-	addInstruction("OUT  1, 0, 0   ; Printing main return value");
+	// 18 instructions to skip Print function
+	InstructionManagerInstance.addInstructionRM(LDA, REGISTER_7, REGISTER_7, 18, "Jump to main");
+
+	// Load into register 1 the value returned from main and print it
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_1, REGISTER_5, 1, "Load main's return value");
+	InstructionManagerInstance.addInstructionRO(OUT, REGISTER_1, REGISTER_0, REGISTER_0, "Printing main return value");
 
 	// Quit
-	addInstruction("HALT  0, 0, 0   ; End of program");
+	InstructionManagerInstance.addInstructionRO(HALT, REGISTER_0, REGISTER_0, REGISTER_0, "End of program");
 }
 
-void CodeGenerator::addInstruction(string Instruction)
+void CodeGenerator::addFunctionLabel(string FunctionName)
 {
-	Instructions.push_back(to_string(InstructionCount) + ": " +  Instruction);
-	InstructionCount++;
-}
-
-void CodeGenerator::addWhiteSpace(string FunctionName)
-{
-	Instructions.push_back("");
-	Instructions.push_back("*");
-	Instructions.push_back("*\t" + FunctionName);
-	Instructions.push_back("*");
+	InstructionManagerInstance.addCommentToInstructions("");
+	InstructionManagerInstance.addCommentToInstructions("*");
+	InstructionManagerInstance.addCommentToInstructions("*\t" + FunctionName);
+	InstructionManagerInstance.addCommentToInstructions("*");
 }
 
 void CodeGenerator::generateMainFunction()
 {
-	FunctionLocations.insert(pair<string, int>("main", InstructionCount));
+	FunctionLocations.insert(pair<string, int>("main", InstructionManagerInstance.getInstructionCount()));
 	generateFunctionHeader("main");
 	
 	// Find Main def node and generate code for it
@@ -94,13 +89,15 @@ void CodeGenerator::generateMainFunction()
 
 void CodeGenerator::generateAllOtherFunctions()
 {
-	// Walk the AST tree for every def node and generate it's code while storing it's location in IMEM
+	// Walk the AST tree for every def node and generate its code while storing its location in IMEM
 	vector<ASTNode*> DefNodes = Tree.getDefinitions()->getDefNodes();
 	for (int i = 0; i < DefNodes.size(); i++) {
 		if (DefNodes.at(i)->getIdentifierNode()->getIdentifierName() != "main")
 		{
 			CurrentFunction = DefNodes.at(i)->getIdentifierNode()->getIdentifierName();
-			FunctionLocations.insert(pair<string, int>(CurrentFunction, InstructionCount));
+			FunctionLocations.insert(pair<string, int>(CurrentFunction, InstructionManagerInstance.getInstructionCount()));
+			
+			// Generate function code
 			generateFunctionHeader(CurrentFunction);
 			generateCodeForDefNode(*DefNodes.at(i));
 			generateFunctionReturnSequence();
@@ -110,39 +107,41 @@ void CodeGenerator::generateAllOtherFunctions()
 
 void CodeGenerator::generatePrintFunction()
 {
-	FunctionLocations.insert(pair<string, int>("print", InstructionCount));
+	FunctionLocations.insert(pair<string, int>("print", InstructionManagerInstance.getInstructionCount()));
 	generateFunctionHeader("print");
-	addInstruction("LD  1, -3(6)   ; Loading the value of whatever argument is passed to print to R1");
-	addInstruction("OUT 1, 0, 0   ; Printing the value of whatever argument is passed to print");
+	
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_1, REGISTER_6, -3, "Loading the value of whatever argument is passed to print to R1");
+	InstructionManagerInstance.addInstructionRO(OUT, REGISTER_1, REGISTER_0, REGISTER_0, "Printing the value of whatever argument is passed to print");
+	
 	generateFunctionReturnSequence();
 }
 
 void CodeGenerator::generateFunctionHeader(string FunctionName)
 {
-	addWhiteSpace(FunctionName);
+	addFunctionLabel(FunctionName);
 	setRegistersInDmem();
 }
 
-/*Note that when setting registers for a function call, we expect to find the old status pointer 
-  in the R1 register. This way we can store it properly.*/
+/* Note that when setting registers for a function call, we expect to find the old status pointer 
+  in the R1 register. This way we can store it properly */
 void CodeGenerator::setRegistersInDmem()
 {
-	addInstruction("ST  2, 0(6)   ; Store register 2 into ( new status pointer) ");
-	addInstruction("ST  3, 1(6)   ; Store register 3 into (new status pointer + 1) ");
-	addInstruction("ST  4, 2(6)   ; Store register 4 into (new status pointer + 2) ");
-	addInstruction("ST  1, 3(6)   ; Store register 1 (the old status pointer) into ( new status pointer + 3) ");
-
-	addInstruction("LDC  1, 3(0)   ; Store constant 3 in R1 ");
-	addInstruction("ADD  5, 1, 6   ; Adjust top of stack to be (new status pointer + 3) ");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_2, REGISTER_6, 0, "Store register 2 into (new status pointer)");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_3, REGISTER_6, 1, "Store register 3 into (new status pointer + 1)");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_4, REGISTER_6, 2, "Store register 4 into (new status pointer + 2)");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_6, 3, "Store register 1 (the old status pointer) into (new status pointer + 3)");
+	
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, 3, "Store constant 3 in R1");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_6, "Adjust top of stack to be (new status pointer + 3)");
 }
 
 void CodeGenerator::generateFunctionReturnSequence()
 {
 	// Stores temp status pointer so it isn't overriden when restoreRegistersFromDmem() is called.
-	addInstruction("ADD  1,6,0   ; Storing a temp copy of status pointer in R1");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_1, REGISTER_6, REGISTER_0, "Storing a temp copy of status pointer in R1");
 	restoreRegistersFromDmem();
-	addInstruction("LD  5,-1(1)   ; Restoring the stack top variable");
-	addInstruction("LD  7,-2(1)   ; Restoring the return adress from the control link");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_5, REGISTER_1, -1, "Restoring the stack top variable");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_7, REGISTER_1, -2, "Restoring the return adress from the control link");
 }
 
 void CodeGenerator::callFunction(string FunctionName)
@@ -152,24 +151,25 @@ void CodeGenerator::callFunction(string FunctionName)
 	// Set incoming args. We do this by transfering the last n slots from the temp objects
 	// of the previous stack frame into the new stack frames arguments section.
 	for (int i = 0; i < ArgCount; i++) {
-		addInstruction("LD 1, -" + to_string(i) + "(5)   ; Moving Temp arg " + to_string(i) + " to R1");
-		addInstruction("ST 1, " + to_string(i + 2) + "(5)   ; Storing Temp arg " + to_string(i) + " to Arg location in new stack frame");
+		InstructionManagerInstance.addInstructionRM(LD, REGISTER_1, REGISTER_5, -i, "Moving Temp arg " + to_string(i) + " to R1");
+		InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_5, i + 2, "Storing Temp arg " + to_string(i) + " to Arg location in new stack frame");
 	}
 
 	// Always leave register one as the value of current status pointer right before we call a function. To avoid overwriten values.
-	addInstruction("ST  5, " + to_string(ArgCount + 3) + "(5)   ; Storing Access Link, about to call " + FunctionName);
-	addInstruction("LDA  1, 4(7)   ; Saving return adress in temp register, about to call " + FunctionName);
-	addInstruction("ST  1, " + to_string(ArgCount + 2) + "(5)   ; Storing the return adress in DMEM at the control link slot");
-	addInstruction("ADD  1, 6, 0   ; Copying current status pointer before function call, about to call " + FunctionName);
-	addInstruction("LDA  6, " + to_string(ArgCount + 4) + "(5)   ; Adjusting Status pointer, about to call " + FunctionName);
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_5, REGISTER_5, ArgCount + 3, "Storing Access Link, about to call " + FunctionName);
+	InstructionManagerInstance.addInstructionRM(LDA, REGISTER_1, REGISTER_7, 4, "Saving return adress in temp register, about to call " + FunctionName);
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_5, ArgCount + 2, "Storing the return adress in DMEM at the control link slot");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_1, REGISTER_6, REGISTER_0, "Copying current status pointer before function call, about to call " + FunctionName);
+	InstructionManagerInstance.addInstructionRM(LDA, REGISTER_6, REGISTER_5, ArgCount + 4, "Adjusting Status pointer, about to call " + FunctionName);
 
 	if (FunctionLocations.find(FunctionName) != FunctionLocations.end()) {
-		addInstruction("LDA  7, " + to_string(FunctionLocations.find(FunctionName)->second) + "(0)   ; Jump to " + FunctionName);
+		// Add jump to function
+		InstructionManagerInstance.addInstructionRM(LDA, REGISTER_7, REGISTER_0, FunctionLocations.find(FunctionName)->second, "Jump to " + FunctionName);
 	}
 	else {
 		// Mark line for later backpatching
-		FunctionJumpReplacements.insert(pair<int, string>(Instructions.size(), FunctionName));
-		addInstruction("LDA  7, " + FunctionName +  "(0)   ; Jump to " + FunctionName);
+		FunctionJumpReplacements.insert(pair<int, string>(InstructionManagerInstance.getInstructionVectorSize(), FunctionName));
+		InstructionManagerInstance.addInstructionRMForBackPatching(LDA, REGISTER_7, REGISTER_0, FunctionName, "Jump to " + FunctionName);
 	}
 }
 
@@ -182,14 +182,14 @@ void CodeGenerator::backPatch()
 		string Placeholder = iter->second;
 
 		// Do replacement on instruction string
-		string Temp = Instructions.at(InstructionIndex);
+		string Temp = InstructionManagerInstance.getInstructions().at(InstructionIndex);
 		Temp.replace(
 			Temp.find(Placeholder),
 			Placeholder.size(), 
 			to_string(FunctionLocations.find(Placeholder)->second));
 
 		// Actually do replacement
-		Instructions.at(InstructionIndex) = Temp;
+		InstructionManagerInstance.replaceInstructionAtIndex(InstructionIndex, Temp);
 
 		// Incrememnt Iterator
 		iter++;
@@ -198,14 +198,15 @@ void CodeGenerator::backPatch()
 
 void CodeGenerator::restoreRegistersFromDmem()
 {
-	addInstruction("LD  2, 0(6)   ; restore register 2 from (status pointer) ");
-	addInstruction("LD  3, 1(6)   ; restore register 3 from (status pointer + 1) ");
-	addInstruction("LD  4, 2(6)   ; restore register 4 from (status pointer + 2) ");
-	addInstruction("LD  6, 3(6)   ; restore register 6 from (status pointer + 3) ");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_2, REGISTER_6, 0, "restore register 2 from (status pointer)");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_3, REGISTER_6, 1, "restore register 3 from (status pointer + 1)");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_4, REGISTER_6, 2, "restore register 4 from (status pointer + 2)");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_6, REGISTER_6, 3, "restore register 6 from (status pointer + 3)");
 }
 
 void CodeGenerator::writeInstructionsToFile()
 {
+	vector<string> Instructions = InstructionManagerInstance.getInstructions();
 	ofstream TMFile;
 	TMFile.open(OutFileName, ios::out);
 
@@ -234,10 +235,10 @@ void CodeGenerator::generateCodeForBodyNode(ASTNode Node)
 	for (int i = PrintStatements.size() - 1; i >= 0; i--) {
 		generateCodeForPrintStatementNode(*PrintStatements.at(i));
 	}
-	generateCodeForExpressionNode(*Node.getBaseExprNode());
 
-	addInstruction("LD 1, 0(5)   ; Pushing the return value of " + CurrentFunction + " into a register");
-	addInstruction("ST 1, -" + to_string(3 + CurrentFunctionParamsSize) + "(6)   ; Storing return value of " + CurrentFunction + " into its' stack frame");
+	generateCodeForExpressionNode(*Node.getBaseExprNode());
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_1, REGISTER_5, 0, "pushing the return value of " + CurrentFunction + " into a register");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_6, -(3 + CurrentFunctionParamsSize), "Storing return value of " + CurrentFunction + " into its stack frame");
 }
 
 void CodeGenerator::generateCodeForBaseExpressionNode(ASTNode Node)
@@ -262,10 +263,10 @@ void CodeGenerator::generateCodeForLiteralFactorNode(ASTNode Node)
 
 void CodeGenerator::generateCodeForIntegerLiteralNode(ASTNode Node)
 {
-	addInstruction("LDC 1, " + Node.getLiteralValue() + "(0)   ; Pushing the literal value into a register.");
-	addInstruction("ST 1, 1(5)   ; Storing integer literal into temp varaibles slot");
-	addInstruction("LDC 1, 1(0)   ; Loading 1 into R1");
-	addInstruction("ADD 5, 1, 5   ; Add 1 to Stack Top");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, stoi(Node.getLiteralValue()), "Pushing the literal value into a register");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_5, 1, "Storing integer literal into temp varaibles slot");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, 1, "Loading 1 into R1");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_5, "Add 1 to Stack Top");
 }
 
 void CodeGenerator::generateCodeForPrintStatementNode(ASTNode Node)
@@ -279,26 +280,26 @@ void CodeGenerator::generateCodeForBooleanLiteralNode(ASTNode Node)
 	// We treat "true" as == 1 and "false" as == 0
 	if (Node.getLiteralValue() == "true")
 	{
-		addInstruction("LDC 1, 1(0)   ; Pushing the boolean value (true == 1) into a register.");
-		addInstruction("ST 1, 1(5)   ; Storing boolean literal into temp varaibles slot");
+		InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, 1, "Pushing the boolean value (true == 1) into a register");
+		InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_5, 1, "Storing boolean literal into temp varaibles slot");
 	}
 	else {
-		addInstruction("LDC 1, 0(0)   ; Pushing the boolean value (false == 0) into a register.");
-		addInstruction("ST 1, 1(5)   ; Storing boolean literal into temp varaibles slot");
+		InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, 0, "Pushing the boolean value (false == 0) into a register");
+		InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_5, 1, "Storing boolean literal into temp varaibles slot");
 	}
 
-	addInstruction("LDC 1, 1(0)   ; Loading 1 into R1");
-	addInstruction("ADD 5, 1, 5   ; Add 1 to Stack Top");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, 1, "Loading 1 into R1");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_5, "Add 1 to Stack Top");
 }
 
 void CodeGenerator::generateCodeForNegatedFactorNode(ASTNode Node)
 {
 	generateCodeForFactorNode(*Node.getFactorNode());
 
-	addInstruction("LD 3, 0(5)   ; Getting left operand of negation multiplication");
-	addInstruction("LDC 4, -1(0)   ; setting right operand of negation to -1");
-	addInstruction("MUL 2, 3, 4   ; Performing negation multiplication on R3 and R4");
-	addInstruction("ST 2, 0(5)   ; Store result of negation multiplication as temp (overwrite original value)");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_3, REGISTER_5, 0, "Getting left operand of negation multiplication");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_4, REGISTER_0, -1, "setting right operand of negation to -1");
+	InstructionManagerInstance.addInstructionRO(MUL, REGISTER_2, REGISTER_3, REGISTER_4, "Performing negation multiplication on R3 and R4");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_2, REGISTER_5, 0, "Store result of negation multiplication as temp (overwrite original value)");
 }
 
 void CodeGenerator::generateCodeForParenthesisedExpressionNode(ASTNode Node)
@@ -321,18 +322,18 @@ void CodeGenerator::generateCodeForFunctionCallNode(ASTNode Node)
 	}
 	
 	callFunction(CalledFunction);
-	addInstruction("LD 1, 1(5)   ; Loading the return value of " + CalledFunction + " into R1");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_1, REGISTER_5, 1, "Loading the return value of " + CalledFunction + " into R1");
 
 	// Overwrite arguments on the stack frame (if they exist)
 	if (CalledFunctionsParamSize == 0)
 	{
-		addInstruction("LDC 1, 1(0)   ; Loading 1 into R1");
-		addInstruction("ADD 5, 1, 5   ; Add 1 to Stack Top");
+		InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, 1, "Loading 1 into R1");
+		InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_5, "Add 1 to Stack Top");
 	}
 	else {
-		addInstruction("ST 1, -" + to_string(CalledFunctionsParamSize - 1) + "(5)   ; Storing return value of " + CalledFunction + " as a temp variable (overwrites other params)");
-		addInstruction("LDC 1, " + to_string(CalledFunctionsParamSize - 1) + "(0)   ; Loading decrement value into R1");
-		addInstruction("SUB 5, 5, 1   ; Decrement Stack Top if needed");
+		InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_5, -(CalledFunctionsParamSize - 1), "Storing return value of " + CalledFunction + " as a temp variable(overwrites other params)");
+		InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, (CalledFunctionsParamSize - 1), "Loading decrement value into R1");
+		InstructionManagerInstance.addInstructionRO(SUB, REGISTER_5, REGISTER_5, REGISTER_1, "Decrement Stack Top if needed");
 	}
 }
 
@@ -346,50 +347,50 @@ void CodeGenerator::generateCodeForIfFactorNode(ASTNode Node)
 	// Evaluate if check
 	generateCodeForExpressionNode(*Node.getBaseExprNode3());
 
-	addInstruction("LD 1, 0(5)   ; Getting value of boolean expression for if statment");
-	int BeforeThenCaseInstructionIndex = Instructions.size();
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_1, REGISTER_5, 0, "Getting value of boolean expression for if statment");
+	int BeforeThenCaseInstructionIndex = InstructionManagerInstance.getInstructionVectorSize();
 	// If value of check == 0, jump to the else clause
-	addInstruction("JEQ 1, X(7)   ; Jump to else clause");
+	InstructionManagerInstance.addInstructionRMForBackPatching(JEQ, REGISTER_1, REGISTER_7, "X", "Jump to else clause");
 
-	int BeforeThenCaseInstruction = InstructionCount;
+	int BeforeThenCaseInstruction = InstructionManagerInstance.getInstructionCount();
 	generateCodeForExpressionNode(*Node.getBaseExprNode2());
-	int BeforeElseCaseInstructionIndex = Instructions.size();
-	addInstruction("LDC 1, Y(0)   ; Store value to skip");
-	addInstruction("ADD 7, 7, 1   ; Skip over then clause (since then clause was triggered)");
-	int AfterThenCaseInstruction = InstructionCount;
+	
+	int BeforeElseCaseInstructionIndex = InstructionManagerInstance.getInstructionVectorSize();
+	InstructionManagerInstance.addInstructionRMForBackPatching(LDC, REGISTER_1, REGISTER_0, "Y", "Store value to skip");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_7, REGISTER_7, REGISTER_1, "Skip over then clause (since then clause was triggered)");
+	int AfterThenCaseInstruction = InstructionManagerInstance.getInstructionCount();
 
-	int BeforeElseCaseInstruction = InstructionCount;
+	int BeforeElseCaseInstruction = InstructionManagerInstance.getInstructionCount();
 	generateCodeForExpressionNode(*Node.getBaseExprNode());
-	int AfterElseCaseInstruction = InstructionCount;
+	int AfterElseCaseInstruction = InstructionManagerInstance.getInstructionCount();
 
 	// Move value of evaluated if expression and overwrite the boolean expression
-	addInstruction("LD 1, 0(5)   ; Getting evaluated value of if expression");
-	addInstruction("ST 1, -1(5)   ; Moving evaluated value of if expression to overwrite boolean expression (if check)");
-	addInstruction("LDC 1, -1(0)   ; Store -1 ");
-	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_1, REGISTER_5, 0, "Getting evaluated value of if expression");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_5, -1, "Moving evaluated value of if expression to overwrite boolean expression (if check)");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, -1, "Store -1");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_5, "Decrement stack top");
 
-
-	// We do the 'backpatching' here as opposed to the backpatch() method since we already have all the information
-	// we would need right here in the scope of this method. It makes more sense to do it here then to persist that
-	// info and wait until a later time.
+	/* We do the 'backpatching' here as opposed to the backpatch() method since we already have all the information
+	we would need right here in the scope of this method. It makes more sense to do it here then to persist that
+	info and wait until a later time. */
 
 	// Do replacement on instruction string
-	string Temp = Instructions.at(BeforeThenCaseInstructionIndex);
+	string Temp = InstructionManagerInstance.getInstructions().at(BeforeThenCaseInstructionIndex);
 	Temp.replace(
 		Temp.find("X"),
 		1,
 		to_string(AfterThenCaseInstruction - BeforeThenCaseInstruction));
 
-	Instructions.at(BeforeThenCaseInstructionIndex) = Temp;
+	InstructionManagerInstance.replaceInstructionAtIndex(BeforeThenCaseInstructionIndex, Temp);
 
 	// Do replacement on instruction string
-	Temp = Instructions.at(BeforeElseCaseInstructionIndex);
+	Temp = InstructionManagerInstance.getInstructions().at(BeforeElseCaseInstructionIndex);
 	Temp.replace(
 		Temp.find("Y"),
 		1,
 		to_string(AfterElseCaseInstruction - BeforeElseCaseInstruction));
 
-	Instructions.at(BeforeElseCaseInstructionIndex) = Temp;
+	InstructionManagerInstance.replaceInstructionAtIndex(BeforeElseCaseInstructionIndex, Temp);
 }
 
 void CodeGenerator::generateCodeForNotFactorNode(ASTNode Node)
@@ -398,12 +399,12 @@ void CodeGenerator::generateCodeForNotFactorNode(ASTNode Node)
 
 	// We can simply subtract 1 then multiply by -1 when negating boolean statements.
 	// Not(true) = (1-1) * 0. Not(False) = (0-1)*-1
-	addInstruction("LD 3, 0(5)   ; Getting original boolean value");
-	addInstruction("LDC 4, 1(0)   ; setting right operand to 1 for subtraction");
-	addInstruction("SUB 2, 3, 4   ; Performing subtraction on R3 and R4");
-	addInstruction("LDC 4, -1(0)   ; setting right operand of negation to -1");
-	addInstruction("MUL 2, 2, 4   ; Performing negation multiplication on R3 and R4");
-	addInstruction("ST 2, 0(5)   ; Store result of negating boolean statement as temp (overwrite original value)");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_3, REGISTER_5, 0, "Getting original boolean value");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_4, REGISTER_0, 1, "setting right operand to 1 for subtraction");
+	InstructionManagerInstance.addInstructionRO(SUB, REGISTER_2, REGISTER_3, REGISTER_4, "Performing subtraction on R3 and R4");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_4, REGISTER_0, -1, "setting right operand of negation to -1");
+	InstructionManagerInstance.addInstructionRO(MUL, REGISTER_2, REGISTER_2, REGISTER_4, "Performing negation multiplication on R3 and R4");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_2, REGISTER_5, 0, "Store result of negating boolean statement as temp (overwrite original value)");
 }
 
 void CodeGenerator::generateCodeForAndNode(ASTNode Node)
@@ -420,14 +421,14 @@ void CodeGenerator::generateCodeForAndNode(ASTNode Node)
 		generateCodeForFactorNode(*Node.getFactorNode2());
 	}
 
-	// We simple multiply here! 1*0 = true and false = 0 = false.
+	// We simple multiply here! 1*0 = (true and false) = 0 = false.
 	// 1 * 1 = 1 = true.
-	addInstruction("LD 3, 0(5)   ; Getting left operand of and operator");
-	addInstruction("LD 4, -1(5)   ; Getting right operand of and operator");
-	addInstruction("MUL 2, 3, 4   ; Performing multiplication (and operation) on R3 and R4");
-	addInstruction("ST 2, -1(5)   ; Store result of and operation as temp (overwrite left operand)");
-	addInstruction("LDC 1, -1(0)   ; Store -1 ");
-	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_3, REGISTER_5, 0, "Getting left operand of and operator");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_4, REGISTER_5, -1, "Getting right operand of and operator");
+	InstructionManagerInstance.addInstructionRO(MUL, REGISTER_2, REGISTER_3, REGISTER_4, "Performing multiplication (and operation) on R3 and R4");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_2, REGISTER_5, -1, "Store result of and operation as temp (overwrite left operand)");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, -1, "Store -1");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_5, "Decrement stack top");
 }
 
 void CodeGenerator::generateCodeForMultiplicatorNode(ASTNode Node)
@@ -448,12 +449,12 @@ void CodeGenerator::generateCodeForMultiplicatorNode(ASTNode Node)
 		generateCodeForFactorNode(*Node.getFactorNode2());
 	}
 
-	addInstruction("LD 3, 0(5)   ; Getting left operand of multiplication");
-	addInstruction("LD 4, -1(5)   ; Getting right operand of multiplication");
-	addInstruction("MUL 2, 3, 4   ; Performing multiplication on R3 and R4");
-	addInstruction("ST 2, -1(5)   ; Store result of multiplication as temp (overwrite left operand)");
-	addInstruction("LDC 1, -1(0)   ; Store -1 ");
-	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_3, REGISTER_5, 0, "Getting left operand of multiplication");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_4, REGISTER_5, -1, "Getting right operand of multiplication");
+	InstructionManagerInstance.addInstructionRO(MUL, REGISTER_2, REGISTER_3, REGISTER_4, "Performing multiplication on R3 and R4");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_2, REGISTER_5, -1, "Store result of multiplication as temp (overwrite left operand)");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, -1, "Store -1");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_5, "Decrement stack top");
 }
 
 void CodeGenerator::generateCodeForDividerNode(ASTNode Node)
@@ -474,12 +475,12 @@ void CodeGenerator::generateCodeForDividerNode(ASTNode Node)
 		generateCodeForFactorNode(*Node.getFactorNode2());
 	}
 
-	addInstruction("LD 3, 0(5)   ; Getting left operand of division");
-	addInstruction("LD 4, -1(5)   ; Getting right operand of division");
-	addInstruction("DIV 2, 3, 4   ; Performing division on R3 and R4");
-	addInstruction("ST 2, -1(5)   ; Store result of division as temp (overwrite left operand)");
-	addInstruction("LDC 1, -1(0)   ; Store -1 ");
-	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_3, REGISTER_5, 0, "Getting left operand of division");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_4, REGISTER_5, -1, "Getting right operand of division");
+	InstructionManagerInstance.addInstructionRO(DIV, REGISTER_2, REGISTER_3, REGISTER_4, "Performing division on R3 and R4");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_2, REGISTER_5, -1, "Store result of division as temp (overwrite left operand)");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, -1, "Store -1");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_5, "Decrement stack top");
 }
 
 void CodeGenerator::generateCodeForOrNode(ASTNode Node)
@@ -497,26 +498,26 @@ void CodeGenerator::generateCodeForOrNode(ASTNode Node)
 	}
 
 	// We do an addition and if the result is >0 we have a true value.
-	addInstruction("LD 3, 0(5)   ; Getting left operand of addition");
-	addInstruction("LD 4, -1(5)   ; Getting right operand of addition");
-	addInstruction("ADD 2, 3, 4   ; Performing addition on R3 and R4");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_3, REGISTER_5, 0, "Getting left operand of addition");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_4, REGISTER_5, -1, "Getting right operand of addition");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_2, REGISTER_3, REGISTER_4, "Performing addition on R3 and R4");
 
 	// Adjust value by subtracting 1
-	addInstruction("ADD 1, 2, 0   ; Store result into temp R1");
-	addInstruction("LDC 3, 1(0)   ; Store 1 into R3 ");
-	addInstruction("SUB 1, 1, 3   ; Performing subtraction on R1 and R3");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_1, REGISTER_2, REGISTER_0, "Store result into temp R1");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_3, REGISTER_0, 1, "Store 1 into R3");
+	InstructionManagerInstance.addInstructionRO(SUB, REGISTER_1, REGISTER_1, REGISTER_3, "Performing subtraction on R1 and R3");
 
 	// If result is > 1 then store result - 1 as the temp variable.
-	addInstruction("JGT 1, 2(7)   ; Performing subtraction on R1 and R3");
-	addInstruction("ST 2, -1(5)   ; Store the result of OR operation as temp (overwrite left operand)");
-	addInstruction("ADD 7, 7, 3   ; Skip 1 instruction");
+	InstructionManagerInstance.addInstructionRM(JGT, REGISTER_1, REGISTER_7, 2, "Performing subtraction on R1 and R3");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_2, REGISTER_5, -1, "Store the result of OR operation as temp (overwrite left operand)");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_7, REGISTER_7, REGISTER_3, "Skip 1 instruction");
 
 	// Store adjusted value
-	addInstruction("ST 1, -1(5)   ; Store adjusted result of OR operation as temp (overwrite left operand)");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_5, -1, "Store adjusted result of OR operation as temp (overwrite left operand)");
 
 	// Adjust stack top
-	addInstruction("LDC 1, -1(0)   ; Store -1 ");
-	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, -1, "Store -1");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_5, "Decrement stack top");
 }
 
 void CodeGenerator::generateCodeForAdditionNode(ASTNode Node)
@@ -533,12 +534,12 @@ void CodeGenerator::generateCodeForAdditionNode(ASTNode Node)
 		generateCodeForTermNode(*Node.getBaseTermNode2());
 	}
 
-	addInstruction("LD 3, 0(5)   ; Getting left operand of addition");
-	addInstruction("LD 4, -1(5)   ; Getting right operand of addition");
-	addInstruction("ADD 2, 3, 4   ; Performing addition on R3 and R4");
-	addInstruction("ST 2, -1(5)   ; Store result of addition as temp (overwrite left operand)");
-	addInstruction("LDC 1, -1(0)   ; Store -1 ");
-	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_3, REGISTER_5, 0, "Getting left operand of addition");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_4, REGISTER_5, -1, "Getting right operand of addition");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_2, REGISTER_3, REGISTER_4, "Performing addition on R3 and R4");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_2, REGISTER_5, -1, "Store result of addition as temp (overwrite left operand)");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, -1, "Store -1");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_5, "Decrement stack top");
 }
 
 void CodeGenerator::generateCodeForSubtractionNode(ASTNode Node)
@@ -555,12 +556,12 @@ void CodeGenerator::generateCodeForSubtractionNode(ASTNode Node)
 		generateCodeForTermNode(*Node.getBaseTermNode2());
 	}
 
-	addInstruction("LD 3, 0(5)   ; Getting left operand of subtraction");
-	addInstruction("LD 4, -1(5)   ; Getting right operand of subtraction");
-	addInstruction("SUB 2, 3, 4   ; Performing subtraction on R3 and R4");
-	addInstruction("ST 2, -1(5)   ; Store result of subtraction as temp (overwrite left operand)");
-	addInstruction("LDC 1, -1(0)   ; Store -1 ");
-	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_3, REGISTER_5, 0, "Getting left operand of subtraction");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_4, REGISTER_5, -1, "Getting right operand of subtraction");
+	InstructionManagerInstance.addInstructionRO(SUB, REGISTER_2, REGISTER_3, REGISTER_4, "Performing subtraction on R3 and R4");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_2, REGISTER_5, -1, "Store result of subtraction as temp (overwrite left operand)");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, -1, "Store -1");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_5, "Decrement stack top");
 }
 
 void CodeGenerator::generateCodeForLessThanNode(ASTNode Node)
@@ -572,24 +573,24 @@ void CodeGenerator::generateCodeForLessThanNode(ASTNode Node)
 	generateCodeForSimpleExpressionNode(*Node.getBaseSimpleExprNode2());
 
 	// We do Right - Left then compare the results to 0.
-	addInstruction("LD 3, 0(5)   ; Getting left operand of <");
-	addInstruction("LD 4, -1(5)   ; Getting right operand of <");
-	addInstruction("SUB 2, 4, 3   ; Performing Subtraction on R4 and R3");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_3, REGISTER_5, 0, "Getting left operand of <");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_4, REGISTER_5, -1, "Getting right operand of <");
+	InstructionManagerInstance.addInstructionRO(SUB, REGISTER_2, REGISTER_4, REGISTER_3, "Performing subtraction on R4 and R3");
 
 	// If result is > 0 then store 1 as the value (since left was less than right).
-	addInstruction("JGT 2, 4(7)   ; Jumping if R2 greater than 0");
-	addInstruction("LDC 1, 0(0)   ; Load 0 (false) ");
-	addInstruction("ST 1, -1(5)   ; Store the result of < as temp (overwrite left operand)");
-	addInstruction("LDC 1, 2(0)   ; Load 2 into R1 ");
-	addInstruction("ADD 7, 7, 1   ; Skip 2 instructions");
+	InstructionManagerInstance.addInstructionRM(JGT, REGISTER_2, REGISTER_7, 4, "Jumping if R2 greater than 0");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, 0, "Load 0 (false) ");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_5, -1, "Store the result of < as temp (overwrite left operand)");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, 2, "Load 2 into R1 ");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_7, REGISTER_7, REGISTER_1, "Skip 2 instructions");
 
 	// Store adjusted value
-	addInstruction("LDC 1, 1(0)   ; Load 1 (true) ");
-	addInstruction("ST 1, -1(5)   ; Store the result of < as temp (overwrite left operand)");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, 1, "Load 1 (true) ");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_5, -1, "Store the result of < as temp (overwrite left operand)");
 
 	// Adjust stack top
-	addInstruction("LDC 1, -1(0)   ; Store -1 ");
-	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, -1, "Store -1");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_5, "Decrement stack top");
 }
 
 void CodeGenerator::generateCodeForEqualNode(ASTNode Node)
@@ -601,24 +602,24 @@ void CodeGenerator::generateCodeForEqualNode(ASTNode Node)
 	generateCodeForSimpleExpressionNode(*Node.getBaseSimpleExprNode2());
 
 	// We do Right - Left then compare the results to 0.
-	addInstruction("LD 3, 0(5)   ; Getting left operand of =");
-	addInstruction("LD 4, -1(5)   ; Getting right operand of =");
-	addInstruction("SUB 2, 4, 3   ; Performing Subtraction on R4 and R3");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_3, REGISTER_5, 0, "Getting left operand of =");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_4, REGISTER_5, -1, "Getting right operand of =");
+	InstructionManagerInstance.addInstructionRO(SUB, REGISTER_2, REGISTER_4, REGISTER_3, "Performing subtraction on R4 and R3"); 
 
 	// If result is = 0 then store 1 as the value (since left was eqaul to right).
-	addInstruction("JEQ 2, 4(7)   ; Jumping if R2 equal than 0");
-	addInstruction("LDC 1, 0(0)   ; Load 0 (false) ");
-	addInstruction("ST 1, -1(5)   ; Store the result of = as temp (overwrite left operand)");
-	addInstruction("LDC 1, 2(0)   ; Load 2 into R1 ");
-	addInstruction("ADD 7, 7, 1   ; Skip 2 instructions");
-
+	InstructionManagerInstance.addInstructionRM(JEQ, REGISTER_2, REGISTER_7, 4, "Jumping if R2 equal to 0");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, 0, "Load 0 (false) ");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_5, -1, "Store the result of = as temp (overwrite left operand)");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, 2, "Load 2 into R1 ");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_7, REGISTER_7, REGISTER_1, "Skip 2 instructions");
+	
 	// Store adjusted value
-	addInstruction("LDC 1, 1(0)   ; Load 1 (true) ");
-	addInstruction("ST 1, -1(5)   ; Store the result of = as temp (overwrite left operand)");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, 1, "Load 1 (true) ");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_5, -1, "Store the result of = as temp (overwrite left operand)");
 
 	// Adjust stack top
-	addInstruction("LDC 1, -1(0)   ; Store -1 ");
-	addInstruction("ADD 5, 1, 5   ; Decrement stack top ");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, -1, "Store -1");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_5, "Decrement stack top");
 }
 
 void CodeGenerator::generateCodeForIdentifierNode(ASTNode Node)
@@ -630,11 +631,10 @@ void CodeGenerator::generateCodeForIdentifierNode(ASTNode Node)
 		[&](const tuple<string, ReturnTypes>& tuple) {return get<0>(tuple) == Node.getIdentifierName(); }) - Params.begin();
 
 	int ArgumentPointer = -1 * (2 + Params.size()) + int(Position);
-	addInstruction("LD 1, " + to_string(ArgumentPointer) + "(6)   ; Loading actual value of argument into R1 from stack");
-
-	addInstruction("ST 1, 1(5)   ; Store the argument into the temp variables slot");
-	addInstruction("LDC 1, 1(0)   ; Store 1 ");
-	addInstruction("ADD 5, 1, 5   ; Increment stack top ");
+	InstructionManagerInstance.addInstructionRM(LD, REGISTER_1, REGISTER_6, ArgumentPointer, "Loading actual value of argument into R1 from stack");
+	InstructionManagerInstance.addInstructionRM(ST, REGISTER_1, REGISTER_5, 1, "Store the argument into the temp variables slot");
+	InstructionManagerInstance.addInstructionRM(LDC, REGISTER_1, REGISTER_0, 1, "Store 1 ");
+	InstructionManagerInstance.addInstructionRO(ADD, REGISTER_5, REGISTER_1, REGISTER_5, "Increment stack top");
 }
 
 // helper methods -------------------------------------------------------
