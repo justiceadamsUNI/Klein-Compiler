@@ -1,5 +1,6 @@
 #pragma once
 #include "SemanticChecker.h"
+#include "InstructionManager.h"
 
 class CodeGenerator {
 public:
@@ -16,15 +17,13 @@ private:
 	map<string, Function> SymbolTable;
 	map<string, int> FunctionLocations;
 	map<int, string> FunctionJumpReplacements;
-	vector<string> Instructions;
 	string OutFileName;
 	string CurrentFunction;
-	int InstructionCount = 0;
+	InstructionManager InstructionManagerInstance;
 
 	void addInitialComments();
+	void addFunctionLabel(string FunctionName);
 	void setUpRuntimeEnvironment();
-	void addInstruction(string Instruction);
-	void addWhiteSpace(string FunctionName);
 	void writeInstructionsToFile();
 	void generateFunctionHeader(string FunctionName);
 	void generateMainFunction();
