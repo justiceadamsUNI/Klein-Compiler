@@ -3,49 +3,49 @@
 using namespace std;
 #define NO_COMMENT ""
 
-void InstructionManager::AddInstructionRO(RegisterOnlyInstruction RO, Register R1, Register R2, Register R3, string comment)
+void InstructionManager::addInstructionRO(RegisterOnlyInstruction RO, Register R1, Register R2, Register R3, string comment)
 {
 	string instruction = to_string(InstructionCount) + ": " 
-		+ MapROtoString(RO) + " "
-		+ MapRegisterToString(R1) + ", "
-		+ MapRegisterToString(R2) + ", "
-		+ MapRegisterToString(R3)
+		+ mapROtoString(RO) + " "
+		+ mapRegisterToString(R1) + ", "
+		+ mapRegisterToString(R2) + ", "
+		+ mapRegisterToString(R3)
 		+ ";   " + comment;
 	
 	Instructions.push_back(instruction);
 	InstructionCount++;
 }
 
-void InstructionManager::AddInstructionRO(RegisterOnlyInstruction RO, Register R1, Register R2, Register R3)
+void InstructionManager::addInstructionRO(RegisterOnlyInstruction RO, Register R1, Register R2, Register R3)
 {
-	AddInstructionRO(RO, R1, R2, R3, NO_COMMENT);
+	addInstructionRO(RO, R1, R2, R3, NO_COMMENT);
 }
 
-void InstructionManager::AddInstructionRM(RegisterMemoryInstruction RM, Register R1, Register R2, int offset, string comment)
+void InstructionManager::addInstructionRM(RegisterMemoryInstruction RM, Register R1, Register R2, int offset, string comment)
 {
 	string instruction = to_string(InstructionCount) + ": "
-		+ MapRMtoString(RM) + " "
-		+ MapRegisterToString(R1) + ", "
+		+ mapRMtoString(RM) + " "
+		+ mapRegisterToString(R1) + ", "
 		+ to_string(offset) + "("
-		+ MapRegisterToString(R2) + ")"
+		+ mapRegisterToString(R2) + ")"
 		+ ";   " + comment;
 
 	Instructions.push_back(instruction);
 	InstructionCount++;
 }
 
-void InstructionManager::AddInstructionRM(RegisterMemoryInstruction RM, Register R1, Register R2, int offset)
+void InstructionManager::addInstructionRM(RegisterMemoryInstruction RM, Register R1, Register R2, int offset)
 {
-	AddInstructionRM(RM, R1, R2, offset, NO_COMMENT);
+	addInstructionRM(RM, R1, R2, offset, NO_COMMENT);
 }
 
-void InstructionManager::AddInstructionRMForBackPatching(RegisterMemoryInstruction RM, Register R1, Register R2, string ReplaceLabel, string comment)
+void InstructionManager::addInstructionRMForBackPatching(RegisterMemoryInstruction RM, Register R1, Register R2, string ReplaceLabel, string comment)
 {
 	string instruction = to_string(InstructionCount) + ": " 
-		+ MapRMtoString(RM) + " "
-		+ MapRegisterToString(R1) + ", "
+		+ mapRMtoString(RM) + " "
+		+ mapRegisterToString(R1) + ", "
 		+ ReplaceLabel + "("
-		+ MapRegisterToString(R2) + ")"
+		+ mapRegisterToString(R2) + ")"
 		+ ";   " + comment;
 
 	Instructions.push_back(instruction);
@@ -57,17 +57,17 @@ void InstructionManager::replaceInstructionAtIndex(int index, string Replacement
 	Instructions.at(index) = Replacement;
 }
 
-void InstructionManager::AddCommentToInstructions(string comment)
+void InstructionManager::addCommentToInstructions(string comment)
 {
 	Instructions.push_back(comment);
 }
 
-int InstructionManager::GetInstructionCount()
+int InstructionManager::getInstructionCount()
 {
 	return InstructionCount;
 }
 
-int InstructionManager::GetInstructionVectorSize()
+int InstructionManager::getInstructionVectorSize()
 {
 	return Instructions.size();
 }
@@ -77,7 +77,7 @@ vector<string> InstructionManager::getInstructions()
 	return Instructions;
 }
 
-string InstructionManager::MapROtoString(RegisterOnlyInstruction RO)
+string InstructionManager::mapROtoString(RegisterOnlyInstruction RO)
 {
 	switch (RO)
 	{
@@ -100,7 +100,7 @@ string InstructionManager::MapROtoString(RegisterOnlyInstruction RO)
 	}
 }
 
-string InstructionManager::MapRMtoString(RegisterMemoryInstruction RM)
+string InstructionManager::mapRMtoString(RegisterMemoryInstruction RM)
 {
 	switch (RM)
 	{
@@ -129,7 +129,7 @@ string InstructionManager::MapRMtoString(RegisterMemoryInstruction RM)
 	}
 }
 
-string InstructionManager::MapRegisterToString(Register Rx)
+string InstructionManager::mapRegisterToString(Register Rx)
 {
 	switch (Rx) {
 	case REGISTER_0:

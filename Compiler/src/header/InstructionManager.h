@@ -40,27 +40,25 @@ enum Register {
 
 class InstructionManager {
 public:
-	void AddInstructionRO(RegisterOnlyInstruction RO, Register R1, Register R2, Register R3, string comment);
-	void AddInstructionRO(RegisterOnlyInstruction RO, Register R1, Register R2, Register R3);
-	
-	void AddInstructionRM(RegisterMemoryInstruction RM, Register R1, Register R2, int offset, string comment);
-	void AddInstructionRM(RegisterMemoryInstruction RM, Register R1, Register R2, int offset);
-	void AddInstructionRMForBackPatching(RegisterMemoryInstruction RM, Register R1, Register R2, string ReplaceLabel, string comment);
-
-	void replaceInstructionAtIndex(int index, string Replacement);
-
-	void AddCommentToInstructions(string comment);
-	
-	int GetInstructionCount();
-	int GetInstructionVectorSize();
 	vector<string> getInstructions();
+	int getInstructionCount();
+	int getInstructionVectorSize();
+
+	void addInstructionRO(RegisterOnlyInstruction RO, Register R1, Register R2, Register R3, string comment);
+	void addInstructionRO(RegisterOnlyInstruction RO, Register R1, Register R2, Register R3);
+	void addInstructionRM(RegisterMemoryInstruction RM, Register R1, Register R2, int offset, string comment);
+	void addInstructionRM(RegisterMemoryInstruction RM, Register R1, Register R2, int offset);
+	void addInstructionRMForBackPatching(RegisterMemoryInstruction RM, Register R1, Register R2, string ReplaceLabel, string comment);
+
+	// For back-patching and comments
+	void replaceInstructionAtIndex(int index, string Replacement);
+	void addCommentToInstructions(string comment);
 
 private:
-	string MapROtoString(RegisterOnlyInstruction RO);
-	string MapRMtoString(RegisterMemoryInstruction RM);
-	string MapRegisterToString(Register Rx);
-	
 	vector<string> Instructions;
 	int InstructionCount = 0;
 
+	string mapROtoString(RegisterOnlyInstruction RO);
+	string mapRMtoString(RegisterMemoryInstruction RM);
+	string mapRegisterToString(Register Rx);
 };
