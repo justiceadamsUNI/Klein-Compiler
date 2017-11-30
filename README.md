@@ -20,22 +20,21 @@
 -----------------------------------------------------------------------------------------
 
 
-Hello, we are the compiler defilers. Our Group Consist of:
+Hello, we are the compiler defilers. Our Group Consists of:
 * [Justice Adams (adamsjal@uni.edu)](https://github.com/justiceadamsUNI)
 * [Harsha Varma (varmak@uni.edu)](https://github.com/harshavarmak)
 * [Joshua Hilliard (hilliarj@uni.edu)](https://github.com/hilliardj)
-
 
 This is the code repository for the Klein Compiler we are writing. We are 
 implementing a Klein compiler that will translate .kln files into machine 
 language. This compiler implementation is written in C++. Currently, we have a
 working Scanner which converts characters in a .kln file into tokens, a 
 parser that validates Klein programs and produces an AST tree, a Semantic 
-analyzer for static code analysis on a given AST tree, and a partial code
-generator that outputs a .tm file (NOTE: The code generator only works for
-print-one.kln file presently). We developed this using a feature-branch 
-workflow utilizing Github. You'll notice the repo has an extra outer 
-directory for various reasons including continuous integration purposes.
+analyzer for static code analysis on a given AST tree, and a full code
+generator that outputs a .tm file. We developed this using a feature-branch 
+workflow utilizing  Github.  You'll notice the repo has an extra outer directory
+for various reasons including continuous integration purposes.
+
 
 **A quick note about Visual Studio.** If you don't intend to edit this using 
 visual studio, ignore the Compiler.sln, Compiler.vcxproj, 
@@ -49,15 +48,17 @@ directory and open the solution!
 -----------------------------------------------------------------------------------------
 ![Project Structure](https://i.imgur.com/gBPuSSq.png)
 	
-**SRC:** A directory containing all code for the project. Header files can be found in /header
-and implementation files of those headers found in /implementation. You'll notice 
-Compiler.cpp, BuildTokens.cpp, PrintASTNodeTree.cpp, ProgramValidator.cpp, 
-SemanticValidator.cpp and TMGenerator.cpp in the src/directory. They serve separate purposes
-and are thus separated. Compiler.cpp will be our final cpp class containing all other objects,
-BuildTokens.cpp prints the tokens of a valid Klein file to the screen, PrintASTNodeTree.cpp 
-prints a formatted listing of tree nodes of the klein program, ProgramValidator.cpp parses 
-the klein program and outputs if it is valid or not, SemanticValidator checks to see if the
-klein program adheres to klein's grammar and TMGenerator creates a tm file.
+**SRC:** A directory containing all code for the project. Header files can be 
+	found in /header and implementation files of those headers found in 
+	/implementation. You'll notice Compiler.cpp, BuildTokens.cpp, 
+	PrintASTNodeTree.cpp, ProgramValidator.cpp, and SemanticValidator.cpp
+	in the src/ directory. They serve separate purposes 
+	and are thus separated. Compiler.cpp will be our final cpp class containing
+	all other objects that creates a TM file, BuildTokens.cpp prints the tokens
+	of a valid Klein file to the screen, PrintASTNodeTree.cpp prints a formatted
+	listing of tree nodes of the klein program, ProgramValidator.cpp parses the 
+	klein program and outputs if it is valid or not, and SemanticValidator.cpp 
+	checks to see if the klein program adheres to klein's grammar.
 	
 **TEST:** A directory containing all files for testing our code. This includes unit test and 
 arbitrary (invalid) .kln files for further testing.
@@ -92,10 +93,10 @@ dev console you could run
 
 Then run the RunTest executable with `RunTest.exe` .There you have it.
 
-ALTERNATIVELY: you can run the bash script if you have a g++ compiler and bash :)
-Note: **This is currently not compatible with STUDENT.CS.UNI.EDU.** The g++ compiler
-on the student server has issues with the Fakeit.hpp file. It does run on most 
-other linux environments including our TravisCI server. Run it with
+ALTERNATIVELY: you can run the bash script if you have a g++ compiler and bash
+Note: This is currently not compatible with STUDENT.CS.UNI.EDU due to GCC 
+version differences. It does run on most other linux environments including our
+TravisCI server. Run it with
 
 `./runtest.sh`
 
@@ -157,14 +158,11 @@ We have verified that this works on STUDENT.CS.UNI.EDU server.
 
 ## KNOWN BUGS:
 -----------------------------------------------------------------------------------------
-We don't have any known bugs but we did fall behind in some development 
-practices this time around. Namely
+We don't have any known bugs at this time. However:
 - We still need to add some more unit test. Our test suite isn't fully
-exhaustive right now, but we're hoping it will be.
-- The FAKEIT framework is not working on the student.cs server, but does work 
-locally on our machines, and does pass the TravisCI testing. We believe there
-is some conflict with the version of g++ compiler on the server and the FakeIt
-version. (note this works on other g++ compilers, just not on the server)
-- PrettyPrinter Node structure needs to be cleaned/collapsed for easier
-reading
+	exhaustive right now, but we're hoping it will be.
+- The FAKEIT framework is not working on the student.cs server due to the GCC version
+	on student.cs.uni being 4.7, and FAKEIT needing GCC 4.8
+- PrettyPrinter node structure needs to be cleaned/collapsed for easier
+	reading
 
