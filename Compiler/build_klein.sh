@@ -5,9 +5,6 @@ kleins (){
 	g++ -std=gnu++11 -w -o kleins src/BuildTokens.cpp src/implementation/*.cpp
 	echo "kleins has been created."
 }
-blank (){
-	echo "Functionality coming soon!"
-}
 kleinf (){
 	buffer="$buffer -f --kleinf"
 	echo "Creating kleinf.  Please Wait."
@@ -29,7 +26,7 @@ kleinv (){
 kleinc (){
 	buffer="$buffer -c --kleinc"
 	echo "Creating kleinc. Please Wait."
-	g++ -std=gnu++11 -w -o kleinc src/TMGenerator.cpp src/implementation/*.cpp
+	g++ -std=gnu++11 -w -o kleinc src/Compiler.cpp src/implementation/*.cpp
 	echo "kleinc has been created."
 }
 i=0
