@@ -1,0 +1,37 @@
+(* matrix3x3Solver.kln
+Harsha Varma, Justice Adams, and Josh Hilliard
+Finds x solutions for a 3x4 using Cramer's Rule
+Note, the last column is the solution matrix
+*)
+
+function main( a0 : integer, a1 : integer, a2 : integer, a3 : integer,
+	b0 : integer, b1 : integer, b2 : integer, b3 : integer,
+	c0 : integer, c1 : integer, c2 : integer, c3 : integer)
+	: boolean
+
+	if 0 = (((a0 * b1 * c2) + (a1 * b2 * c0) + (a2 * b0 * c1)) - 
+		((c0 * b1 * a2) + (c1 * b2 * a0) + (c2 * b0 * a1)))
+	then
+		false
+	else
+		printSolutions(a0,a1,a2,a3,b0,b1,b2,b3,c0,c1,c2,c3)
+
+function determinate(a0 : integer, a1 : integer, a2 : integer,
+	b0 : integer, b1 : integer, b2 : integer,
+	c0 : integer, c1 : integer, c2 : integer)
+	: integer
+	((a0 * b1 * c2) + (a1 * b2 * c0) + (a2 * b0 * c1)) - 
+	((c0 * b1 * a2) + (c1 * b2 * a0) + (c2 * b0 * a1))
+	
+function printSolutions(a0 : integer, a1 : integer, a2 : integer, a3 : integer,
+	b0 : integer, b1 : integer, b2 : integer, b3 : integer,
+	c0 : integer, c1 : integer, c2 : integer, c3 : integer)
+	: boolean
+
+	print(determinate(a3, a1, a2, b3, b1, b2, c3, c1, c2) / 
+		determinate(a0, a1, a2, b0, b1, b2, c0, c1, c2))
+	print(determinate(a0, a3, a2, b0, b3, b2, c0, c3, c2) /
+		determinate(a0, a1, a2, b0, b1, b2, c0, c1, c2))
+	print(determinate(a0, a1, a3, b0, b1, b3, c0, c1, c3) /
+		determinate(a0, a1, a2, b0, b1, b2, c0, c1, c2))
+	true
