@@ -39,7 +39,7 @@ TEST_CASE("Test that the generic print-one.kln prints the value 1 twice when com
 }
 
 TEST_CASE("Test that fraction addition works correctly", "[Integration Test]") {
-	compileKleinFileToTm("programs/fractionAddition.kln");
+	compileKleinFileToTm("programs/fraction-addition.kln");
 
 	char* argv[6] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "1", "2", "3", "4" };
 	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutputStatements(6, argv);
@@ -72,7 +72,7 @@ TEST_CASE("Test that test_klein_program_multiple_function_calls.kln works correc
 }
 
 TEST_CASE("Test that isExcellent works correctly when number is excellent", "[Integration Test]") {
-	compileKleinFileToTm("programs/isExcellent.kln");
+	compileKleinFileToTm("programs/is-excellent.kln");
 
 	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "3468" };
 	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutputStatements(3, argv);
@@ -82,7 +82,7 @@ TEST_CASE("Test that isExcellent works correctly when number is excellent", "[In
 }
 
 TEST_CASE("Test that isExcellent works correctly when number is not excellent", "[Integration Test]") {
-	compileKleinFileToTm("programs/isExcellent.kln");
+	compileKleinFileToTm("programs/is-excellent.kln");
 
 	char* argv[3] = { "tm-cli-go.exe", "UnitTestGeneratedProgram.tm", "50" };
 	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutputStatements(3, argv);

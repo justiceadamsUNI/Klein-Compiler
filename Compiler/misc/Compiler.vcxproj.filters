@@ -63,6 +63,9 @@
     <ClInclude Include="src\header\CodeGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\header\InstructionManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test\RunAllTest.cpp">
@@ -95,9 +98,6 @@
     <ClCompile Include="src\implementation\SemanticChecker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\SemanticValidator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="test\SemanticCheckerTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -117,6 +117,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="test\CodeGeneratorTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TMGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\SemanticStackTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\implementation\InstructionManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\InstructionManagerTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\IntegrationTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

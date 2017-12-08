@@ -49,13 +49,13 @@ Our project is structured like the following
 	|		|
 	|		|__ header (Header C++ files for main compiler code files)
 	|		|
-	|		|__ implementation (The implementation of the C++ header files)
+	|		|__ implementation (The implementation of the  C++ header files)
 	|
 	|----- test (Files for testing source files)
 	|
 	|----- programs (Valid klein files written in klein programming language)
 	|
-	|----- docs (Files for documenting our process of building this project)
+	|----- docs (Files for document our process of building this project)
 	|
 	|----- misc (Any other project files we feel are relevant)
 	
@@ -65,8 +65,8 @@ Our project is structured like the following
 	/implementation. You'll notice Compiler.cpp, BuildTokens.cpp, 
 	PrintASTNodeTree.cpp, ProgramValidator.cpp, and SemanticValidator.cpp
 	in the src/ directory. They serve separate purposes 
-	and are thus separated. Compiler.cpp is our final cpp class containing
-	all other objects and creates a TM file, BuildTokens.cpp prints the tokens
+	and are thus separated. Compiler.cpp will be our final cpp class containing
+	all other objects that creates a TM file, BuildTokens.cpp prints the tokens
 	of a valid Klein file to the screen, PrintASTNodeTree.cpp prints a formatted
 	listing of tree nodes of the klein program, ProgramValidator.cpp parses the 
 	klein program and outputs if it is valid or not, and SemanticValidator.cpp 
@@ -76,7 +76,7 @@ Our project is structured like the following
 	unit test and arbitrary (invalid) .kln files for further testing.
 	
 	PROGRAMS: A collection of valid .kln programs we have written while 
-	building this compiler (also includes programs that are not ours).
+	building this compiler.
 	
 	DOCS: A collection of documents we've used while building this compiler.
 	Includes language grammar, any design docs, and old README's.
@@ -88,7 +88,7 @@ Our project is structured like the following
 TESTING:
 -------------------------------------------------------------------------------
 We decided to use CATCH, an open source C++ testing framework that's 
-lightweight, IDE-independent, and fully featured. Their repo describes it as 
+lightweight. IDE-independent, and fully featured. Their repo describes it as 
 'A modern, C++-native, header-only, test framework for unit-tests, TDD and 
 BDD'. Note that the catch.h is not ours, we're just using it to test! 
 It's a header-only framework. We also use FakeIt, a header-only C++ mocking
@@ -96,7 +96,7 @@ framework that's fully compatible with Catch.
 (Again, Fakeit.hpp is not our code!)
 
 NOTE: tm-cli-go.hpp was not written by us. It has been modified for unit
-testing purposes as indicated by the comments at the top of the file.
+testing purposes.
 
 To run our test you can compile  test/*.cpp and src/implementation/*.cpp into
 an executable and run it. All you need is a c++ compiler! For Example: Using 
@@ -114,7 +114,7 @@ TravisCI server. Run it with ./runtest.sh
 
 BUILD SCRIPTS:
 -------------------------------------------------------------------------------
-We have a build script that takes in several command line arguments. The 
+We will have a build script that takes in several command line arguments. The 
 file name is build_klein.sh.
 
 The options for build_klein.sh are
@@ -175,6 +175,8 @@ RESOURCES THAT MADE THIS PROJECT POSSIBLE (Descriptions as listed online):
 KNOWN BUGS:
 -------------------------------------------------------------------------------
 We don't have any known bugs at this time. However:
+- We still need to add some more unit test. Our test suite isn't fully
+	exhaustive right now, but we're hoping it will be.
 - The FAKEIT framework is not working on the student.cs server due to the GCC version
 	on student.cs.uni being 4.7, and FAKEIT needing GCC 4.8
 - PrettyPrinter node structure needs to be cleaned/collapsed for easier
