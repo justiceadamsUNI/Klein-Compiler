@@ -53,8 +53,8 @@ directory and open the solution!
 	/implementation. You'll notice Compiler.cpp, BuildTokens.cpp, 
 	PrintASTNodeTree.cpp, ProgramValidator.cpp, and SemanticValidator.cpp
 	in the src/ directory. They serve separate purposes 
-	and are thus separated. Compiler.cpp will be our final cpp class containing
-	all other objects that creates a TM file, BuildTokens.cpp prints the tokens
+	and are thus separated. Compiler.cpp is our final cpp class containing
+	all other objects and creates a TM file, BuildTokens.cpp prints the tokens
 	of a valid Klein file to the screen, PrintASTNodeTree.cpp prints a formatted
 	listing of tree nodes of the klein program, ProgramValidator.cpp parses the 
 	klein program and outputs if it is valid or not, and SemanticValidator.cpp 
@@ -63,7 +63,8 @@ directory and open the solution!
 **TEST:** A directory containing all files for testing our code. This includes unit test and 
 arbitrary (invalid) .kln files for further testing.
 	
-**PROGRAMS:** A collection of valid .kln programs we have written while building this compiler.
+**PROGRAMS:** A collection of valid .kln programs we have written while building this compiler
+(Also includes programs that are not ours).
 	
 **DOCS:** A collection of documents we've used while building this compiler. Includes language
 grammer as well as any design docs.
@@ -75,14 +76,15 @@ valuable for you to see!
 	
 ## TESTING:
 -----------------------------------------------------------------------------------------
-We decided to use CATCH, an open source C++ testing framework that's lightweight.
+We decided to use CATCH, an open source C++ testing framework that's lightweight,
 IDE-independent, and fully featured. Their repo describes it as 
 'A modern, C++-native, header-only, test framework for unit-tests, TDD and BDD'. Note that
 the catch.h is not ours, we're just using it to test! It's a header-only framework.
 We also use FakeIt, a header-only C++ mocking framework that's fully compatible with Catch.
 (Again, Fakeit.hpp is not our code!)
 
-**NOTE:** tm-cli-go.hpp was not written by us. It has been modified for unit testing purposes.
+**NOTE:** tm-cli-go.hpp was not written by us. It has been modified for unit testing purposes
+as indicated by the comments at the top of the file
 
 To run our test you can compile  
 test/*.cpp and src/implementation/*.cpp into an 
@@ -104,7 +106,7 @@ TravisCI server. Run it with
 
 ## BUILD SCRIPTS:
 -----------------------------------------------------------------------------------------
-We will have a build script that takes in several command line arguments. The 
+We have a build script that takes in several command line arguments. The 
 file name is build_klein.sh. 
 
 The options for build_klein.sh are
@@ -159,8 +161,6 @@ We have verified that this works on STUDENT.CS.UNI.EDU server.
 ## KNOWN BUGS:
 -----------------------------------------------------------------------------------------
 We don't have any known bugs at this time. However:
-- We still need to add some more unit test. Our test suite isn't fully
-	exhaustive right now, but we're hoping it will be.
 - The FAKEIT framework is not working on the student.cs server due to the GCC version
 	on student.cs.uni being 4.7, and FAKEIT needing GCC 4.8
 - PrettyPrinter node structure needs to be cleaned/collapsed for easier
