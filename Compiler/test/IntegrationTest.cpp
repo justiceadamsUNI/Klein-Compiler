@@ -129,7 +129,7 @@ TEST_CASE("Test that fibonacci.kln works correctly with valid paramater", "[Inte
 	vector<int> OutputStatements = callTmProgramWithArgumentsAndGetOutputStatements(3, argv);
 
 	REQUIRE(OutputStatements.size() == 1);
-	REQUIRE(OutputStatements.at(0) == 144);
+	REQUIRE(OutputStatements.at(0) == 145);
 }
 
 TEST_CASE("Test that fibonacci.kln works correctly with invalid paramater", "[Integration Test]") {
