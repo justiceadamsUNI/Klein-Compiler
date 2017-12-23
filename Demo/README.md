@@ -31,8 +31,8 @@ To run our test suite, you can simply compile the implementation files + the tes
 
 ![fibonacci run](test-run.gif)
 
-We decided to utilize the power of continuous integration with this project. We used both [Catch](https://github.com/catchorg/Catch2) and [Fake it](https://github.com/eranpeer/FakeIt) to write an exhaustive unit testing suite and we used [Travis CI](https://travis-ci.org/) as our continuous integration tool for testing builds/PR's For an idea of how this workflow is organized, here's a diagram !
+We decided to utilize the power of continuous integration with this project. We used both [Catch](https://github.com/catchorg/Catch2) and [Fake it](https://github.com/eranpeer/FakeIt) to write an exhaustive unit testing suite and we used [Travis CI](https://travis-ci.org/) as our continuous integration tool for testing builds/PR's. For an idea of how this workflow is organized, here's a diagram !
 
-[Travis CI diagram](ci-diagram.jpg)
+![Travis CI diagram](ci-diagram.jpg)
 
 As always, feel free to reach out if you have questions when browsing this repo :)
