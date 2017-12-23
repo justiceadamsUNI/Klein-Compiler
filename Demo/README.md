@@ -19,9 +19,9 @@ Finally, the implementation of the compiler and its entire test suite were writt
 ## Compiling and Running Code
 To run a program, you can simply compile the implementation files + Compiler.cpp and run the executable like so `cl /FeCompiler /EHsc src/Compiler.cpp src/implementation/*.cpp`. Alternatively, you can use the build scripts that are detailed on the [homepage](../README.md). Here's an example run when compiling and running a Klein program that prints the nth Fibonacci number. Read the code [here](fibonacci.kln)
 
-![fibonacci run](fibonacci-run.gif).
+![fibonacci run](fibonacci-run.gif)
 
-Our compiler is also equipped with useful error messages. Here's an example of how the type-checker will throw an error when a type mismatch is encountered within the given Klein program. 
+Our compiler is also equipped with useful error messages. Here's an example of how the type-checker will throw an error when a type mismatch is encountered within the given Klein [program](type-error.kln) 
 
 ![semantic errors](type-error.gif)
 
@@ -29,7 +29,7 @@ Our compiler is also equipped with useful error messages. Here's an example of h
 ## Compiling and Running Test
 To run our test suite, you can simply compile the implementation files + the test files and run the executable like so `cl /FeRunTest /EHsc test/*.cpp src/implementation/*.cpp`. Alternatively, you can use the `runtest` build script that is detailed on the [homepage](../README.md). Here's an example of what it looks like to run the test suite!
 
-![fibonacci run](test-run.gif).
+![fibonacci run](test-run.gif)
 
 We decided to utilize the power of continuous integration with this project. We used both [Catch](https://github.com/catchorg/Catch2) and [Fake it](https://github.com/eranpeer/FakeIt) to write an exhaustive unit testing suite and we used [Travis CI](https://travis-ci.org/) as our continuous integration tool for testing builds/PR's For an idea of how this workflow is organized, here's a diagram !
 
