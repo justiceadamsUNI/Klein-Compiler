@@ -1,0 +1,4 @@
+(*  This program will not compile because the types are mismatched! *)
+
+function main ( a : integer, b: boolean ) : integer
+	a + b

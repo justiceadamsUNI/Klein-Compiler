@@ -19,6 +19,14 @@
      \_______/ \________|\__|      \______|\________|\________|\__|  \__| \______/ 
 -----------------------------------------------------------------------------------------
 
+## BEFORE WE GET STARTED
+I was the team lead for this compiler project which took the entire Fall semester. 
+It was an amazing learning experience and it fundamentally changed the way I think
+about computer science/programming. If you want to understand the nature of this
+project fully, keep on reading. If you just want to see the final product/how to 
+run it, then I encourage you to check out the [Demo folder](/Demo) which contains
+gifs of the final product and some information regaurding the development process.
+
 
 Hello, we are the compiler defilers. Our Group Consists of:
 * [Justice Adams (adamsjal@uni.edu)](https://github.com/justiceadamsUNI)
@@ -165,4 +173,3 @@ We don't have any known bugs at this time. However:
 	on student.cs.uni being 4.7, and FAKEIT needing GCC 4.8
 - PrettyPrinter node structure needs to be cleaned/collapsed for easier
 	reading
-
